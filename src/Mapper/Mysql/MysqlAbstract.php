@@ -133,7 +133,7 @@ abstract class MysqlAbstract implements MapperInterface
         $values = implode(", ", array_fill(1, count($this->_rawData), "?"));
         $update = implode(" = ?, ", array_keys($this->_rawData)) . " = ?";
 
-        $query = "INSERT INTO {$table} ({$fields}) VALUES ('{$values}') ON DUPLICATE KEY UPDATE {$update}";
+        $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
         $stmt = $this->_db->query($query, array_merge(array_values($this->_rawData), array_values($this->_rawData)));
 
