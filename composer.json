@@ -29,7 +29,6 @@
     "phpunit/phpunit": "3.7.*"
   },
   "require": {
-    "php"        : ">=5.3.3",
-    "zf1/zend-db": "1.*"
+    "php"        : ">=5.3.3"
   }
 }
