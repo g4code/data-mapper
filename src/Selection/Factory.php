@@ -2,54 +2,55 @@
 
 namespace G4\DataMapper\Selection;
 
-use Gee\Log\Writer;
-
 use G4\DataMapper\Selection\Identity;
 
 class Factory
 {
     protected $_defaultLimit = 20;
 
-    public function where( Identity $identity = null)
+    /**
+     * @param Identity $identity
+     * @return string
+     */
+    public function where(Identity $identity = null)
     {
-        if ( $identity->isVoid() ) {
+        if ($identity->isVoid()) {
             return '1';
         }
 
         $compstrings = array();
 
-        foreach ( $identity->getComps() as $comp ) {
+        foreach ($identity->getComps() as $comp) {
+            $s = "{$comp['name']} {$comp['operator']} ";
 
-            if ($comp['operator'] != 'IN') {
+            $s .= ($comp['operator'] != 'IN' && !\G4\DataMapper\Db\Db::isExprInstance($comp['value']))
+                ? "'{$comp['value']}'"
+                : "{$comp['value']}";
 
-                if(\G4\DataMapper\Db\Db::isExprInstance($comp['value'])) {
-                    $compstrings[] = "{$comp['name']} {$comp['operator']} {$comp['value']}";
-                } else {
-                    $compstrings[] = "{$comp['name']} {$comp['operator']} '{$comp['value']}'";
-                }
-
-            } else {
-                $compstrings[] = "{$comp['name']} {$comp['operator']} {$comp['value']}";
-            }
+            $compstrings[] = $s;
         }
 
-        $where = implode( " AND ", $compstrings );
+        $where = implode(" AND ", $compstrings);
 
         return $where;
     }
 
-    public function orderBy( Identity $identity = null )
+    /**
+     * @param Identity $identity
+     * @return string
+     */
+    public function orderBy(Identity $identity = null)
     {
         $orderByArr = $identity->getOrderBy();
 
-        if ( is_null( $identity ) || empty( $orderByArr ) ) {
+        if (is_null($identity) || empty($orderByArr)) {
             return array();
         }
 
         $result = array();
 
-        foreach ($orderByArr as $key => $value ) {
-            $result[] = $key . ( strtolower( $value ) == 'desc' ? ' DESC' : ' ASC' );
+        foreach ($orderByArr as $key => $value) {
+            $result[] = $key . ' ' . (strtolower($value) == 'desc' ? 'DESC' : 'ASC');
         }
 
         return $result;
@@ -58,11 +59,11 @@ class Factory
     /**
      *
      * @param Identity $identity
-     * @return number
+     * @return int
      */
-    public function limit(Identity $identity = null )
+    public function limit(Identity $identity = null)
     {
-        if (is_null( $identity)) {
+        if (is_null($identity)) {
             return $this->_defaultLimit;
         }
 
@@ -76,11 +77,11 @@ class Factory
     /**
      *
      * @param Identity $identity
-     * @return string|Ambigous <string, unknown>
+     * @return int
      */
-    public function offset(Identity $identity = null )
+    public function offset(Identity $identity = null)
     {
-        if (is_null( $identity)) {
+        if (is_null($identity)) {
             return 0;
         }
 

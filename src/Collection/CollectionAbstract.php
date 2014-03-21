@@ -4,7 +4,6 @@ namespace G4\DataMapper\Collection;
 
 abstract class CollectionAbstract implements \Iterator, \Countable
 {
-
     protected $_keyMap = array();
 
     protected $_objects = array();
@@ -14,7 +13,6 @@ abstract class CollectionAbstract implements \Iterator, \Countable
     protected $_rawData = array();
 
     protected $_total = 0;
-
 
     public function count()
     {
@@ -40,7 +38,7 @@ abstract class CollectionAbstract implements \Iterator, \Countable
     {
         $row = $this->_getObject();
 
-        if ( !empty( $row ) ) {
+        if (!empty($row)) {
             $this->_incrementPointer();
         }
 
@@ -50,7 +48,6 @@ abstract class CollectionAbstract implements \Iterator, \Countable
     public function rewind()
     {
         $this->_pointer = 0;
-
         return $this;
     }
 
@@ -64,7 +61,6 @@ abstract class CollectionAbstract implements \Iterator, \Countable
     protected function _addObject($object)
     {
         $this->_objects[$this->_pointer] = $object;
-
         return $this;
     }
 
@@ -120,17 +116,15 @@ abstract class CollectionAbstract implements \Iterator, \Countable
     public function _incrementPointer()
     {
         $this->_pointer++;
-
         return $this;
     }
 
     protected function _setRawData(array $rawData = null)
     {
-    	if (!is_null($rawData)) {
-
-    		$this->_rawData = $rawData;
-    		$this->_total   = count($rawData);
-    		$this->_keyMap  = array_keys($rawData);
-    	}
+        if (!is_null($rawData)) {
+            $this->_rawData = $rawData;
+            $this->_total   = count($rawData);
+            $this->_keyMap  = array_keys($rawData);
+        }
     }
 }

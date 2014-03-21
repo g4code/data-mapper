@@ -2,8 +2,6 @@
 
 namespace G4\DataMapper\Mapper\Mysql;
 
-use Gee\Log\Writer;
-
 use G4\DataMapper\Domain\DomainAbstract;
 use G4\DataMapper\Mapper\MapperInterface;
 use G4\DataMapper\Selection\Factory as SelectionFactory;
@@ -71,11 +69,10 @@ abstract class MysqlAbstract implements MapperInterface
         return $this->_db->commit();
     }
 
-
     /**
      * @param Identity $identity
      *
-     * @return \Api\Model\Collection\Content
+     * @return \G4\DataMapper\Collection\CollectionAbstract
      */
     public function findAll(Identity $identity = null)
     {
@@ -109,17 +106,17 @@ abstract class MysqlAbstract implements MapperInterface
         return new Identity();
     }
 
-
     public function hasRawData()
     {
         return !empty($this->_rawData);
     }
 
-
     public function insert(DomainAbstract $domain)
     {
         $this->setRawDataFromDomain($domain);
+
         $this->_db->insert($this->_getTablaName(), $this->_rawData);
+
         $lastId = $this->_db->lastInsertId();
         $domain->setId($lastId);
 
@@ -130,10 +127,15 @@ abstract class MysqlAbstract implements MapperInterface
     {
         $this->setRawDataFromDomain($domain);
 
-        $query = 'INSERT INTO `'. $this->_getTablaName().'` ('.implode(',',array_keys($this->_rawData)).') VALUES ('.implode(',',array_fill(1, count($this->_rawData), '?')).')
-                  ON DUPLICATE KEY UPDATE '.implode(' = ?,',array_keys($this->_rawData)).' = ?';
+        $table = $this->_getTablaName();
 
-        $stmt = $this->_db->query($query,array_merge(array_values($this->_rawData),array_values($this->_rawData)));
+        $fields = implode(", ", array_keys($this->_rawData));
+        $values = implode(", ", array_fill(1, count($this->_rawData), "?"));
+        $update = implode(" = ?, ", array_keys($this->_rawData)) . " = ?";
+
+        $query = "INSERT INTO {$table} ({$fields}) VALUES ('{$values}') ON DUPLICATE KEY UPDATE {$update}";
+
+        $stmt = $this->_db->query($query, array_merge(array_values($this->_rawData), array_values($this->_rawData)));
 
         return $stmt->rowCount();
     }
@@ -165,7 +167,7 @@ abstract class MysqlAbstract implements MapperInterface
     {
         return $this
             ->setRawDataFromDomain($domain)
-            ->_update($domain->getIdKey().' = '.$this->_db->quote($domain->getId())); //TODO: Drasko: move this to selection factory!!!
+            ->_update($domain->getIdKey() . ' = ' . $this->_db->quote($domain->getId())); //TODO: Drasko: move this to selection factory!!!
     }
 
     public function updateAll(Identity $identity, array $rawData)
@@ -184,13 +186,16 @@ abstract class MysqlAbstract implements MapperInterface
             throw new \Exception('Selection identity can not be 1');
         }
 
-        $sql = "UPDATE " . $this->_getTablaName() . " SET " . implode(', ', $fields) . " WHERE {$where}";
+        $table = $this->_getTablaName();
+        $fields = implode(', ', $fields);
+
+        $sql = "UPDATE {$table} SET {$fields} WHERE {$where}";
 
         if($identity->getLimit()) {
             $sql .= " LIMIT " . $sf->limit($identity);
         }
 
-        return $this->_db->query($sql , array_values($rawData));
+        return $this->_db->query($sql, array_values($rawData));
     }
 
     /**
@@ -200,8 +205,6 @@ abstract class MysqlAbstract implements MapperInterface
      */
     protected function _fetchAll(Identity $identity)
     {
-        $s = $this->_getSelectWithLimit($identity);
-
         $this->_rawData = $this->_db->fetchAll($this->_getSelectWithLimit($identity));
         return $this;
     }
@@ -297,11 +300,11 @@ abstract class MysqlAbstract implements MapperInterface
     }
 
     /**
-     * @return \Api\Model\Collection\Content
+     * @return \G4\DataMapper\Collection\Content
      */
     protected function _returnCollection()
     {
-        return new \Api\Model\Collection\Content($this->_rawData, $this->_getFactoryDomainName(), $this->_totalItemsCount);
+        return new \G4\DataMapper\Collection\Content($this->_rawData, $this->_getFactoryDomainName(), $this->_totalItemsCount);
     }
 
     /**
@@ -310,10 +313,11 @@ abstract class MysqlAbstract implements MapperInterface
     protected function _returnDomain()
     {
         $factoryDomainName = $this->_getFactoryDomainName();
+        $factoryDomain     = new $factoryDomainName();
 
-        $factoryDomain = new $factoryDomainName();
-
-        return empty($this->_rawData) ? null : $factoryDomain->createObject($this->_rawData);
+        return empty($this->_rawData)
+            ? null
+            : $factoryDomain->createObject($this->_rawData);
     }
 
     private function _update($where)
