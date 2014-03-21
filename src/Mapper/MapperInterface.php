@@ -7,7 +7,6 @@ use G4\DataMapper\Selection\Identity;
 
 interface MapperInterface
 {
-
     public function delete( Identity $identity );
 
     public function findAll( Identity $identity );
@@ -17,5 +16,4 @@ interface MapperInterface
     public function insert( DomainAbstract $domain );
 
     public function update( DomainAbstract $domain );
-
 }

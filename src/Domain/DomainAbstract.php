@@ -22,10 +22,8 @@ abstract class DomainAbstract
      */
     protected $_mapperSave = null;
 
-    
     abstract public function getRawData();
 
-    
     public static function getIdKey()
     {
         return static::$_idKey;
@@ -41,7 +39,6 @@ abstract class DomainAbstract
         return $this->_id !== null;
     }
 
-
     /**
      * @param int $id
      *
@@ -50,8 +47,7 @@ abstract class DomainAbstract
     public function setId($id)
     {
         $this->_id = $id;
-
         return $this;
     }
-    
+
 }

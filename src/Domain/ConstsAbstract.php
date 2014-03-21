@@ -7,7 +7,6 @@ use G4\DataMapper\Mapper\Save;
 
 abstract class ConstsAbstract implements ConstsInterface
 {
-
     public static function getConst($constName)
     {
         $map = static::getMap();
