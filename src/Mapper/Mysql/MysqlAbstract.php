@@ -123,6 +123,31 @@ abstract class MysqlAbstract implements MapperInterface
         return isset($lastId) ? $lastId : false;
     }
 
+    public function insertBulk($collection)
+    {
+        if (!$collection instanceof  \Iterator && !is_array($collection)) {
+            throw new \Exception('Collection in insertBulk() must implement Iterator or be an array.', 500);
+        }
+
+        if (empty($collection)) {
+            throw new \Exception('Collection in insertBulk() must not be empty.', 500);
+        }
+
+        //@TODO setting fields may be solved better?
+        $domain = is_array($collection)
+                    ? reset($collection)
+                    : $collection->rewind()->current();
+        $fields = "`" . implode("`,`", array_keys($domain->getRawData())) . "`";
+        $values = array();
+
+        foreach ($collection as $domain) {
+            $values[] = "('" .implode("','", $domain->getRawData()) . "')";
+        }
+
+        $query = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
+        return $this->_db->query($query);
+    }
+
     public function insertOnDuplicateKeyUpdate(DomainAbstract $domain)
     {
         $this->setRawDataFromDomain($domain);
