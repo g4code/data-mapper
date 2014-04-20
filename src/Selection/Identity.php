@@ -152,6 +152,33 @@ class Identity
     /**
      * @return Identity
      */
+    public function likeWildcardLeft($value = null)
+    {
+        $this->_operator("LIKE", "%{$value}");
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function likeWildcardRight($value = null)
+    {
+        $this->_operator("LIKE", "{$value}%");
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function likeWildcardBoth($value = null)
+    {
+        $this->_operator("LIKE", "%{$value}%");
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
     public function lt($value = null)
     {
         $this->_operator("<", $value);
