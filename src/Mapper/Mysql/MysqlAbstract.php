@@ -333,16 +333,14 @@ abstract class MysqlAbstract implements MapperInterface
     }
 
     /**
-     * @return
+     * @return \G4\DataMapper\Domain\DomainAbstract
      */
     protected function _returnDomain()
     {
         $factoryDomainName = $this->_getFactoryDomainName();
         $factoryDomain     = new $factoryDomainName();
 
-        return empty($this->_rawData)
-            ? null
-            : $factoryDomain->createObject($this->_rawData);
+        return $factoryDomain->createObject($this->_rawData);
     }
 
     private function _update($where)

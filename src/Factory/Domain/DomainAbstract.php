@@ -27,9 +27,9 @@ abstract class DomainAbstract
     {
         $this->setData($data);
 
-        if ($this->hasData() && $this->hasDomainModelInstance()) {
-            $this->_objectFactory();
-        }
+        $this->hasData() && $this->hasDomainModelInstance()
+            ? $this->_objectFactory()
+            : $this->nullObjectFactory();
 
         return $this->getDomainModel();
     }
@@ -52,6 +52,11 @@ abstract class DomainAbstract
     public function hasDomainModelInstance()
     {
         return $this->_domainModel !== null;
+    }
+
+    public function nullObjectFactory()
+    {
+        $this->_domainModel = null;
     }
 
     /**
