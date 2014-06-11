@@ -7,6 +7,8 @@ use G4\DataMapper\Mapper\Save;
 
 abstract class DomainAbstract
 {
+    const METHOD_GET_ID_KEY = 'getIdKey';
+
     /**
      * @var int
      */
