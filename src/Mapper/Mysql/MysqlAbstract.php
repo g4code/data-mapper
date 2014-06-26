@@ -45,6 +45,11 @@ abstract class MysqlAbstract implements MapperInterface
         return $this->_db->delete($this->_getTablaName(), $this->_getSelectionFactory()->where($identity));
     }
 
+    public function query($sql)
+    {
+        return $this->_db->query($sql);
+    }
+
     public function transactionBegin()
     {
         if(self::$_throwExceptionOnNewTrancationBegin === true && self::$_transactionActive === true) {
