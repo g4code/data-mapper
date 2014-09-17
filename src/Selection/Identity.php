@@ -61,6 +61,14 @@ class Identity
         return $this;
     }
 
+    /**
+     * @return G4\DataMapper\Selection\IdentityField
+     */
+    public function getCurrentField()
+    {
+        return $this->_currentField;
+    }
+
     public function getComps()
     {
         $ret = array();
@@ -95,6 +103,11 @@ class Identity
     public function getOrderBy()
     {
         return $this->_orderBy;
+    }
+
+    public function hasOrderBy()
+    {
+        return !empty($this->_orderBy);
     }
 
     public function isVoid()
@@ -255,6 +268,17 @@ class Identity
         }
 
         $this->_currentField->add($symbol, $value);
+
+        return $this;
+    }
+
+    protected function _operatorAttach($symbol, $value)
+    {
+        if ($this->isVoid()) {
+            throw new \Exception("No object field defined");
+        }
+
+        $this->_currentField->attach($symbol, $value);
 
         return $this;
     }
