@@ -23,6 +23,6 @@ class Like implements \G4\DataMapper\Selection\Solr\IdentityValue\IdentityValueI
 
     private function getJoined()
     {
-        return \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD . $this->value . \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD;
+        return \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD . $this->value . \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD;
     }
 }

@@ -8,7 +8,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
     public function fieldList(\G4\DataMapper\Selection\Solr\Identity $identity = null)
     {
         if (!$identity->hasFieldList()) {
-            return \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD;
+            return \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD;
         }
         $fieldList = $identity->getFieldList();
         foreach ($identity->getFieldList() as $key => $oneField) {
@@ -17,7 +17,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
             }
         }
         return empty($fieldList)
-            ? \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD
+            ? \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD
             : join(",", $fieldList);
     }
 
@@ -82,6 +82,6 @@ class Factory extends \G4\DataMapper\Selection\Factory
 
     private function queryAll()
     {
-        return \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD . \G4\DataMapper\Selection\Solr\Consts\Query::COLON . \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD;
+        return \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD . \G4\DataMapper\Selection\Solr\Consts\Query::COLON . \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD;
     }
 }

@@ -35,14 +35,14 @@ class TimeRange implements \G4\DataMapper\Selection\Solr\IdentityValue\IdentityV
     {
         return $this->hasMax()
             ? (\G4\DataMapper\Selection\Solr\Consts\Time::NOW . ((int) $this->max > 0 ? '+' : '') . $this->max . \G4\DataMapper\Selection\Solr\Consts\Time::MINUTES)
-            : ($this->field->hasCurrentValueMax() ? $this->field->getCurrentValueMax() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD);
+            : ($this->field->hasCurrentValueMax() ? $this->field->getCurrentValueMax() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD);
     }
 
     private function getMin()
     {
         return $this->hasMin()
             ? (\G4\DataMapper\Selection\Solr\Consts\Time::NOW . ((int) $this->min > 0 ? '+' : '') . $this->min . \G4\DataMapper\Selection\Solr\Consts\Time::MINUTES)
-            : ($this->field->hasCurrentValueMin() ? $this->field->getCurrentValueMin() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDECARD);
+            : ($this->field->hasCurrentValueMin() ? $this->field->getCurrentValueMin() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD);
     }
 
     private function hasMax()

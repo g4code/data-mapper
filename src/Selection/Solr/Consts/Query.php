@@ -16,6 +16,6 @@ class Query
     const COLON         = ':';
     const MAX_DISTANCE  = 100000;
     const TO            = 'TO';
-    const WILDECARD     = '*';
+    const WILDCARD      = '*';
 
 }
