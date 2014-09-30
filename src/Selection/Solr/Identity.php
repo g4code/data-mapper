@@ -32,7 +32,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
         );
     }
 
-    public function eq($value)
+    public function eq($value = null)
     {
         return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
@@ -82,15 +82,18 @@ class Identity extends \G4\DataMapper\Selection\Identity
         return !empty($this->geodist['latitude']) && !empty($this->geodist['longitude']);
     }
 
-    public function in(array $value = null)
+    public function in($value = array())
     {
+        if (empty($value)) {
+            $value = null;
+        }
         return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
         );
     }
 
-    public function like($value)
+    public function like($value = null)
     {
         return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
