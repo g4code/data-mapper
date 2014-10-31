@@ -4,6 +4,11 @@ data-mapper
 > data-mapper - [php](http://php.net) library
 
 ## Install
+Via Composer
+
+```sh
+composer require g4/data-mapper
+```
 
 ## Usage
 
