@@ -42,7 +42,13 @@ abstract class MysqlAbstract implements MapperInterface
 
     public function delete(Identity $identity)
     {
-        return $this->_db->delete($this->_getTablaName(), $this->_getSelectionFactory()->where($identity));
+        $sql  = "DELETE FROM " . $this->_db->quoteIdentifier($this->_getTablaName(), true);
+        $sql .= $this->_getSelectionFactory()->where($identity) ? (" WHERE " . $this->_getSelectionFactory()->where($identity)) : '';
+        $sql .= $identity->hasOrderBy() ? (" ORDER BY " . join(',', $this->_getSelectionFactory()->orderBy($identity))) : '';
+        $sql .= $identity->getLimit() ? (" LIMIT " . $identity->getLimit()) : '';
+
+        $stmt = $this->_db->query($sql);
+        return $stmt->rowCount();
     }
 
     public function query($sql)
