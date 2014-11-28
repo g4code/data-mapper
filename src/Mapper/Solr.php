@@ -6,6 +6,11 @@ class Solr
 {
 
     /**
+     * @var string
+     */
+    private $factoryDomainName;
+
+    /**
      * @var G4\DataMapper\Selection\Solr\Factory
      */
     private $selectionFactory;
@@ -43,9 +48,16 @@ class Solr
             ->returnCollection();
     }
 
+    /**
+     * @throws \Exception
+     * @return string
+     */
     public function getFactoryDomainName()
     {
-        return '\Api\Model\Factory\Domain\User\User';
+        if (empty($this->factoryDomainName)) {
+            throw new \Exception('factoryDomainName is not set!');
+        }
+        return $this->factoryDomainName;
     }
 
     /**
@@ -73,6 +85,16 @@ class Solr
     public function returnCollection()
     {
         return new \G4\DataMapper\Collection\Content($this->rawData, $this->getFactoryDomainName(), $this->totalItemsCount);
+    }
+
+    /**
+     * @param string $factoryDomainName
+     * @return \G4\DataMapper\Mapper\Solr
+     */
+    public function setFactoryDomainName($factoryDomainName)
+    {
+        $this->factoryDomainName = $factoryDomainName;
+        return $this;
     }
 
     private function fetch(\G4\DataMapper\Selection\Identity $identity)
