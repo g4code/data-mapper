@@ -6,6 +6,11 @@ class Solr
 {
 
     /**
+     * @var \G4\DataMapper\Adapter\Solr\Curl
+     */
+    private $adapter;
+
+    /**
      * @var string
      */
     private $factoryDomainName;
@@ -14,11 +19,6 @@ class Solr
      * @var G4\DataMapper\Selection\Solr\Factory
      */
     private $selectionFactory;
-
-    /**
-     * @var string
-     */
-    private $selectUrl;
 
     /**
      * @var array
@@ -33,7 +33,8 @@ class Solr
 
     public function __construct($selectUrl)
     {
-        $this->selectUrl       = $selectUrl;
+        $this->adapter = new \G4\DataMapper\Adapter\Solr\Curl($selectUrl);
+
         $this->rawData         = [];
         $this->totalItemsCount = 0;
     }
@@ -99,17 +100,11 @@ class Solr
 
     private function fetch(\G4\DataMapper\Selection\Identity $identity)
     {
-        $url = $this->getSelectUrl($identity);
-        $ch  = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('q' => $this->getSelectionFactory()->query($identity)));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $output = curl_exec($ch);
-
-        curl_close($ch);
+        $output = $this->adapter
+            ->setRequestParams($this->getSelectionFactory()->requestParams($identity))
+            ->setQuery($this->getSelectionFactory()->query($identity))
+            ->connect()
+            ->getResponse();
 
         $resultFeed = json_decode($output, true);
 
@@ -121,10 +116,5 @@ class Solr
             : $resultFeed["response"]["docs"];
 
         return $this;
-    }
-
-    private function getSelectUrl(\G4\DataMapper\Selection\Identity $identity)
-    {
-        return $this->selectUrl . '?' . http_build_query($this->getSelectionFactory()->requestParams($identity));
     }
 }
