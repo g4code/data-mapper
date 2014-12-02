@@ -16,30 +16,26 @@ class Solr
     private $factoryDomainName;
 
     /**
+     * @var array
+     */
+    private $response;
+
+    /**
      * @var G4\DataMapper\Selection\Solr\Factory
      */
     private $selectionFactory;
 
-    /**
-     * @var array
-     */
-    private $rawData;
 
     /**
-     * @var int
+     * @param \G4\DataMapper\Adapter\Solr\Curl $adapter
      */
-    private $totalItemsCount;
-
-
-    public function __construct($selectUrl)
+    public function __construct(\G4\DataMapper\Adapter\Solr\Curl $adapter)
     {
-        $this->adapter = new \G4\DataMapper\Adapter\Solr\Curl($selectUrl);
-
-        $this->rawData         = [];
-        $this->totalItemsCount = 0;
+        $this->adapter = $adapter;
     }
 
     /**
+     * @param \G4\DataMapper\Selection\Identity $identity
      * @return \G4\DataMapper\Collection\Content
      */
     public function find(\G4\DataMapper\Selection\Identity $identity = null)
@@ -70,6 +66,16 @@ class Solr
     }
 
     /**
+     * @return array
+     */
+    public function getRawData()
+    {
+        return empty($this->response["response"]["docs"])
+            ? []
+            : $this->response["response"]["docs"];
+    }
+
+    /**
      * @return G4\DataMapper\Selection\Solr\Factory
      */
     public function getSelectionFactory()
@@ -81,11 +87,21 @@ class Solr
     }
 
     /**
+     * @return int
+     */
+    public function getTotalItemsCount()
+    {
+        return empty($this->response['response']['numFound'])
+            ? 0
+            : $this->response['response']['numFound'];;
+    }
+
+    /**
      * @return \G4\DataMapper\Collection\Content
      */
     public function returnCollection()
     {
-        return new \G4\DataMapper\Collection\Content($this->rawData, $this->getFactoryDomainName(), $this->totalItemsCount);
+        return new \G4\DataMapper\Collection\Content($this->getRawData(), $this->getFactoryDomainName(), $this->getTotalItemsCount());
     }
 
     /**
@@ -98,22 +114,14 @@ class Solr
         return $this;
     }
 
+    /**
+     * @return \G4\DataMapper\Mapper\Solr
+     */
     private function fetch(\G4\DataMapper\Selection\Identity $identity)
     {
-        $output = $this->adapter
-            ->setRequestParams($this->getSelectionFactory()->requestParams($identity))
-            ->setQuery($this->getSelectionFactory()->query($identity))
-            ->connect()
-            ->getResponse();
+        $output = $this->adapter->select($this->getSelectionFactory()->requestParams($identity), $this->getSelectionFactory()->query($identity));
 
-        $resultFeed = json_decode($output, true);
-
-        $this->totalItemsCount = empty($resultFeed['response']['numFound'])
-            ? 0
-            : $resultFeed['response']['numFound'];
-        $this->rawData         = empty($resultFeed["response"]["docs"])
-            ? array()
-            : $resultFeed["response"]["docs"];
+        $this->response = json_decode($output, true);
 
         return $this;
     }
