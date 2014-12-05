@@ -203,7 +203,7 @@ abstract class MysqlAbstract implements MapperInterface
     {
         return $this
             ->setRawDataFromDomain($domain)
-            ->_update($domain->getIdKey() . ' = ' . $this->_db->quote($domain->getId())); //TODO: Drasko: move this to selection factory!!!
+            ->_update('`' . $domain->getIdKey() . '` = ' . $this->_db->quote($domain->getId())); //TODO: Drasko: move this to selection factory!!!
     }
 
     public function updateAll(Identity $identity, array $rawData)
