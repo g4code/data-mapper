@@ -46,62 +46,11 @@ class Solr
     }
 
     /**
-     * @throws \Exception
-     * @return string
-     */
-    public function getFactoryDomainName()
-    {
-        if (empty($this->factoryDomainName)) {
-            throw new \Exception('factoryDomainName is not set!');
-        }
-        return $this->factoryDomainName;
-    }
-
-    /**
      * @return G4\DataMapper\Selection\Solr\Identity
      */
     public function getIdentity()
     {
         return new \G4\DataMapper\Selection\Solr\Identity();
-    }
-
-    /**
-     * @return array
-     */
-    public function getRawData()
-    {
-        return empty($this->response["response"]["docs"])
-            ? []
-            : $this->response["response"]["docs"];
-    }
-
-    /**
-     * @return G4\DataMapper\Selection\Solr\Factory
-     */
-    public function getSelectionFactory()
-    {
-        if ($this->selectionFactory === null) {
-            $this->selectionFactory = new \G4\DataMapper\Selection\Solr\Factory();
-        }
-        return $this->selectionFactory;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalItemsCount()
-    {
-        return empty($this->response['response']['numFound'])
-            ? 0
-            : $this->response['response']['numFound'];;
-    }
-
-    /**
-     * @return \G4\DataMapper\Collection\Content
-     */
-    public function returnCollection()
-    {
-        return new \G4\DataMapper\Collection\Content($this->getRawData(), $this->getFactoryDomainName(), $this->getTotalItemsCount());
     }
 
     /**
@@ -114,15 +63,75 @@ class Solr
         return $this;
     }
 
+    public function update(array $data)
+    {
+        $this->response = $this->adapter
+            ->setDocument($data)
+            ->update();
+        return isset($this->response["responseHeader"]["status"])
+            && $this->response["responseHeader"]["status"] === 0;
+    }
+
     /**
      * @return \G4\DataMapper\Mapper\Solr
      */
     private function fetch(\G4\DataMapper\Selection\Identity $identity)
     {
-        $output = $this->adapter->select($this->getSelectionFactory()->requestParams($identity), $this->getSelectionFactory()->query($identity));
-
-        $this->response = json_decode($output, true);
-
+        $this->response = $this->adapter
+            ->setRequestParams($this->getSelectionFactory()->requestParams($identity))
+            ->setQuery($this->getSelectionFactory()->query($identity))
+            ->select();
         return $this;
+    }
+
+    /**
+     * @throws \Exception
+     * @return string
+     */
+    private function getFactoryDomainName()
+    {
+        if (empty($this->factoryDomainName)) {
+            throw new \Exception('factoryDomainName is not set!');
+        }
+        return $this->factoryDomainName;
+    }
+
+    /**
+     * @return array
+     */
+    private function getRawData()
+    {
+        return empty($this->response["response"]["docs"])
+            ? []
+            : $this->response["response"]["docs"];
+    }
+
+    /**
+     * @return G4\DataMapper\Selection\Solr\Factory
+     */
+    private function getSelectionFactory()
+    {
+        if ($this->selectionFactory === null) {
+            $this->selectionFactory = new \G4\DataMapper\Selection\Solr\Factory();
+        }
+        return $this->selectionFactory;
+    }
+
+    /**
+     * @return int
+     */
+    private function getTotalItemsCount()
+    {
+        return empty($this->response['response']['numFound'])
+            ? 0
+            : $this->response['response']['numFound'];;
+    }
+
+    /**
+     * @return \G4\DataMapper\Collection\Content
+     */
+    private function returnCollection()
+    {
+        return new \G4\DataMapper\Collection\Content($this->getRawData(), $this->getFactoryDomainName(), $this->getTotalItemsCount());
     }
 }

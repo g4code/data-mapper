@@ -5,10 +5,19 @@ namespace G4\DataMapper\Adapter\Solr;
 class Curl
 {
 
+    const TIMEOUT       = 5;
+    const METHOD_SELECT = 'select';
+    const METHOD_UPDATE = 'update';
+
+    /**
+     * @var array
+     */
+    private $document;
+
     /**
      * @var string
      */
-    private $url;
+    private $method;
 
     /**
      * @var array
@@ -31,6 +40,11 @@ class Curl
     private $query;
 
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
      * @param array $params
      */
     public function __construct(array $params)
@@ -43,20 +57,26 @@ class Curl
      */
     public function getResponse()
     {
-        return $this->response;
+        return is_array($this->response)
+            ? $this->response
+            : json_decode($this->response, true);
     }
 
     /**
-     * @param array $requestParams
-     * @param string $query
+     * @return array
      */
-    public function select(array $requestParams, $query)
+    public function select()
     {
+        $this->method = self::METHOD_SELECT;
         return $this
-            ->setRequestParams($requestParams)
-            ->setQuery($query)
             ->exec()
             ->getResponse();
+    }
+
+    public function setDocument($document)
+    {
+        $this->document = $document;
+        return $this;
     }
 
     /**
@@ -77,6 +97,14 @@ class Curl
         return $this;
     }
 
+    public function update()
+    {
+        $this->method = self::METHOD_UPDATE;
+        return $this
+            ->exec()
+            ->getResponse();
+    }
+
     /**
      * @return string
      */
@@ -89,8 +117,9 @@ class Curl
                 $this->getPort(),
                 '/solr',
                 $this->getCollection(),
-                "/select/?",
-                http_build_query($this->requestParams)
+                '/',
+                $this->method,
+                $this->httpBuildQuery(),
             ]);
         }
         return $this->url;
@@ -103,11 +132,15 @@ class Curl
     {
         $ch  = curl_init($this->buildUrl());
         curl_setopt_array($ch, [
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => ['q' => $this->query],
+            CURLOPT_POST           => 1,
+            CURLOPT_POSTFIELDS     => $this->getPostfields(),
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_TIMEOUT        => $this->getTimeout(),
             CURLOPT_URL            => $this->buildUrl(),
-            CURLOPT_RETURNTRANSFER => 1
         ]);
+        if ($this->method === self::METHOD_UPDATE) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        }
         $this->response = curl_exec($ch);
         curl_close($ch);
         return $this;
@@ -134,5 +167,26 @@ class Curl
             throw new \Exception('Solr port param is missing!');
         }
         return $this->params['port'];
+    }
+
+    private function getPostfields()
+    {
+        return $this->method === self::METHOD_SELECT
+            ? ['q' => $this->query]
+            : json_encode($this->document);
+    }
+
+    private function getTimeout()
+    {
+        return empty($this->params['timeout'])
+            ? self::TIMEOUT
+            : $this->params['timeout'];
+    }
+
+    private function httpBuildQuery()
+    {
+        return $this->method === self::METHOD_SELECT
+            ? '/?' . http_build_query($this->requestParams)
+            : '';
     }
 }
