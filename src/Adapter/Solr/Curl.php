@@ -80,6 +80,17 @@ class Curl
     }
 
     /**
+     * @param string $key
+     * @param mixed $value
+     * @return \G4\DataMapper\Adapter\Solr\Curl
+     */
+    public function setParam($key, $value)
+    {
+        $this->params[$key] = $value;
+        return $this;
+    }
+
+    /**
      * @param array $requestParams
      */
     public function setRequestParams(array $requestParams)
