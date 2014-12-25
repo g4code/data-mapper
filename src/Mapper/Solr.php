@@ -34,6 +34,22 @@ class Solr
         $this->adapter = $adapter;
     }
 
+
+    public function bulkUpdate(\G4\DataMapper\Bulk\Solr $bulk)
+    {
+        if ($bulk->hasData()) {
+            $this->response = $this->adapter
+                ->setDocument($bulk->getData())
+                ->update();
+        }
+        return $this->getResponseStatus();
+    }
+
+    public function delete(\G4\DataMapper\Domain\DomainAbstract $domain)
+    {
+        return $this->bulkUpdate($this->getBulk()->markForDelete($domain));
+    }
+
     /**
      * @param \G4\DataMapper\Selection\Identity $identity
      * @return \G4\DataMapper\Collection\Content
@@ -43,6 +59,11 @@ class Solr
         return $this
             ->fetch($identity === null ? $this->getIdentity() : $identity)
             ->returnCollection();
+    }
+
+    public function getBulk()
+    {
+        return new \G4\DataMapper\Bulk\Solr();
     }
 
     /**
@@ -63,13 +84,19 @@ class Solr
         return $this;
     }
 
-    public function update(array $data)
+    public function update(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
-        $this->response = $this->adapter
-            ->setDocument($data)
-            ->update();
-        return isset($this->response["responseHeader"]["status"])
-            && $this->response["responseHeader"]["status"] === 0;
+        return $this->bulkUpdate($this->getBulk()->markForUpdate($domain));
+    }
+
+    public function updateAdd(\G4\DataMapper\Domain\DomainAbstract $domain)
+    {
+        return $this->bulkUpdate($this->getBulk()->markForAdd($domain));
+    }
+
+    public function updateSet(\G4\DataMapper\Domain\DomainAbstract $domain)
+    {
+        return $this->bulkUpdate($this->getBulk()->markForSet($domain));
     }
 
     /**
@@ -104,6 +131,13 @@ class Solr
         return empty($this->response["response"]["docs"])
             ? []
             : $this->response["response"]["docs"];
+    }
+
+    private function getResponseStatus()
+    {
+        return !empty($this->response)
+            && isset($this->response["responseHeader"]["status"])
+            && $this->response["responseHeader"]["status"] === 0;
     }
 
     /**
