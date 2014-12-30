@@ -55,6 +55,11 @@ class Solr
         return $this->bulkUpdate($this->getBulk()->markForDelete($domain));
     }
 
+    public function deleteByIdentity(\G4\DataMapper\Selection\Identity $identity)
+    {
+        return $this->bulkUpdate($this->getBulk()->markForDeleteByIdentity($identity));
+    }
+
     /**
      * @param \G4\DataMapper\Selection\Identity $identity
      * @return \G4\DataMapper\Collection\Content

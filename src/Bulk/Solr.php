@@ -13,6 +13,11 @@ class Solr
 
     private $data;
 
+    /**
+     * @var \G4\DataMapper\Selection\Solr\Identity
+     */
+    private $identity;
+
     private $idsForDelete;
 
 
@@ -29,14 +34,10 @@ class Solr
 
     public function getDataForDelete()
     {
-        $identity = new \G4\DataMapper\Selection\Solr\Identity();
-        $identity
-            ->field(self::IDENTIFIER_KEY)
-            ->in($this->idsForDelete);
-        $selection = new \G4\DataMapper\Selection\Solr\Factory();
+        $this->appendIdsForDeleteToIdentity();
         return [
             self::METHOD_DELETE => [
-                'query' => $selection->query($identity)
+                'query' => $this->getSelection()->query($this->getIdentity())
             ]
         ];
     }
@@ -48,7 +49,8 @@ class Solr
 
     public function hasDataForDelete()
     {
-        return !empty($this->idsForDelete);
+        return $this->hasIdsForDelete()
+            || ($this->hasIdentity() && !$this->getIdentity()->isVoid());
     }
 
     public function markForAdd(\G4\DataMapper\Domain\DomainAbstract $domain)
@@ -60,6 +62,12 @@ class Solr
     public function markForDelete(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
         $this->idsForDelete[] = $domain->getId();
+        return $this;
+    }
+
+    public function markForDeleteByIdentity(\G4\DataMapper\Selection\Identity $identity)
+    {
+        $this->identity = $identity;
         return $this;
     }
 
@@ -83,5 +91,37 @@ class Solr
             }
         }
         return $data;
+    }
+
+    private function appendIdsForDeleteToIdentity()
+    {
+        if ($this->hasIdsForDelete()) {
+            $this->getIdentity()
+                ->field(self::IDENTIFIER_KEY)
+                ->in($this->idsForDelete);
+        }
+    }
+
+    private function getIdentity()
+    {
+        if (!$this->hasIdentity()) {
+            $this->identity = new \G4\DataMapper\Selection\Solr\Identity();
+        }
+        return $this->identity;
+    }
+
+    private function getSelection()
+    {
+        return new \G4\DataMapper\Selection\Solr\Factory();
+    }
+
+    private function hasIdentity()
+    {
+        return $this->identity instanceof \G4\DataMapper\Selection\Solr\Identity;
+    }
+
+    private function hasIdsForDelete()
+    {
+        return !empty($this->idsForDelete);
     }
 }
