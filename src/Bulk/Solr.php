@@ -13,10 +13,13 @@ class Solr
 
     private $data;
 
+    private $idsForDelete;
+
 
     public function __construct()
     {
-        $this->data = [];
+        $this->data         = [];
+        $this->idsForDelete = [];
     }
 
     public function getData()
@@ -24,9 +27,28 @@ class Solr
         return $this->data;
     }
 
+    public function getDataForDelete()
+    {
+        $identity = new \G4\DataMapper\Selection\Solr\Identity();
+        $identity
+            ->field(self::IDENTIFIER_KEY)
+            ->in($this->idsForDelete);
+        $selection = new \G4\DataMapper\Selection\Solr\Factory();
+        return [
+            self::METHOD_DELETE => [
+                'query' => $selection->query($identity)
+            ]
+        ];
+    }
+
     public function hasData()
     {
         return !empty($this->data);
+    }
+
+    public function hasDataForDelete()
+    {
+        return !empty($this->idsForDelete);
     }
 
     public function markForAdd(\G4\DataMapper\Domain\DomainAbstract $domain)
@@ -37,11 +59,7 @@ class Solr
 
     public function markForDelete(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
-        $this->data[] = [
-            self::METHOD_DELETE => [
-                self::IDENTIFIER_KEY => $domain->getId()
-            ]
-        ];
+        $this->idsForDelete[] = $domain->getId();
         return $this;
     }
 

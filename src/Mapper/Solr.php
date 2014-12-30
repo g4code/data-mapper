@@ -42,6 +42,11 @@ class Solr
                 ->setDocument($bulk->getData())
                 ->update();
         }
+        if ($bulk->hasDataForDelete()) {
+            $this->response = $this->adapter
+                ->setDocument($bulk->getDataForDelete())
+                ->update();
+        }
         return $this->getResponseStatus();
     }
 
