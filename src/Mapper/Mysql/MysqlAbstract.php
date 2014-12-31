@@ -152,11 +152,15 @@ abstract class MysqlAbstract implements MapperInterface
         $values = array();
 
         foreach ($collection as $domain) {
-            $values[] = "('" .implode("','", $domain->getRawData()) . "')";
+            $quotedValues = array();
+            foreach ($domain->getRawData() as $value){
+                $quotedValues[] = $this->_db->quote($value);
+            }
+            $values[] = "(" .implode(",", $quotedValues) . ")";
         }
 
         $query = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
-        return $this->_db->query($query);
+        return $this->_db->getConnection()->exec($query);
     }
 
     public function insertOnDuplicateKeyUpdate(DomainAbstract $domain)
