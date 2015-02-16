@@ -52,6 +52,13 @@ class Factory extends \G4\DataMapper\Selection\Factory
                 'fq'     => $identity->getGeodist()['filterQuery']
             ];
         }
+        if ($identity->hasGroupBy()) {
+            $params += [
+                'group'       => 'true',
+                'group.field' => $identity->getGroupBy(),
+                'group.main'  => 'true',
+            ];
+        }
         return $params;
     }
 

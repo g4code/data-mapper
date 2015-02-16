@@ -7,6 +7,8 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     private $fieldList = [];
 
+    private $groupBy;
+
     private $geodist = [];
 
 
@@ -67,6 +69,11 @@ class Identity extends \G4\DataMapper\Selection\Identity
         return $this->geodist;
     }
 
+    public function getGroupBy()
+    {
+        return $this->groupBy;
+    }
+
     public function hasFieldList()
     {
         return !empty($this->fieldList);
@@ -75,6 +82,11 @@ class Identity extends \G4\DataMapper\Selection\Identity
     public function hasGeoDistance()
     {
         return !empty($this->geodist['distance']);
+    }
+
+    public function hasGroupBy()
+    {
+        return !empty($this->groupBy);
     }
 
     public function hasGeoLatitudeAndLongitude()
@@ -104,6 +116,12 @@ class Identity extends \G4\DataMapper\Selection\Identity
     public function setFieldList(array $fieldList)
     {
         $this->fieldList = $fieldList;
+        return $this;
+    }
+
+    public function setGroupBy($fieldname)
+    {
+        $this->groupBy = $fieldname;
         return $this;
     }
 
