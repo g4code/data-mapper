@@ -71,6 +71,17 @@ class Solr
             ->returnCollection();
     }
 
+    public function flush()
+    {
+        return $this->adapter
+            ->setDocument([
+                \G4\DataMapper\Bulk\Solr::METHOD_DELETE => [
+                    'query' => '*:*',
+                ]
+            ])
+            ->flush();
+    }
+
     public function getBulk()
     {
         return new \G4\DataMapper\Bulk\Solr();

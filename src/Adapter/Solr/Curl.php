@@ -52,6 +52,13 @@ class Curl
         $this->params = $params;
     }
 
+    public function flush()
+    {
+        $this->method = self::METHOD_UPDATE;
+        return $this->exec()
+            ->getResponse();
+    }
+
     /**
      * @return string
      */
