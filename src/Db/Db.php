@@ -13,6 +13,11 @@ class Db
         return DI::get('db');
     }
 
+    public static function getProfilerConstInsert()
+    {
+        return \Zend_Db_Profiler::INSERT;
+    }
+
     public static function isTableRowInstance($obj)
     {
         return $obj instanceof \Zend_Db_Table_Row;

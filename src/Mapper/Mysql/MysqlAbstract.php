@@ -159,8 +159,12 @@ abstract class MysqlAbstract implements MapperInterface
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
 
-        $query = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
-        return $this->_db->getConnection()->exec($query);
+        $query    = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
+        $queryId  = $this->_db->getProfiler()->queryStart($query, \G4\DataMapper\Db\Db::getProfilerConstInsert());
+        $response = $this->_db->getConnection()->exec($query);
+        $this->_db->getProfiler()->queryEnd($queryId);
+
+        return $response;
     }
 
     public function insertOnDuplicateKeyUpdate(DomainAbstract $domain)
