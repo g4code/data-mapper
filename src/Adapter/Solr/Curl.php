@@ -25,6 +25,11 @@ class Curl
     private $params;
 
     /**
+     * @var \G4\DataMapper\Profiler\Search
+     */
+    private $profiler;
+
+    /**
      * @var string
      */
     private $response;
@@ -49,7 +54,8 @@ class Curl
      */
     public function __construct(array $params)
     {
-        $this->params = $params;
+        $this->params   = $params;
+        $this->profiler = \G4\DataMapper\Profiler\Search::getInstance();
     }
 
     public function flush()
@@ -148,7 +154,9 @@ class Curl
      */
     private function exec()
     {
-        $ch  = curl_init($this->buildUrl());
+        $uniqueId = $this->profiler->start();
+        $ch       = curl_init($this->buildUrl());
+
         curl_setopt_array($ch, [
             CURLOPT_POST           => 1,
             CURLOPT_POSTFIELDS     => $this->getPostfields(),
@@ -159,8 +167,14 @@ class Curl
         if ($this->method === self::METHOD_UPDATE) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         }
+
         $this->response = curl_exec($ch);
+        $this->profiler->setInfo($uniqueId, curl_getinfo($ch));
+
         curl_close($ch);
+
+        $this->profiler->end($uniqueId);
+
         return $this;
     }
 
