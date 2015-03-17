@@ -25,7 +25,7 @@ class Curl
     private $params;
 
     /**
-     * @var \G4\DataMapper\Profiler\Search
+     * @var \G4\DataMapper\Profiler\Solr\Ticker
      */
     private $profiler;
 
@@ -55,7 +55,7 @@ class Curl
     public function __construct(array $params)
     {
         $this->params   = $params;
-        $this->profiler = \G4\DataMapper\Profiler\Search::getInstance();
+        $this->profiler = \G4\DataMapper\Profiler\Solr\Ticker::getInstance();
     }
 
     public function flush()
