@@ -15,7 +15,7 @@ install:
 
 self-update:
 	@ /bin/echo -e "${TITLE} running composer self update" \
-	&& php composer.phar self-update"
+	&& php composer.phar self-update
 
 test:
 	@/bin/echo -e "${TITLE} testing suite started..." \
