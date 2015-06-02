@@ -2,36 +2,37 @@
 
 namespace G4\DataMapper\Factory\Domain;
 
-abstract class DomainAbstract
+abstract class DomainAbstract implements DomainInterface
 {
-    /**
-     * @var array
-     */
+
+    //TODO: Drasko: change to private after interface implementation in all child classes!
     protected $_data;
 
+    //TODO: Drasko: change to private after interface implementation in all child classes!
     protected $_domainModel;
 
+    //TODO: Drasko: remove this after interface implementation in all child classes!
     protected $_domainModelName;
 
+    //TODO: Drasko: remove this after interface implementation in all child classes!
     public function __construct()
     {
-        $this->_domainModel = null;
-        $this->_domainModelFactory();
+        $this->getDomainModel();
     }
 
     /**
      *
-     * @param array $data
+     * @param $data
      */
     public function createObject($data = null)
     {
         $this->setData($data);
 
-        $this->hasData() && $this->hasDomainModelInstance()
-            ? $this->_objectFactory()
+        $this->hasData()
+            ? $this->objectFactory()
             : $this->nullObjectFactory();
 
-        return $this->getDomainModel();
+        return $this->_domainModel;
     }
 
     public function getDataProperty($name)
@@ -41,44 +42,59 @@ abstract class DomainAbstract
 
     public function getDomainModel()
     {
+        if (!$this->hasDomainModelInstance()) {
+            $this->_domainModel = $this->getDomainModelInstance();
+        }
         return $this->_domainModel;
     }
 
-    public function hasData()
+    private function hasData()
     {
         return is_array($this->_data) && !empty($this->_data);
     }
 
-    public function hasDomainModelInstance()
+    private function hasDomainModelInstance()
     {
         return $this->_domainModel !== null;
     }
 
-    public function nullObjectFactory()
+    private function nullObjectFactory()
     {
         $this->_domainModel = null;
     }
 
     /**
-     *
      * @param \Zend_Db_Table_Row|array $data
      */
-    public function setData($data)
+    private function setData($data)
     {
         $this->_data = \G4\DataMapper\Db\Db::isTableRowInstance($data) ? $data->toArray() : $data;
         return $this;
     }
 
+
+    //TODO: Drasko: remove this after interface implementation in all child classes!
     abstract protected function _objectFactory();
 
-    /**
-     *
-     */
+    //TODO: Drasko: remove this after interface implementation in all child classes!
     protected function _domainModelFactory()
     {
         if (empty($this->_domainModelName) || !class_exists($this->_domainModelName)) {
             throw new \Exception('Domain model class does not exit: ' . $this->_domainModelName, 500);
         }
-        $this->_domainModel = new $this->_domainModelName();
+        return new $this->_domainModelName();
     }
+
+    //TODO: Drasko: remove this after interface implementation in all child classes!
+    public function getDomainModelInstance()
+    {
+        return $this->_domainModelFactory();
+    }
+
+    //TODO: Drasko: remove this after interface implementation in all child classes!
+    public function objectFactory()
+    {
+        $this->_objectFactory();
+    }
+
 }
