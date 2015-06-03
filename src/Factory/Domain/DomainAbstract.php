@@ -74,9 +74,6 @@ abstract class DomainAbstract implements DomainInterface
 
 
     //TODO: Drasko: remove this after interface implementation in all child classes!
-    abstract protected function _objectFactory();
-
-    //TODO: Drasko: remove this after interface implementation in all child classes!
     protected function _domainModelFactory()
     {
         if (empty($this->_domainModelName) || !class_exists($this->_domainModelName)) {
