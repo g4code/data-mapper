@@ -48,6 +48,11 @@ abstract class DomainAbstract implements DomainInterface
         return $this->_domainModel;
     }
 
+    public function nullObjectFactory()
+    {
+        $this->_domainModel = null;
+    }
+
     private function hasData()
     {
         return is_array($this->_data) && !empty($this->_data);
@@ -56,11 +61,6 @@ abstract class DomainAbstract implements DomainInterface
     private function hasDomainModelInstance()
     {
         return $this->_domainModel !== null;
-    }
-
-    private function nullObjectFactory()
-    {
-        $this->_domainModel = null;
     }
 
     /**
