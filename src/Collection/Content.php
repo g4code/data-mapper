@@ -18,12 +18,24 @@ class Content extends CollectionAbstract
 
     protected function _factory()
     {
-        $factoryDomain = new $this->_factoryDomainName();
-        return $factoryDomain->createObject($this->_getCurrentRawData());
+        return $this->factory($this->_getCurrentRawData());
     }
 
     public function getTotalItemsCount()
     {
         return $this->_totalItemsCount;
+    }
+
+    //TODO: Drasko: new object interface!
+    public function pickUp($key)
+    {
+        return isset($this->_rawData[$key])
+            ? $this->factory($this->_rawData[$key])
+            : null;
+    }
+
+    private function factory($data)
+    {
+        return (new $this->_factoryDomainName())->createObject($data);
     }
 }
