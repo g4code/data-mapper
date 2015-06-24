@@ -187,6 +187,13 @@ class Solr
      */
     private function returnCollection()
     {
-        return new \G4\DataMapper\Collection\Content($this->getRawData(), $this->getFactoryDomainName(), $this->getTotalItemsCount());
+        //TODO: Drasko: extract to new class!!!
+        $transformedData = [];
+        if (is_array($this->getRawData()) && count($this->getRawData()) > 0) {
+            foreach ($this->getRawData() as $key => $value) {
+                $transformedData[empty($value['id']) ? $key : $value['id']] = $value;
+            }
+        }
+        return new \G4\DataMapper\Collection\Content($transformedData, $this->getFactoryDomainName(), $this->getTotalItemsCount());
     }
 }
