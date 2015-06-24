@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Selection;
 
-use G4\DataMapper\Selection\Identity;
+use G4\DataMapper\Db\Db;
 
 class Factory
 {
@@ -18,14 +18,16 @@ class Factory
             return '1';
         }
 
+        $db = Db::getAdapter();
+
         $compstrings = array();
 
         foreach ($identity->getComps() as $comp) {
-            $s = "{$comp['name']} {$comp['operator']} ";
+            $s = sprintf("%s %s ", $comp['name'], $comp['operator']);
 
             $s .= ($comp['operator'] != 'IN' && !\G4\DataMapper\Db\Db::isExprInstance($comp['value']))
-                ? "'{$comp['value']}'"
-                : "{$comp['value']}";
+                ? sprintf("%s", $db->quote($comp['value']))
+                : $comp['value'];
 
             $compstrings[] = $s;
         }
