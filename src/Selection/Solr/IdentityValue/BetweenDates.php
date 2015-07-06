@@ -32,8 +32,8 @@ class BetweenDates implements \G4\DataMapper\Selection\Solr\IdentityValue\Identi
             $datetimeMin = date_create($this->min);
             $datetimeMax = date_create($this->max);
             $interval    = date_diff($datetimeMax, $datetimeMin);
-            $diff        = (int) $interval->format('%R%y');
-            $value       = [($diff < 0 ? $this->min : $this->max), ($diff < 0 ? $this->max : $this->min)];
+            $diff        = (int) $interval->format('%R%d');
+            $value       = [($diff <= 0 ? $this->min : $this->max), ($diff <= 0 ? $this->max : $this->min)];
         }
         return $value;
     }
