@@ -13,14 +13,24 @@ class Client
     private $client;
 
     /**
+     * @var string
+     */
+    private $index;
+
+    /**
      * @var array
      */
     private $params;
 
+//     /**
+//      * @var \G4\DataMapper\Profiler\Solr\Ticker
+//      */
+//     private $profiler;
+
     /**
-     * @var \G4\DataMapper\Profiler\Solr\Ticker
+     * @var string
      */
-    private $profiler;
+    private $type;
 
 
     /**
@@ -34,10 +44,9 @@ class Client
     }
 
 
-
-    public function index($params)
+    public function index(array $body, $id)
     {
-        return $this->client->index($params);
+        return $this->client->index($this->prepareForIndexing($body, $id));
     }
 
     public function get($params)
@@ -55,15 +64,32 @@ class Client
         return $this->client->delete($params);
     }
 
-    public function create($params)
+//     public function create($params)
+//     {
+//         return $this->client->create($params);
+//     }
+
+    /**
+     * @param array $body
+     * @return array
+     */
+    private function prepareForIndexing(array $body, $id)
     {
-        return $this->client->create($params);
+        $prepared = [
+            'index' => $this->index,
+            'type'  => $this->type,
+            'body'  => $body,
+        ];
+        if ($id !== null) {
+            $prepared['id'] = $id;
+        }
+        return $prepared;
     }
-
-
 
     private function filterParams($params)
     {
+        $this->index  = $params['index'];
+        $this->type   = $params['type'];
         $this->params = [
             'hosts' => [
                 $params['host'] . ':' . $params['port'],
