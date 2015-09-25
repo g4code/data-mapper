@@ -10,11 +10,15 @@ class Factory extends \G4\DataMapper\Selection\Factory
         $compstrings = [];
         foreach ($identity->getComps() as $comp) {
             if ($comp['value'] !== null) {
-                $compstrings['match'][$comp['name']] = $comp['value'];
+                $compstrings[][$comp['operator']][$comp['name']] = $comp['value'];
             }
         }
         return [
-            'query' => $compstrings,
+            'query' => [
+                'bool' => [
+                    'must' => $compstrings,
+                ],
+            ],
         ];
     }
 }

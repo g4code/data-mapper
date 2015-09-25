@@ -11,7 +11,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
     public function eq($value = null)
     {
         return $this->_operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            'match',
             $value
         );
     }
