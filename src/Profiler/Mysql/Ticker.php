@@ -7,22 +7,13 @@ use G4\DI\Container as DI;
 class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 {
 
-    private static $instance;
+    private $db;
 
-    private function __construct() {}
+    public function __construct(\G4\DataMapper\Adapter\Mysql\Db $dbAdapter) {
+        $this->db = $dbAdapter->get();
+    }
 
     private function __clone() {}
-
-    /**
-     * @return \G4\DataMapper\Profiler\Mysql\Ticker
-     */
-    final public static function getInstance()
-    {
-        if (static::$instance === null) {
-            static::$instance = new static();
-        }
-        return static::$instance;
-    }
 
     /**
      * @return string
@@ -69,6 +60,6 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
      */
     private function getDbProfiler()
     {
-        return DI::get('db')->getProfiler();
+        return  $this->db->getProfiler();
     }
 }

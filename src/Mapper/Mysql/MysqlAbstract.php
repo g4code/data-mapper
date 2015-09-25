@@ -35,9 +35,9 @@ abstract class MysqlAbstract implements MapperInterface
 
     protected $_tableName = null;
 
-    public function __construct()
+    public function __construct(\G4\DataMapper\Adapter\Mysql\Db $adapter)
     {
-        $this->_db = \G4\DataMapper\Db\Db::getAdapter();
+        $this->_db = $adapter->get();
     }
 
     public function delete(Identity $identity)
@@ -146,8 +146,8 @@ abstract class MysqlAbstract implements MapperInterface
 
         //@TODO setting fields may be solved better?
         $domain = is_array($collection)
-                    ? reset($collection)
-                    : $collection->rewind()->current();
+            ? reset($collection)
+            : $collection->rewind()->current();
         $fields = "`" . implode("`,`", array_keys($domain->getRawData())) . "`";
         $values = array();
 
@@ -329,7 +329,7 @@ abstract class MysqlAbstract implements MapperInterface
     protected function _getSelectionFactory()
     {
         if ($this->_selectionFactory === null) {
-            $this->_selectionFactory = new SelectionFactory();
+            $this->_selectionFactory = new SelectionFactory($this->_db);
         }
 
         return $this->_selectionFactory;
