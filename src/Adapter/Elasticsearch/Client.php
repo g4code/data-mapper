@@ -55,10 +55,10 @@ class Client
 //         return $this->client->get($params);
 //     }
 
-//     public function search($params)
-//     {
-//         return $this->client->search($params);
-//     }
+    public function search($body)
+    {
+        return $this->client->search($this->prepareForIndexing($body));
+    }
 
 //     public function delete()
 //     {
@@ -86,7 +86,7 @@ class Client
      * @param string $id
      * @return array
      */
-    private function prepareForIndexing(array $body, $id)
+    private function prepareForIndexing(array $body, $id = null)
     {
         $prepared = $this->prepareBasics() + [
             'body'  => $body,
