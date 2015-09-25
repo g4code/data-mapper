@@ -3,10 +3,18 @@
 namespace G4\DataMapper\Selection;
 
 use G4\DataMapper\Db\Db;
+use Rhumsaa\Uuid\Console\Exception;
 
 class Factory
 {
     protected $_defaultLimit = 20;
+
+    private $db;
+
+    public function __construct($db = null)
+    {
+        $this->db = $db;
+    }
 
     /**
      * @param Identity $identity
@@ -18,7 +26,9 @@ class Factory
             return '1';
         }
 
-        $db = Db::getAdapter();
+        if($this->db === null){
+            throw new \Exception("Missing Mysql db adapter", 500);
+        }
 
         $compstrings = array();
 
@@ -26,7 +36,7 @@ class Factory
             $s = sprintf("%s %s ", $comp['name'], $comp['operator']);
 
             $s .= ($comp['operator'] != 'IN' && !\G4\DataMapper\Db\Db::isExprInstance($comp['value']))
-                ? sprintf("%s", $db->quote($comp['value']))
+                ? sprintf("%s", $this->db->quote($comp['value']))
                 : $comp['value'];
 
             $compstrings[] = $s;
