@@ -19,6 +19,11 @@ class Elasticsearch
     }
 
 
+    public function flush()
+    {
+        return $this->adapter->flush();
+    }
+
     public function update(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
         return $this->adapter->index($domain->getRawData(), $domain->getId());

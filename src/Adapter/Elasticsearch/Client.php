@@ -22,9 +22,6 @@ class Client
      */
     private $params;
 
-//     /**
-//      * @var \G4\DataMapper\Profiler\Solr\Ticker
-//      */
 //     private $profiler;
 
     /**
@@ -43,26 +40,30 @@ class Client
         $this->client = new ElasticsearchClient($this->params);
     }
 
+    public function flush()
+    {
+        return $this->client->indices()->deleteMapping($this->prepareBasics());
+    }
 
     public function index(array $body, $id)
     {
         return $this->client->index($this->prepareForIndexing($body, $id));
     }
 
-    public function get($params)
-    {
-        return $this->client->get($params);
-    }
+//     public function get($params)
+//     {
+//         return $this->client->get($params);
+//     }
 
-    public function search($params)
-    {
-        return $this->client->search($params);
-    }
+//     public function search($params)
+//     {
+//         return $this->client->search($params);
+//     }
 
-    public function delete($params)
-    {
-        return $this->client->delete($params);
-    }
+//     public function delete()
+//     {
+//         return $this->client->delete();
+//     }
 
 //     public function create($params)
 //     {
@@ -70,14 +71,24 @@ class Client
 //     }
 
     /**
+     * @return array
+     */
+    private function prepareBasics()
+    {
+        return [
+            'index' => $this->index,
+            'type'  => $this->type,
+        ];
+    }
+
+    /**
      * @param array $body
+     * @param string $id
      * @return array
      */
     private function prepareForIndexing(array $body, $id)
     {
-        $prepared = [
-            'index' => $this->index,
-            'type'  => $this->type,
+        $prepared = $this->prepareBasics() + [
             'body'  => $body,
         ];
         if ($id !== null) {
@@ -86,7 +97,10 @@ class Client
         return $prepared;
     }
 
-    private function filterParams($params)
+    /**
+     * @param array $params
+     */
+    private function filterParams(array $params)
     {
         $this->index  = $params['index'];
         $this->type   = $params['type'];
