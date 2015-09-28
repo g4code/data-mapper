@@ -40,6 +40,12 @@ abstract class MysqlAbstract implements MapperInterface
         $this->_db = $adapter->get();
     }
 
+    public function closeConnection()
+    {
+        $this->_db->closeConnection();
+        return $this;
+    }
+
     public function delete(Identity $identity)
     {
         $sql  = "DELETE FROM " . $this->_db->quoteIdentifier($this->_getTablaName(), true);
