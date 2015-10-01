@@ -2,29 +2,48 @@
 
 namespace G4\DataMapper\Mapper;
 
+use G4\DataMapper\Selection\Elasticsearch\Factory as SelectionFactory;
+use G4\DataMapper\Selection\Elasticsearch\Identity as SelectionIdentity;
+use G4\DataMapper\Adapter\Elasticsearch\Client as Adapter;
+use G4\DataMapper\Collection\Content as CollectionContent;
+use G4\DataMapper\Domain\DomainAbstract;
+
 class Elasticsearch
 {
 
     /**
-     * @var unknown
+     * @var Adapter
      */
     private $adapter;
 
+    /**
+     * @var string
+     */
     private $factoryDomainName;
 
+    /**
+     * @var array
+     */
     private $response;
 
+    /**
+     * @var SelectionFactory
+     */
     private $selectionFactory;
 
     /**
-     * @param \G4\DataMapper\Adapter\Elasticsearch\Client $adapter
+     * @param Adapter $adapter
      */
-    public function __construct(\G4\DataMapper\Adapter\Elasticsearch\Client $adapter)
+    public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
     }
 
-    public function find($identity = null)
+    /**
+     * @param SelectionIdentity $identity
+     * @return CollectionContent
+     */
+    public function find(SelectionIdentity $identity = null)
     {
         $this->response = $this->adapter->search($this->getSelectionFactory()->query($identity));
         return $this->returnCollection();
@@ -35,9 +54,12 @@ class Elasticsearch
         return $this->adapter->flush();
     }
 
+    /**
+     * @return SelectionIdentity
+     */
     public function getIdentity()
     {
-        return new \G4\DataMapper\Selection\Elasticsearch\Identity();
+        return new SelectionIdentity();
     }
 
     public function setFactoryDomainName($factoryDomainName)
@@ -46,11 +68,15 @@ class Elasticsearch
         return $this;
     }
 
-    public function update(\G4\DataMapper\Domain\DomainAbstract $domain)
+    public function update(DomainAbstract $domain)
     {
         return $this->adapter->index($domain->getRawData(), $domain->getId());
     }
 
+    /**
+     * @throws \Exception
+     * @return string
+     */
     private function getFactoryDomainName()
     {
         if (empty($this->factoryDomainName)) {
@@ -59,6 +85,9 @@ class Elasticsearch
         return $this->factoryDomainName;
     }
 
+    /**
+     * @return array
+     */
     private function getRawData()
     {
         return empty($this->response['hits']['hits'])
@@ -66,10 +95,13 @@ class Elasticsearch
             : $this->response['hits']['hits'];
     }
 
+    /**
+     * @return SelectionFactory
+     */
     private function getSelectionFactory()
     {
         if ($this->selectionFactory === null) {
-            $this->selectionFactory = new \G4\DataMapper\Selection\Elasticsearch\Factory();
+            $this->selectionFactory = new SelectionFactory();
         }
         return $this->selectionFactory;
     }
@@ -84,6 +116,9 @@ class Elasticsearch
             : $this->response['hits']['total'];
     }
 
+    /**
+     * @return CollectionContent
+     */
     private function returnCollection()
     {
         $transformedData = [];
@@ -93,6 +128,6 @@ class Elasticsearch
                 $transformedData[empty($value['_id']) ? $key : $value['_id']] = $value['_source'];
             }
         }
-        return new \G4\DataMapper\Collection\Content($transformedData, $this->getFactoryDomainName(), $this->getTotalItemsCount());
+        return new CollectionContent($transformedData, $this->getFactoryDomainName(), $this->getTotalItemsCount());
     }
 }

@@ -15,10 +15,10 @@ class Factory extends \G4\DataMapper\Selection\Factory
         }
         return [
             'query' => [
-                'bool' => [
-                    'must' => $compstrings,
+                'filtered' => [
+                    'filter' => $compstrings
                 ],
-            ],
+            ]
         ];
     }
 }
