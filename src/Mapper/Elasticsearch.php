@@ -46,6 +46,7 @@ class Elasticsearch
     public function find(SelectionIdentity $identity = null)
     {
         $this->response = $this->adapter->search($this->getSelectionFactory()->query($identity));
+        print_r($this->response);
         return $this->returnCollection();
     }
 

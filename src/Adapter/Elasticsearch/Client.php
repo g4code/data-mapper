@@ -57,6 +57,8 @@ class Client
 
     public function search($body)
     {
+        echo '<pre>';
+        print_r($this->prepareForIndexing($body));
         return $this->client->search($this->prepareForIndexing($body));
     }
 
