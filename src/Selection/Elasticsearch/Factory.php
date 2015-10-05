@@ -23,10 +23,10 @@ class Factory extends \G4\DataMapper\Selection\Factory
                         'bool' => [
                             'must' => [
                                 ['term' => ['country_id' => 201],],
-                                ['term' => ['city_id' => 14359],],
+//                                 ['term' => ['city_id' => 14359],],
                                 ['term' => ['site_id' => 1],],
 //                                 ['term' => ['city_name' => 'Madrid'],],
-//                                 ['term' => ['gender' => 'F'],],
+                                ['term' => ['gender' => 'F'],],
                             ],
                         ],
                     ],

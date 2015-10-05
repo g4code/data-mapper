@@ -39,6 +39,11 @@ class Elasticsearch
         $this->adapter = $adapter;
     }
 
+    public function create($params)
+    {
+        return $this->adapter->putMapping($params);
+    }
+
     /**
      * @param SelectionIdentity $identity
      * @return CollectionContent
@@ -52,7 +57,7 @@ class Elasticsearch
 
     public function flush()
     {
-        return $this->adapter->flush();
+        return $this->adapter->deleteMapping();
     }
 
     /**

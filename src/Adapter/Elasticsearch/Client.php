@@ -40,9 +40,18 @@ class Client
         $this->client = new ElasticsearchClient($this->params);
     }
 
-    public function flush()
+    public function putMapping($params)
     {
-        return $this->client->indices()->deleteMapping($this->prepareBasics());
+        if (!$this->client->indices()->exists($this->prepareIndex())) {
+            $this->client->indices()->create($this->prepareIndex());
+        }
+        return $this->client->indices()->putMapping($this->prepareForIndexing($params));
+    }
+
+    public function deleteMapping()
+    {
+        //add check if index and type exists
+        return $this->client->indices()->deleteMapping($this->prepareType());
     }
 
     public function index(array $body, $id)
@@ -72,13 +81,19 @@ class Client
 //         return $this->client->create($params);
 //     }
 
-    /**
-     * @return array
-     */
-    private function prepareBasics()
+    private function prepareIndex()
     {
         return [
             'index' => $this->index,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function prepareType()
+    {
+        return $this->prepareIndex() + [
             'type'  => $this->type,
         ];
     }
@@ -90,7 +105,7 @@ class Client
      */
     private function prepareForIndexing(array $body, $id = null)
     {
-        $prepared = $this->prepareBasics() + [
+        $prepared = $this->prepareType() + [
             'body'  => $body,
         ];
         if ($id !== null) {
