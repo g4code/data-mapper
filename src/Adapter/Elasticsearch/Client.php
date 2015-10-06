@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Adapter\Elasticsearch;
 
 use Elasticsearch\Client as ElasticsearchClient;
+use Elasticsearch\Namespaces\IndicesNamespace;
 
 class Client
 {
@@ -11,6 +12,11 @@ class Client
      * @var ElasticsearchClient
      */
     private $client;
+
+    /**
+     * @var IndicesNamespace
+     */
+    private $clientIndices;
 
     /**
      * @var string
@@ -37,21 +43,23 @@ class Client
     {
         $this->filterParams($params);
 
-        $this->client = new ElasticsearchClient($this->params);
+        $this->client        = new ElasticsearchClient($this->params);
+        $this->clientIndices = $this->client->indices();
     }
 
     public function putMapping($params)
     {
-        if (!$this->client->indices()->exists($this->prepareIndex())) {
-            $this->client->indices()->create($this->prepareIndex());
+        if (!$this->clientIndices->exists($this->prepareIndex())) {
+            $this->clientIndices->create($this->prepareIndex());
         }
-        return $this->client->indices()->putMapping($this->prepareForIndexing($params));
+        return $this->clientIndices->putMapping($this->prepareForIndexing($params));
     }
 
     public function deleteMapping()
     {
-        //add check if index and type exists
-        return $this->client->indices()->deleteMapping($this->prepareType());
+        return $this->clientIndices->exists($this->prepareIndex()) && $this->clientIndices->existsType($this->prepareType())
+            ? $this->clientIndices->deleteMapping($this->prepareType())
+            : true;
     }
 
     public function index(array $body, $id)
