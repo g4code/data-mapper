@@ -4,6 +4,7 @@ namespace G4\DataMapper\Adapter\Elasticsearch;
 
 use Elasticsearch\Client as ElasticsearchClient;
 use Elasticsearch\Namespaces\IndicesNamespace;
+use G4\DataMapper\Selection\Elasticsearch\Factory as SelectionFactory;
 
 class Client
 {
@@ -47,24 +48,24 @@ class Client
         $this->clientIndices = $this->client->indices();
     }
 
-    public function putMapping($params)
+    public function putMapping(SelectionFactory $selectionFactory)
     {
-        if (!$this->clientIndices->exists($this->prepareIndex())) {
-            $this->clientIndices->create($this->prepareIndex());
+        if (!$this->clientIndices->exists($selectionFactory->prepareIndex())) {
+            $this->clientIndices->create($selectionFactory->prepareIndex());
         }
-        return $this->clientIndices->putMapping($this->prepareForIndexing($params));
+        return $this->clientIndices->putMapping($selectionFactory->prepareForMapping());
     }
 
-    public function deleteMapping()
+    public function deleteMapping(SelectionFactory $selectionFactory)
     {
-        return $this->clientIndices->exists($this->prepareIndex()) && $this->clientIndices->existsType($this->prepareType())
-            ? $this->clientIndices->deleteMapping($this->prepareType())
+        return $this->clientIndices->exists($selectionFactory->prepareIndex()) && $this->clientIndices->existsType($selectionFactory->prepareType())
+            ? $this->clientIndices->deleteMapping($selectionFactory->prepareType())
             : true;
     }
 
-    public function index(array $body, $id)
+    public function index(SelectionFactory $selectionFactory)
     {
-        return $this->client->index($this->prepareForIndexing($body, $id));
+        return $this->client->index($selectionFactory->prepareForIndexing());
     }
 
 //     public function get($params)
@@ -72,11 +73,21 @@ class Client
 //         return $this->client->get($params);
 //     }
 
-    public function search($body)
+    public function search(SelectionFactory $selectionFactory)
     {
         echo '<pre>';
-        print_r($this->prepareForIndexing($body));
-        return $this->client->search($this->prepareForIndexing($body));
+        print_r($selectionFactory->query());
+        return $this->client->search($selectionFactory->query());
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 
 //     public function delete()
@@ -88,39 +99,6 @@ class Client
 //     {
 //         return $this->client->create($params);
 //     }
-
-    private function prepareIndex()
-    {
-        return [
-            'index' => $this->index,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function prepareType()
-    {
-        return $this->prepareIndex() + [
-            'type'  => $this->type,
-        ];
-    }
-
-    /**
-     * @param array $body
-     * @param string $id
-     * @return array
-     */
-    private function prepareForIndexing(array $body, $id = null)
-    {
-        $prepared = $this->prepareType() + [
-            'body'  => $body,
-        ];
-        if ($id !== null) {
-            $prepared['id'] = $id;
-        }
-        return $prepared;
-    }
 
     /**
      * @param array $params

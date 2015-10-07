@@ -41,7 +41,8 @@ class Elasticsearch
 
     public function create($params)
     {
-        return $this->adapter->putMapping($params);
+        $this->getSelectionFactory()->setMappings($params);
+        return $this->adapter->putMapping($this->getSelectionFactory());
     }
 
     /**
@@ -50,14 +51,14 @@ class Elasticsearch
      */
     public function find(SelectionIdentity $identity = null)
     {
-        $this->response = $this->adapter->search($this->getSelectionFactory()->query($identity));
-        print_r($this->response);
+        $this->getSelectionFactory()->setIdentity($identity);
+        $this->response = $this->adapter->search($this->getSelectionFactory());
         return $this->returnCollection();
     }
 
     public function flush()
     {
-        return $this->adapter->deleteMapping();
+        return $this->adapter->deleteMapping($this->getSelectionFactory());
     }
 
     /**
@@ -76,7 +77,10 @@ class Elasticsearch
 
     public function update(DomainAbstract $domain)
     {
-        return $this->adapter->index($domain->getRawData(), $domain->getId());
+        $this->getSelectionFactory()
+            ->setBody($domain->getRawData())
+            ->setId($domain->getId());
+        return $this->adapter->index($this->getSelectionFactory());
     }
 
     /**
@@ -108,6 +112,9 @@ class Elasticsearch
     {
         if ($this->selectionFactory === null) {
             $this->selectionFactory = new SelectionFactory();
+            $this->selectionFactory
+                ->setIndexName($this->adapter->getIndex())
+                ->setTypeName($this->adapter->getType());
         }
         return $this->selectionFactory;
     }
