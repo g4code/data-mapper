@@ -3,15 +3,14 @@
 namespace G4\DataMapper\Selection;
 
 use G4\DataMapper\Selection\IdentityField;
+use G4\DataMapper\Selection\IdentityAbstract;
 
 //TODO: Drasko - This needs refactoring - large class!
-class Identity
+class Identity extends IdentityAbstract
 {
     private $_currentField = null;
 
     private $_customContainer = array();
-
-    private $_enforce = array();
 
     private $_fields = array();
 
@@ -21,25 +20,6 @@ class Identity
 
     private $_orderBy = array();
 
-    public function __construct($field = null, array $enforce = null)
-    {
-        if (!is_null($enforce)) {
-            $this->_enforce = $enforce;
-        }
-
-        if (!is_null($field)) {
-            $this->field($field);
-        }
-    }
-
-    public function enforceField($fieldname)
-    {
-        if (!in_array($fieldname, $this->_enforce) && !empty($this->_enforce)) {
-            $forcelist = implode(', ', $this->_enforce);
-            throw new \Exception("{$fieldname} is not a legal field ($forcelist)");
-        }
-    }
-
     /**
      * @return Identity
      */
@@ -48,8 +28,6 @@ class Identity
         if (!$this->isVoid() && $this->_currentField->isIncomplete()) {
             throw new \Exception("Incomplete field");
         }
-
-        $this->enforceField($fieldname);
 
         if (isset($this->_fields[$fieldname])) {
             $this->_currentField = $this->_fields[$fieldname];
@@ -88,11 +66,6 @@ class Identity
     public function getLimit()
     {
         return $this->_limit;
-    }
-
-    public function getObjectFields()
-    {
-        return $this->_enforce;
     }
 
     public function getPage()
