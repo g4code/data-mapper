@@ -14,8 +14,6 @@ class Identity extends IdentityAbstract
 
     private $_fields = array();
 
-    private $_page = '';
-
     /**
      * @return Identity
      */
@@ -57,11 +55,6 @@ class Identity extends IdentityAbstract
     public function getId($fieldName)
     {
         return isset($this->_fields[$fieldName]) ? $this->_fields[$fieldName]->getCompEq() : null;
-    }
-
-    public function getPage()
-    {
-        return $this->_page;
     }
 
     public function isVoid()
@@ -167,15 +160,6 @@ class Identity extends IdentityAbstract
     public function ge($value = null)
     {
         $this->_operator(">=", $value);
-        return $this;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function setPage($value)
-    {
-        $this->_page = $value;
         return $this;
     }
 
