@@ -18,8 +18,6 @@ class Identity extends IdentityAbstract
 
     private $_page = '';
 
-    private $_orderBy = array();
-
     /**
      * @return Identity
      */
@@ -71,16 +69,6 @@ class Identity extends IdentityAbstract
     public function getPage()
     {
         return $this->_page;
-    }
-
-    public function getOrderBy()
-    {
-        return $this->_orderBy;
-    }
-
-    public function hasOrderBy()
-    {
-        return !empty($this->_orderBy);
     }
 
     public function isVoid()
@@ -204,15 +192,6 @@ class Identity extends IdentityAbstract
     public function setPage($value)
     {
         $this->_page = $value;
-        return $this;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function setOrderBy($param, $value)
-    {
-        $this->_orderBy[$param] = $value;
         return $this;
     }
 
