@@ -14,8 +14,6 @@ class Identity extends IdentityAbstract
 
     private $_fields = array();
 
-    private $_limit = '';
-
     private $_page = '';
 
     /**
@@ -59,11 +57,6 @@ class Identity extends IdentityAbstract
     public function getId($fieldName)
     {
         return isset($this->_fields[$fieldName]) ? $this->_fields[$fieldName]->getCompEq() : null;
-    }
-
-    public function getLimit()
-    {
-        return $this->_limit;
     }
 
     public function getPage()
@@ -174,15 +167,6 @@ class Identity extends IdentityAbstract
     public function ge($value = null)
     {
         $this->_operator(">=", $value);
-        return $this;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function setLimit($value)
-    {
-        $this->_limit = $value;
         return $this;
     }
 

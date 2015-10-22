@@ -7,10 +7,17 @@ use G4\DataMapper\Selection\IdentityField;
 class IdentityAbstract
 {
 
+    private $limit = '';
+
     /**
      * @var array
      */
     private $orderBy = [];
+
+    public function getLimit()
+    {
+        return $this->limit;
+    }
 
     /**
      * @return array
@@ -26,6 +33,15 @@ class IdentityAbstract
     public function hasOrderBy()
     {
         return !empty($this->orderBy);
+    }
+
+    /**
+     * @return Identity
+     */
+    public function setLimit($value)
+    {
+        $this->limit = $value;
+        return $this;
     }
 
     /**
