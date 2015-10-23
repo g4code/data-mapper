@@ -10,8 +10,6 @@ class Identity extends IdentityAbstract
 {
     private $_currentField = null;
 
-    private $_customContainer = array();
-
     private $_fields = array();
 
     /**
@@ -161,21 +159,6 @@ class Identity extends IdentityAbstract
     {
         $this->_operator(">=", $value);
         return $this;
-    }
-
-    public function __call($name, $args)
-    {
-        $method = array();
-        preg_match('~([a-z]+)(.*)~', $name, $method);
-
-        switch ($method[1]) {
-            case 'set' :
-                $this->_customContainer[$method[2]] = $args[0];
-                break;
-            case 'get' :
-                return isset($this->_customContainer[$method[2]]) ? $this->_customContainer[$method[2]] : null;
-                break;
-        }
     }
 
     /**
