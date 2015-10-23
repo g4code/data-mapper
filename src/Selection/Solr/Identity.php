@@ -134,7 +134,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function timeFromInMinutes($value)
     {
-        return $this->_operatorAttach(
+        return $this->operatorAttach(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
         );
@@ -142,7 +142,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function timeToInMinutes($value)
     {
-        return $this->_operatorAttach(
+        return $this->operatorAttach(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
         );
