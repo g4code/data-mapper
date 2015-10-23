@@ -65,7 +65,7 @@ class Identity extends IdentityAbstract
      */
     public function eq($value = null)
     {
-        $this->_operator("=", $value);
+        $this->operator("=", $value);
         return $this;
     }
 
@@ -74,7 +74,7 @@ class Identity extends IdentityAbstract
      */
     public function neq($value = null)
     {
-        $this->_operator("<>", $value);
+        $this->operator("<>", $value);
         return $this;
     }
 
@@ -83,7 +83,7 @@ class Identity extends IdentityAbstract
      */
     public function gt($value = null)
     {
-        $this->_operator(">", $value);
+        $this->operator(">", $value);
         return $this;
     }
 
@@ -94,7 +94,7 @@ class Identity extends IdentityAbstract
     {
         $fields = "('" . implode("', '", $fields) . "')";
 
-        $this->_operator('IN', $fields);
+        $this->operator('IN', $fields);
         return $this;
     }
 
@@ -103,7 +103,7 @@ class Identity extends IdentityAbstract
      */
     public function like($value = null)
     {
-        $this->_operator("LIKE", $value);
+        $this->operator("LIKE", $value);
         return $this;
     }
 
@@ -112,7 +112,7 @@ class Identity extends IdentityAbstract
      */
     public function likeWildcardLeft($value = null)
     {
-        $this->_operator("LIKE", "%{$value}");
+        $this->operator("LIKE", "%{$value}");
         return $this;
     }
 
@@ -121,7 +121,7 @@ class Identity extends IdentityAbstract
      */
     public function likeWildcardRight($value = null)
     {
-        $this->_operator("LIKE", "{$value}%");
+        $this->operator("LIKE", "{$value}%");
         return $this;
     }
 
@@ -130,7 +130,7 @@ class Identity extends IdentityAbstract
      */
     public function likeWildcardBoth($value = null)
     {
-        $this->_operator("LIKE", "%{$value}%");
+        $this->operator("LIKE", "%{$value}%");
         return $this;
     }
 
@@ -139,7 +139,7 @@ class Identity extends IdentityAbstract
      */
     public function lt($value = null)
     {
-        $this->_operator("<", $value);
+        $this->operator("<", $value);
         return $this;
     }
 
@@ -148,7 +148,7 @@ class Identity extends IdentityAbstract
      */
     public function le($value = null)
     {
-        $this->_operator("<=", $value);
+        $this->operator("<=", $value);
         return $this;
     }
 
@@ -157,14 +157,14 @@ class Identity extends IdentityAbstract
      */
     public function ge($value = null)
     {
-        $this->_operator(">=", $value);
+        $this->operator(">=", $value);
         return $this;
     }
 
     /**
      * @return Identity
      */
-    protected function _operator($symbol, $value)
+    public function operator($symbol, $value)
     {
         if ($this->isVoid()) {
             throw new \Exception("No object field defined");
@@ -175,7 +175,7 @@ class Identity extends IdentityAbstract
         return $this;
     }
 
-    protected function _operatorAttach($symbol, $value)
+    public function _operatorAttach($symbol, $value)
     {
         if ($this->isVoid()) {
             throw new \Exception("No object field defined");

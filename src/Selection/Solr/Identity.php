@@ -20,7 +20,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function between($min, $max)
     {
-        return $this->_operator(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Between($min, $max))
         );
@@ -28,7 +28,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function betweenDates($min, $max)
     {
-        return $this->_operator(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\BetweenDates($min, $max))
         );
@@ -36,7 +36,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function eq($value = null)
     {
-        return $this->_operator(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $value
         );
@@ -99,7 +99,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
         if (empty($value)) {
             $value = null;
         }
-        return $this->_operator(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
         );
@@ -107,7 +107,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function like($value = null)
     {
-        return $this->_operator(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Like($value))
         );

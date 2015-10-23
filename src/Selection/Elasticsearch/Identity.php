@@ -10,7 +10,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function eq($value = null)
     {
-        return $this->_operator(
+        return $this->operator(
             'term',
             $value
         );
@@ -18,7 +18,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function in($value = null)
     {
-        return $this->_operator(
+        return $this->operator(
             'terms',
             $value
         );
