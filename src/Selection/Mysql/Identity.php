@@ -50,6 +50,17 @@ class Identity extends IdentityAbstract
     /**
      * @return Identity
      */
+    public function nin($fields = array())
+    {
+        $fields = "('" . implode("', '", $fields) . "')";
+
+        $this->operator('NOT IN', $fields);
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
     public function like($value = null)
     {
         $this->operator("LIKE", $value);
