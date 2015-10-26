@@ -7,9 +7,15 @@ use G4\DataMapper\Selection\IdentityField;
 class IdentityAbstract
 {
 
-    private $_currentField = null;
+    /**
+     * @var IdentityField
+     */
+    private $currentField;
 
-    private $_fields = array();
+    /**
+     * @var array
+     */
+    private $fields;
 
     /**
      * @var int
@@ -29,58 +35,71 @@ class IdentityAbstract
 
     public function __construct()
     {
-        //TODO: change this!!!;
-        $this->limit = '';
-        $this->orderBy = [];
-        $this->page = '';
+        $this->currentField = null;
+        $this->fields       = [];
+        $this->limit        = ''; //TODO: Drasko: change this!!!;
+        $this->orderBy      = [];
+        $this->page         = ''; //TODO: Drasko: change this!!!;
     }
 
     /**
-     * @return Identity
+     * @param string $fieldname
+     * @throws \Exception
+     * @return IdentityAbstract
      */
     public function field($fieldname)
     {
-        if (!$this->isVoid() && $this->_currentField->isIncomplete()) {
+        if (!$this->isVoid() && $this->currentField->isIncomplete()) {
             throw new \Exception("Incomplete field");
         }
 
-        if (isset($this->_fields[$fieldname])) {
-            $this->_currentField = $this->_fields[$fieldname];
+        if (isset($this->fields[$fieldname])) {
+            $this->currentField = $this->fields[$fieldname];
         } else {
-            $this->_currentField = new IdentityField($fieldname);
-            $this->_fields[$fieldname] = $this->_currentField;
+            $this->currentField = new IdentityField($fieldname);
+            $this->fields[$fieldname] = $this->currentField;
         }
 
         return $this;
     }
 
     /**
-     * @return G4\DataMapper\Selection\IdentityField
+     * @return IdentityField
      */
     public function getCurrentField()
     {
-        return $this->_currentField;
+        return $this->currentField;
     }
 
+    /**
+     * @return array
+     */
     public function getComps()
     {
-        $ret = array();
+        $ret = [];
 
-        foreach ($this->_fields as $key => $field) {
+        foreach ($this->fields as $key => $field) {
             $ret = array_merge($ret, $field->getComps());
         }
 
         return $ret;
     }
 
+    /**
+     * @param string $fieldName
+     * @return mixed
+     */
     public function getId($fieldName)
     {
-        return isset($this->_fields[$fieldName]) ? $this->_fields[$fieldName]->getCompEq() : null;
+        return isset($this->fields[$fieldName]) ? $this->fields[$fieldName]->getCompEq() : null;
     }
 
+    /**
+     * @return boolean
+     */
     public function isVoid()
     {
-        return empty($this->_fields);
+        return empty($this->fields);
     }
 
     /**
@@ -116,6 +135,7 @@ class IdentityAbstract
     }
 
     /**
+     * @param int $value
      * @return IdentityAbstract
      */
     public function setLimit($value)
@@ -125,6 +145,8 @@ class IdentityAbstract
     }
 
     /**
+     * @param string $param
+     * @param string $value
      * @return IdentityAbstract
      */
     public function setOrderBy($param, $value)
@@ -134,7 +156,8 @@ class IdentityAbstract
     }
 
     /**
-     * @return IdentityAbstract
+     * @param int $value
+     * @return \G4\DataMapper\Selection\IdentityAbstract
      */
     public function setPage($value)
     {
@@ -143,7 +166,10 @@ class IdentityAbstract
     }
 
     /**
-     * @return Identity
+     * @param string $symbol
+     * @param string $value
+     * @throws \Exception
+     * @return IdentityAbstract
      */
     public function operator($symbol, $value)
     {
@@ -151,18 +177,24 @@ class IdentityAbstract
             throw new \Exception("No object field defined");
         }
 
-        $this->_currentField->add($symbol, $value);
+        $this->currentField->add($symbol, $value);
 
         return $this;
     }
 
+    /**
+     * @param string $symbol
+     * @param string $value
+     * @throws \Exception
+     * @return IdentityAbstract
+     */
     public function operatorAttach($symbol, $value)
     {
         if ($this->isVoid()) {
             throw new \Exception("No object field defined");
         }
 
-        $this->_currentField->attach($symbol, $value);
+        $this->currentField->attach($symbol, $value);
 
         return $this;
     }
