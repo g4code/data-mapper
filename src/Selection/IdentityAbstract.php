@@ -157,7 +157,7 @@ class IdentityAbstract
 
     /**
      * @param int $value
-     * @return \G4\DataMapper\Selection\IdentityAbstract
+     * @return IdentityAbstract
      */
     public function setPage($value)
     {

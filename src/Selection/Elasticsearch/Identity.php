@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Selection\Elasticsearch;
 
-class Identity extends \G4\DataMapper\Selection\Identity
+class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 {
 
     private $fieldList = [];

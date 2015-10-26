@@ -55,7 +55,7 @@ class Solr
         return $this->bulkUpdate($this->getBulk()->markForDelete($domain));
     }
 
-    public function deleteByIdentity(\G4\DataMapper\Selection\Identity $identity)
+    public function deleteByIdentity(\G4\DataMapper\Selection\IdentityAbstract $identity)
     {
         return $this->bulkUpdate($this->getBulk()->markForDeleteByIdentity($identity));
     }
@@ -64,7 +64,7 @@ class Solr
      * @param \G4\DataMapper\Selection\Identity $identity
      * @return \G4\DataMapper\Collection\Content
      */
-    public function find(\G4\DataMapper\Selection\Identity $identity = null)
+    public function find(\G4\DataMapper\Selection\IdentityAbstract $identity = null)
     {
         return $this
             ->fetch($identity === null ? $this->getIdentity() : $identity)
@@ -123,7 +123,7 @@ class Solr
     /**
      * @return \G4\DataMapper\Mapper\Solr
      */
-    private function fetch(\G4\DataMapper\Selection\Identity $identity)
+    private function fetch(\G4\DataMapper\Selection\IdentityAbstract $identity)
     {
         $this->response = $this->adapter
             ->setRequestParams($this->getSelectionFactory()->requestParams($identity))

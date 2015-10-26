@@ -65,7 +65,7 @@ class Solr
         return $this;
     }
 
-    public function markForDeleteByIdentity(\G4\DataMapper\Selection\Identity $identity)
+    public function markForDeleteByIdentity(\G4\DataMapper\Selection\IdentityAbstract $identity)
     {
         $this->identity = $identity;
         return $this;

@@ -21,7 +21,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
             : join(",", $fieldList);
     }
 
-    public function orderBy(\G4\DataMapper\Selection\Identity $identity = null)
+    public function orderBy(\G4\DataMapper\Selection\IdentityAbstract $identity = null)
     {
         if (is_null($identity) || !$identity->hasOrderBy()) {
             return '';
