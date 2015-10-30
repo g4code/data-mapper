@@ -3,8 +3,9 @@
 namespace G4\DataMapper\Selection;
 
 use G4\DataMapper\Selection\IdentityField;
+use G4\DataMapper\Selection\IdentityInterface;
 
-class IdentityAbstract
+abstract class IdentityAbstract implements IdentityInterface
 {
 
     /**

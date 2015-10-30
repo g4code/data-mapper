@@ -5,24 +5,25 @@ namespace G4\DataMapper\Selection;
 interface IdentityInterface
 {
 
-    public function equal($value = null);
-
-    public function notEqual($value = null);
+    public function equal($value);
 
 
-    public function greaterThan($value = null);
+    public function greaterThan($value);
 
-    public function greaterThanOrEqual($value = null);
-
-    public function lessThan($value = null);
-
-    public function lessThanOrEqual($value = null);
+    public function greaterThanOrEqual($value);
 
 
-    public function in($fields = array());
+    public function in(array $fields);
 
-    public function notIn($fields = array());
+    public function like($value, $wildCardPosition = null);
 
 
-    public function like($value = null, $wildCardPosition = null);
+    public function lessThan($value);
+
+    public function lessThanOrEqual($value);
+
+
+    public function notEqual($value);
+
+    public function notIn(array $fields);
 }

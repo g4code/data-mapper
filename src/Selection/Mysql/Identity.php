@@ -8,116 +8,180 @@ use G4\DataMapper\Selection\IdentityAbstract;
 class Identity extends IdentityAbstract
 {
 
+    const WILDCARD_POSITION_BOTH  = 'WILDCARD_POSITION_BOTH';
+    const WILDCARD_POSITION_LEFT  = 'WILDCARD_POSITION_LEFT';
+    const WILDCARD_POSITION_RIGHT = 'WILDCARD_POSITION_RIGHT';
+
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function eq($value = null)
+    public function equal($value)
     {
         $this->operator("=", $value);
         return $this;
     }
-
     /**
-     * @return Identity
+     * OBSOLETE !!! USE equal($value)
      */
-    public function neq($value = null)
+    public function eq($value = null)
     {
-        $this->operator("<>", $value);
-        return $this;
+        return $this->equal($value);
     }
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function gt($value = null)
+    public function greaterThan($value)
     {
         $this->operator(">", $value);
         return $this;
     }
+    /**
+     * OBSOLETE !!! USE greaterThan($value)
+     */
+    public function gt($value = null)
+    {
+        return $this->greaterThan($value);
+    }
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function in($fields = array())
+    public function greaterThanOrEqual($value)
     {
-        $fields = "('" . implode("', '", $fields) . "')";
+        $this->operator(">=", $value);
+        return $this;
+    }
+    /**
+     * OBSOLETE !!! USE greaterThanOrEqual($value)
+     */
+    public function ge($value = null)
+    {
+        return $this->greaterThanOrEqual($value);
+    }
 
+    /**
+     * @param array $fields
+     * @return Identity
+     */
+    public function in(array $fields)
+    {
+        $fields = empty($fields) ? null : "('" . implode("', '", $fields) . "')";
         $this->operator('IN', $fields);
         return $this;
     }
 
     /**
+     * @param string $value
+     * @param string $wildCardPosition
      * @return Identity
      */
-    public function nin($fields = array())
+    public function like($value, $wildCardPosition = null)
     {
-        $fields = "('" . implode("', '", $fields) . "')";
-
-        $this->operator('NOT IN', $fields);
-        return $this;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function like($value = null)
-    {
+        if ($wildCardPosition === self::WILDCARD_POSITION_BOTH) {
+            $value = "%{$value}%";
+        }
+        if ($wildCardPosition === self::WILDCARD_POSITION_LEFT) {
+            $value = "%{$value}";
+        }
+        if ($wildCardPosition === self::WILDCARD_POSITION_RIGHT) {
+            $value = "{$value}%";
+        }
         $this->operator("LIKE", $value);
         return $this;
     }
-
     /**
-     * @return Identity
-     */
-    public function likeWildcardLeft($value = null)
-    {
-        $this->operator("LIKE", "%{$value}");
-        return $this;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function likeWildcardRight($value = null)
-    {
-        $this->operator("LIKE", "{$value}%");
-        return $this;
-    }
-
-    /**
-     * @return Identity
+     * OBSOLETE !!! USE like($value, $wildCardPosition = null)
      */
     public function likeWildcardBoth($value = null)
     {
-        $this->operator("LIKE", "%{$value}%");
-        return $this;
+        return $this->like($value, self::WILDCARD_POSITION_BOTH);
+    }
+    /**
+     * OBSOLETE !!! USE like($value, $wildCardPosition = null)
+     */
+    public function likeWildcardLeft($value = null)
+    {
+        return $this->like($value, self::WILDCARD_POSITION_LEFT);
+    }
+    /**
+     * OBSOLETE !!! USE like($value, $wildCardPosition = null)
+     */
+    public function likeWildcardRight($value = null)
+    {
+        return $this->like($value, self::WILDCARD_POSITION_RIGHT);
     }
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function lt($value = null)
+    public function lessThan($value)
     {
         $this->operator("<", $value);
         return $this;
     }
+    /**
+     * OBSOLETE !!! USE lessThan($value)
+     */
+    public function lt($value = null)
+    {
+        return $this->lessThan($value);
+    }
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function le($value = null)
+    public function lessThanOrEqual($value)
     {
         $this->operator("<=", $value);
         return $this;
     }
+    /**
+     * OBSOLETE !!! USE lessThanOrEqual($value)
+     */
+    public function le($value = null)
+    {
+        return $this->lessThanOrEqual($value);
+    }
 
     /**
+     * @param string $value
      * @return Identity
      */
-    public function ge($value = null)
+    public function notEqual($value)
     {
-        $this->operator(">=", $value);
+        $this->operator("<>", $value);
         return $this;
+    }
+    /**
+     * OBSOLETE !!! USE notEqual($value)
+     */
+    public function neq($value = null)
+    {
+        return $this->notEqual($value);
+    }
+
+    /**
+     * @param array $fields
+     * @return Identity
+     */
+    public function notIn(array $fields)
+    {
+        $fields = empty($fields) ? null : "('" . implode("', '", $fields) . "')";
+        $this->operator('NOT IN', $fields);
+        return $this;
+    }
+    /**
+     * OBSOLETE !!! USE notIn(array $fields)
+     */
+    public function nin($fields = array())
+    {
+        return $this->notIn($fields);
     }
 }
