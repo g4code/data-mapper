@@ -105,6 +105,20 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
+    public function nin($value = array())
+    {
+        if (empty($value)) {
+            $value = null;
+        }
+
+        $this->getCurrentField()->addPrefixToName('-');
+
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
+        );
+    }
+
     public function like($value = null)
     {
         return $this->operator(

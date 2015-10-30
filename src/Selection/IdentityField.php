@@ -4,41 +4,48 @@ namespace G4\DataMapper\Selection;
 
 class IdentityField
 {
-    private $_comps = array();
+    private $comps = array();
 
-    private $_name = null;
+    private $name = null;
 
     public function __construct($name)
     {
-        $this->_name = $name;
+        $this->name  = $name;
+        $this->comps = [];
     }
 
     public function attach($operator, $value)
     {
-        return empty($this->_comps)
+        return empty($this->comps)
             ? $this->add($operator, $value)
             : $this->overrideCurrent($operator, $value);
     }
 
     public function add($operator, $value)
     {
-        $this->_comps[] = array(
-            'name'     => $this->_name,
+        $this->comps[] = array(
+            'name'     => $this->name,
             'operator' => $operator,
             'value'    => $value
         );
         return $this;
     }
 
+    public function addPrefixToName($prefix)
+    {
+        $this->name = $prefix . $this->name;
+        return $this;
+    }
+
     public function getComps()
     {
-        return $this->_comps;
+        return $this->comps;
     }
 
     public function getCompEq()
     {
         if (!$this->isIncomplete()) {
-            foreach ($this->_comps as $comp) {
+            foreach ($this->comps as $comp) {
                 if ($comp['operator'] == '=') {
                     return $comp['value'];
                 }
@@ -50,48 +57,53 @@ class IdentityField
     public function getCurrentValue()
     {
         return $this->hasCurrentValue()
-            ? $this->_comps[0]['value']
+            ? $this->comps[0]['value']
             : null;
     }
 
     public function getCurrentValueMax()
     {
         return $this->hasCurrentValueMax()
-            ? $this->_comps[0]['value'][1]
+            ? $this->comps[0]['value'][1]
             : null;
     }
 
     public function getCurrentValueMin()
     {
         return $this->hasCurrentValue()
-            ? $this->_comps[0]['value'][0]
+            ? $this->comps[0]['value'][0]
             : null;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function hasCurrentValue()
     {
-        return !empty($this->_comps) && isset($this->_comps[0]['value']);
+        return !empty($this->comps) && isset($this->comps[0]['value']);
     }
 
     public function hasCurrentValueMax()
     {
-        return $this->hasCurrentValue() && isset($this->_comps[0]['value'][1]);
+        return $this->hasCurrentValue() && isset($this->comps[0]['value'][1]);
     }
 
     public function hasCurrentValueMin()
     {
-        return $this->hasCurrentValue() && isset($this->_comps[0]['value'][0]);
+        return $this->hasCurrentValue() && isset($this->comps[0]['value'][0]);
     }
 
     public function isIncomplete()
     {
-        return empty($this->_comps);
+        return empty($this->comps);
     }
 
     private function overrideCurrent($operator, $value)
     {
-        $this->_comps[0] = array(
-            'name'     => $this->_name,
+        $this->comps[0] = array(
+            'name'     => $this->name,
             'operator' => $operator,
             'value'    => $value
         );
