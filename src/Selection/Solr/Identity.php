@@ -149,15 +149,15 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
-    public function notIn(array $values)
+    public function notIn(array $values = null)
     {
-        if (empty($value)) {
-            $value = null;
+        if (empty($values)) {
+            $values = null;
         }
         $this->getCurrentField()->addPrefixToName('-');
         return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($values))
         );
     }
     /**

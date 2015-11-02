@@ -16,7 +16,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
-    public function in($value = null)
+    public function in(array $values = null)
     {
         return $this->operator(
             'terms',

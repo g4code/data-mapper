@@ -25,5 +25,5 @@ interface IdentityInterface
 
     public function notEqual($value);
 
-    public function notIn(array $values);
+    public function notIn(array $values = null);
 }

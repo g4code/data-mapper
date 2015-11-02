@@ -171,7 +171,7 @@ class Identity extends IdentityAbstract
      * @param array $fields
      * @return Identity
      */
-    public function notIn(array $fields)
+    public function notIn(array $fields = null)
     {
         $fields = empty($fields) ? null : "('" . implode("', '", $fields) . "')";
         $this->operator('NOT IN', $fields);
