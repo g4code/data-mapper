@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Selection;
 
 use G4\DataMapper\Db\Db;
+use G4\DataMapper\Selection\IdentityInterface;
 use Rhumsaa\Uuid\Console\Exception;
 
 class Factory
@@ -20,7 +21,7 @@ class Factory
      * @param Identity $identity
      * @return string
      */
-    public function where(Identity $identity = null)
+    public function where(IdentityInterface $identity = null)
     {
         if ($identity->isVoid()) {
             return '1';
@@ -51,7 +52,7 @@ class Factory
      * @param Identity $identity
      * @return string
      */
-    public function orderBy(Identity $identity = null)
+    public function orderBy(IdentityInterface $identity = null)
     {
         $orderByArr = $identity->getOrderBy();
 
@@ -73,7 +74,7 @@ class Factory
      * @param Identity $identity
      * @return int
      */
-    public function limit(Identity $identity = null)
+    public function limit(IdentityInterface $identity = null)
     {
         if (is_null($identity)) {
             return $this->_defaultLimit;
@@ -91,7 +92,7 @@ class Factory
      * @param Identity $identity
      * @return int
      */
-    public function offset(Identity $identity = null)
+    public function offset(IdentityInterface $identity = null)
     {
         if (is_null($identity)) {
             return 0;

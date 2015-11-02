@@ -68,10 +68,10 @@ class Identity extends IdentityAbstract
      * @param array $fields
      * @return Identity
      */
-    public function in(array $fields)
+    public function in(array $values = null)
     {
-        $fields = empty($fields) ? null : "('" . implode("', '", $fields) . "')";
-        $this->operator('IN', $fields);
+        $values = empty($values) ? null : "('" . implode("', '", $values) . "')";
+        $this->operator('IN', $values);
         return $this;
     }
 

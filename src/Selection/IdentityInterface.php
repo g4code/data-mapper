@@ -13,7 +13,7 @@ interface IdentityInterface
     public function greaterThanOrEqual($value);
 
 
-    public function in(array $fields);
+    public function in(array $values = null);
 
     public function like($value, $wildCardPosition = null);
 
@@ -25,5 +25,5 @@ interface IdentityInterface
 
     public function notEqual($value);
 
-    public function notIn(array $fields);
+    public function notIn(array $values);
 }

@@ -34,12 +34,19 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
-    public function eq($value = null)
+    public function equal($value)
     {
         return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $value
         );
+    }
+    /**
+     * OBSOLETE !!! USE equal($value)
+     */
+    public function eq($value = null)
+    {
+        return $this->equal($value);
     }
 
     public function geodist($latitude, $longitude, $distance = null)
@@ -74,6 +81,16 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $this->groupBy;
     }
 
+    public function greaterThan($value)
+    {
+        throw new \Exception('Not implemented yet', 501);
+    }
+
+    public function greaterThanOrEqual($value)
+    {
+        throw new \Exception('Not implemented yet', 501);
+    }
+
     public function hasFieldList()
     {
         return !empty($this->fieldList);
@@ -94,37 +111,61 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return !empty($this->geodist['latitude']) && !empty($this->geodist['longitude']);
     }
 
-    public function in($value = array())
+    public function in(array $values = null)
     {
-        if (empty($value)) {
-            $value = null;
+        if (empty($values)) {
+            $values = null;
         }
         return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($values))
         );
     }
 
-    public function nin($value = array())
-    {
-        if (empty($value)) {
-            $value = null;
-        }
-
-        $this->getCurrentField()->addPrefixToName('-');
-
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
-        );
-    }
-
-    public function like($value = null)
+    public function like($value, $wildCardPosition = null)
     {
         return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Like($value))
         );
+    }
+
+    public function lessThan($value)
+    {
+        throw new \Exception('Not implemented yet', 501);
+    }
+
+    public function lessThanOrEqual($value)
+    {
+        throw new \Exception('Not implemented yet', 501);
+    }
+
+    public function notEqual($value)
+    {
+        $this->getCurrentField()->addPrefixToName('-');
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $value
+        );
+    }
+
+    public function notIn(array $values)
+    {
+        if (empty($value)) {
+            $value = null;
+        }
+        $this->getCurrentField()->addPrefixToName('-');
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
+        );
+    }
+    /**
+     * OBSOLETE !!! USE notIn(array $values)
+     */
+    public function nin(array $values)
+    {
+        return $this->notIn($values);
     }
 
     public function setFieldList(array $fieldList)
