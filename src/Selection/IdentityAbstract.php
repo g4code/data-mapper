@@ -43,6 +43,7 @@ abstract class IdentityAbstract implements IdentityInterface
         $this->page         = ''; //TODO: Drasko: change this!!!;
     }
 
+
     /**
      * @param string $fieldname
      * @throws \Exception

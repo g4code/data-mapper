@@ -168,6 +168,24 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $this->notIn($values);
     }
 
+    public function notTimeFromInMinutes($value)
+    {
+        $this->getCurrentField()->addPrefixToName('-');
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
+        );
+    }
+
+    public function timeToInMinutes($value)
+    {
+        $this->getCurrentField()->addPrefixToName('-');
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
+        );
+    }
+
     public function setFieldList(array $fieldList)
     {
         $this->fieldList = $fieldList;
@@ -189,7 +207,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function timeFromInMinutes($value)
     {
-        return $this->operatorAttach(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
         );
@@ -197,7 +215,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function timeToInMinutes($value)
     {
-        return $this->operatorAttach(
+        return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
         );
