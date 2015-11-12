@@ -114,8 +114,8 @@ class Factory extends \G4\DataMapper\Selection\Factory
             'size'  => $this->limit($this->identity),
             'body'  => [
                 'query' => [
-                    'filtered' => [
-                        'query' => [
+                    'bool' => [
+                        'must' => [
                             'match_all' => [],
                         ],
                         'filter' => [

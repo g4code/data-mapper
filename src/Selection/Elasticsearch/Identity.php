@@ -8,7 +8,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
     private $fieldList = [];
 
 
-    public function eq($value = null)
+    public function equal($value = null)
     {
         return $this->operator(
             'term',
@@ -16,11 +16,58 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
+    public function greaterThan($value)
+    {
+
+    }
+
+    public function greaterThanOrEqual($value)
+    {
+
+    }
+
     public function in(array $values = null)
+    {
+        if (empty($values)) {
+            $values = null;
+        }
+        return $this->operator(
+            'terms',
+            $values
+        );
+    }
+
+    public function like($value, $wildCardPosition = null)
     {
         return $this->operator(
             'terms',
             $value
+        );
+    }
+
+    public function lessThan($value)
+    {
+
+    }
+
+    public function lessThanOrEqual($value)
+    {
+
+    }
+
+    public function notEqual($value)
+    {
+
+    }
+
+    public function notIn(array $values = null)
+    {
+        if (empty($values)) {
+            $values = null;
+        }
+        return $this->operator(
+            'terms',
+            $values
         );
     }
 
