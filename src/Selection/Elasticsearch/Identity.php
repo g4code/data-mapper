@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Selection\Elasticsearch;
 
+use G4\DataMapper\Selection\Elasticsearch\Consts;
+
 class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 {
 
@@ -11,7 +13,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
     public function equal($value = null)
     {
         return $this->operator(
-            'term',
+            Consts::MUST,
             $value
         );
     }
@@ -32,17 +34,26 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
             $values = null;
         }
         return $this->operator(
-            'terms',
+            Consts::MUST,
             $values
         );
     }
 
-    public function like($value, $wildCardPosition = null)
+    //TODO: Drasko: This needs refactoring !!!
+    public function like($value, $wildCardPosition = Consts::WILDCARD_POSITION_BOTH)
     {
-        return $this->operator(
-            'terms',
-            $value
-        );
+        if ($value !== null) {
+            if ($wildCardPosition === Consts::WILDCARD_POSITION_BOTH) {
+                $value = "*{$value}*";
+            }
+            if ($wildCardPosition === Consts::WILDCARD_POSITION_LEFT) {
+                $value = "*{$value}";
+            }
+            if ($wildCardPosition === Consts::WILDCARD_POSITION_RIGHT) {
+                $value = "{$value}*";
+            }
+        }
+        return $this->operator(Consts::WILDCARD, $value);
     }
 
     public function lessThan($value)
@@ -57,7 +68,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function notEqual($value)
     {
-
+        return $this->operator(Consts::MUST_NOT, $value);
     }
 
     public function notIn(array $values = null)
@@ -65,10 +76,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         if (empty($values)) {
             $values = null;
         }
-        return $this->operator(
-            'terms',
-            $values
-        );
+        return $this->operator(Consts::MUST_NOT,$values);
     }
 
     public function setFieldList(array $fieldList)

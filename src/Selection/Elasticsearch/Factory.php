@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Selection\Elasticsearch;
 
 use G4\DataMapper\Selection\Elasticsearch\Identity;
+use G4\DataMapper\Selection\Elasticsearch\Consts;
 
 class Factory extends \G4\DataMapper\Selection\Factory
 {
@@ -100,25 +101,37 @@ class Factory extends \G4\DataMapper\Selection\Factory
     }
 
 
+    //TODO: Drasko: This needs refactoring!!!
     public function query()
     {
-        $compstrings = [];
+        $filters = [];
+        $queries = [];
         foreach ($this->identity->getComps() as $comp) {
             if ($comp['value'] === null || (is_array($comp['value']) && empty($comp['value']))) {
                 continue;
             }
-            $compstrings[][$comp['operator']][$comp['name']] = $comp['value'];
+            if ($comp['operator'] === Consts::WILDCARD) {
+                $queries['bool']['must'][][Consts::WILDCARD][$comp['name']] = $comp['value'];
+            } else {
+                $termFilter = is_array($comp['value']) ? Consts::TERMS : Consts::TERM;
+                $filters[$comp['operator']][][$termFilter][$comp['name']] = $comp['value'];
+            }
+        }
+        if (empty($queries)) {
+            $queries = [
+                'match_all' => [],
+            ];
         }
         return $this->prepareType() + [
             'from'  => $this->offset($this->identity),
             'size'  => $this->limit($this->identity),
             'body'  => [
                 'query' => [
-                    'bool' => [
-                        'must' => [
-                            'match_all' => [],
+                    'filtered' => [
+                        'query' => $queries,
+                        'filter' => [
+                            'bool' => $filters,
                         ],
-//                         'filter' => $compstrings,
                     ],
                 ],
             ]

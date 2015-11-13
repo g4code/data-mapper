@@ -75,6 +75,7 @@ class Client
 
     public function search(SelectionFactory $selectionFactory)
     {
+//         echo '<pre>';print_r($selectionFactory->query());
         return $this->client->search($selectionFactory->query());
     }
 
