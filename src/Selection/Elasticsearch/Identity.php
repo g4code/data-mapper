@@ -84,4 +84,15 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         $this->fieldList = $fieldList;
         return $this;
     }
+
+    public function timeFromInMinutes($value)
+    {
+        if ($value !== null) {
+            $value = [
+                Consts::GREATER_THAN       => 'now' . $value . 'm/m',
+                Consts::LESS_THAN_OR_EQUAL => 'now/m',
+            ];
+        }
+        return $this->operator(Consts::MUST, $value);
+    }
 }

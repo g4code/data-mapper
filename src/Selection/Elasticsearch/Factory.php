@@ -113,8 +113,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
             if ($comp['operator'] === Consts::WILDCARD) {
                 $queries['bool']['must'][][Consts::WILDCARD][$comp['name']] = $comp['value'];
             } else {
-                $termFilter = is_array($comp['value']) ? Consts::TERMS : Consts::TERM;
-                $filters[$comp['operator']][][$termFilter][$comp['name']] = $comp['value'];
+                $filters[$comp['operator']][][$this->getTerm($comp['value'])][$comp['name']] = $comp['value'];
             }
         }
         if (empty($queries)) {
@@ -136,5 +135,12 @@ class Factory extends \G4\DataMapper\Selection\Factory
                 ],
             ]
         ];
+    }
+
+    private function getTerm($value)
+    {
+        return is_array($value)
+            ? (count(array_intersect(Consts::rangeParams(), array_keys($value))) > 0 ? Consts::RANGE : Consts::TERMS)
+            : Consts::TERM;
     }
 }
