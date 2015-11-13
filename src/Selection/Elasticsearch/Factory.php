@@ -118,11 +118,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
                         'must' => [
                             'match_all' => [],
                         ],
-                        'filter' => [
-                            'bool' => [
-                                'must' => $compstrings
-                            ],
-                        ],
+//                         'filter' => $compstrings,
                     ],
                 ],
             ]

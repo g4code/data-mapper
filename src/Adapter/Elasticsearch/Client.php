@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Adapter\Elasticsearch;
 
+use Elasticsearch\ClientBuilder;
 use Elasticsearch\Client as ElasticsearchClient;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use G4\DataMapper\Selection\Elasticsearch\Factory as SelectionFactory;
@@ -27,7 +28,7 @@ class Client
     /**
      * @var array
      */
-    private $params;
+    private $hosts;
 
 //     private $profiler;
 
@@ -43,8 +44,7 @@ class Client
     public function __construct(array $params)
     {
         $this->filterParams($params);
-
-        $this->client        = new ElasticsearchClient($this->params);
+        $this->client        = ClientBuilder::create()->setHosts($this->hosts)->build();
         $this->clientIndices = $this->client->indices();
     }
 
@@ -75,8 +75,6 @@ class Client
 
     public function search(SelectionFactory $selectionFactory)
     {
-        echo '<pre>';
-        print_r($selectionFactory->query());
         return $this->client->search($selectionFactory->query());
     }
 
@@ -105,12 +103,8 @@ class Client
      */
     private function filterParams(array $params)
     {
-        $this->index  = $params['index'];
-        $this->type   = $params['type'];
-        $this->params = [
-            'hosts' => [
-                $params['host'] . ':' . $params['port'],
-            ]
-        ];
+        $this->index = $params['index'];
+        $this->type  = $params['type'];
+        $this->hosts = $params['hosts'];
     }
 }
