@@ -4,18 +4,28 @@ namespace G4\DataMapper\Selection\Elasticsearch;
 
 use G4\DataMapper\Selection\Elasticsearch\Consts;
 
+//TODO: Drasko: Extract common logic to new classes!!!
 class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 {
 
     private $fieldList = [];
 
 
+    public function between($min, $max)
+    {
+        $value = null;
+        if ($min !== null && $max !== null) {
+            $value = [
+                Consts::GREATER_THAN_OR_EQUAL => ($min < $max ? $min : $max),
+                Consts::LESS_THAN_OR_EQUAL    => ($max > $min ? $max : $min),
+            ];
+        }
+        return $this->operator(Consts::MUST, $value);
+    }
+
     public function equal($value = null)
     {
-        return $this->operator(
-            Consts::MUST,
-            $value
-        );
+        return $this->operator(Consts::MUST, $value);
     }
 
     public function greaterThan($value)
@@ -33,10 +43,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         if (empty($values)) {
             $values = null;
         }
-        return $this->operator(
-            Consts::MUST,
-            $values
-        );
+        return $this->operator(Consts::MUST, $values);
     }
 
     //TODO: Drasko: This needs refactoring !!!
@@ -77,6 +84,17 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
             $values = null;
         }
         return $this->operator(Consts::MUST_NOT,$values);
+    }
+
+    public function notTimeFromInMinutes($value)
+    {
+        if ($value !== null) {
+            $value = [
+                Consts::GREATER_THAN       => 'now' . $value . 'm/m',
+                Consts::LESS_THAN_OR_EQUAL => 'now/m',
+            ];
+        }
+        return $this->operator(Consts::MUST_NOT, $value);
     }
 
     public function setFieldList(array $fieldList)
