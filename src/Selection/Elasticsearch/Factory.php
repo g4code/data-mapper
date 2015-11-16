@@ -4,6 +4,7 @@ namespace G4\DataMapper\Selection\Elasticsearch;
 
 use G4\DataMapper\Selection\Elasticsearch\Identity;
 use G4\DataMapper\Selection\Elasticsearch\Consts;
+use G4\DataMapper\Selection\IdentityInterface;
 
 class Factory extends \G4\DataMapper\Selection\Factory
 {
@@ -133,8 +134,23 @@ class Factory extends \G4\DataMapper\Selection\Factory
                         ],
                     ],
                 ],
+                'sort' => $this->orderBy(),
             ]
         ];
+    }
+
+    public function orderBy(IdentityInterface $identity = null)
+    {
+        if (is_null($this->identity) || !$this->identity->hasOrderBy()) {
+            return [];
+        }
+        $sort = [];
+        foreach ($this->identity->getOrderBy() as $key => $value) {
+            if ($key !== null) {
+                $sort[$key] = (strtolower($value) == 'desc' ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING);
+            }
+        }
+        return $sort;
     }
 
     private function getTerm($value)

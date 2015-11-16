@@ -153,7 +153,9 @@ abstract class IdentityAbstract implements IdentityInterface
      */
     public function setOrderBy($param, $value)
     {
-        $this->orderBy[$param] = $value;
+        if ($param !== null) {
+            $this->orderBy[$param] = $value;
+        }
         return $this;
     }
 
