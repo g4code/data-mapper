@@ -3,8 +3,9 @@
 namespace G4\DataMapper\Selection\Elasticsearch;
 
 use G4\DataMapper\Selection\Elasticsearch\Consts;
+use G4\DataMapper\Selection\Solr\IdentityValue\BetweenDates;
 
-//TODO: Drasko: Extract common logic to new classes!!!
+//TODO: Drasko: Extract common logic and large methods to new classes!!!
 class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 {
 
@@ -23,6 +24,32 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $this->operator(Consts::MUST, $value);
     }
 
+    public function betweenDates($min, $max)
+    {
+        $value = null;
+        if ($min === null && $max !== null) {
+            $value = [
+                Consts::LESS_THAN_OR_EQUAL => $max,
+            ];
+        }
+        if ($min !== null && $max === null) {
+            $value = [
+                Consts::GREATER_THAN_OR_EQUAL => $min,
+            ];
+        }
+        if ($min !== null && $max !== null) {
+            $datetimeMin = new \DateTime($min);
+            $datetimeMax = new \DateTime($max);
+            $interval    = $datetimeMax->diff($datetimeMin);
+            $diff        = (int) $interval->format('%R%y');
+            $value = [
+                Consts::GREATER_THAN_OR_EQUAL => ($diff <= 0 ? $min : $max),
+                Consts::LESS_THAN_OR_EQUAL    => ($diff <= 0 ? $max : $min),
+            ];
+        }
+        return $this->operator(Consts::MUST, $value);;
+    }
+
     public function equal($value = null)
     {
         return $this->operator(Consts::MUST, $value);
@@ -30,12 +57,12 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function greaterThan($value)
     {
-
+        throw new \Exception('Not implemented yet!', 501);
     }
 
     public function greaterThanOrEqual($value)
     {
-
+        throw new \Exception('Not implemented yet!', 501);
     }
 
     public function in(array $values = null)
@@ -65,12 +92,12 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function lessThan($value)
     {
-
+        throw new \Exception('Not implemented yet!', 501);
     }
 
     public function lessThanOrEqual($value)
     {
-
+        throw new \Exception('Not implemented yet!', 501);
     }
 
     public function notEqual($value)
