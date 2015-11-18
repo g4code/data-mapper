@@ -57,13 +57,21 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function geodist($latitude, $longitude, $distance)
     {
-        $this->field('geo_distance');
+        $this->field(Consts::GEO_DISTANCE);
         $value = null;
         if ($latitude !== null && $longitude !== null && $distance !== null) {
             $value = [
-                "distance" => $distance . 'km',
-                "location" => $latitude . ',' . $longitude,
+                Consts::DISTANCE => $distance . Consts::KILOMETER,
+                'location' => $latitude . ',' . $longitude,
             ];
+        }
+        if ($latitude !== null && $longitude !== null) {
+            $this->setOrderBy(Consts::GEO_DISTANCE_SORT, [
+                'location'      =>  $latitude . ',' . $longitude,
+                'order'         => Consts::ASCENDING,
+                'unit'          => Consts::KILOMETER,
+                'distance_type' => Consts::PLANE,
+            ]);
         }
         return $this->operator(Consts::MUST, $value);
     }

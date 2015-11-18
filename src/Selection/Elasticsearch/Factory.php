@@ -159,8 +159,10 @@ class Factory extends \G4\DataMapper\Selection\Factory
 //                     ],
 //                     "order" => "asc"
 //                 ];
+            } elseif ($key === Consts::GEO_DISTANCE_SORT) {
+                $sort[$key] = $value;
             } elseif ($key !== null) {
-                $sort[$key] = (strtolower($value) == 'desc' ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING);
+                $sort[$key] = (strtolower($value) == Consts::DESCENDING ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING);
             }
         }
         return $sort;
@@ -176,7 +178,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
             $term = Consts::RANGE;
         }
         if (is_array($value) && count(array_intersect(Consts::geoParams(), array_keys($value))) > 0) {
-            $term = 'geo_distance';
+            $term = Consts::GEO_DISTANCE;
         }
         return $term;
     }
