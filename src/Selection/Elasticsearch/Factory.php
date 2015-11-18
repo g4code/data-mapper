@@ -6,6 +6,7 @@ use G4\DataMapper\Selection\Elasticsearch\Identity;
 use G4\DataMapper\Selection\Elasticsearch\Consts;
 use G4\DataMapper\Selection\IdentityInterface;
 
+//TODO: Drasko: This needs refactoring!!!
 class Factory extends \G4\DataMapper\Selection\Factory
 {
 
@@ -101,7 +102,6 @@ class Factory extends \G4\DataMapper\Selection\Factory
         return $this;
     }
 
-
     //TODO: Drasko: This needs refactoring!!!
     public function query()
     {
@@ -143,6 +143,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
         ];
     }
 
+    //TODO: Drasko: This needs refactoring!!!
     public function orderBy(IdentityInterface $identity = null)
     {
         if (is_null($this->identity) || !$this->identity->hasOrderBy()) {
@@ -151,14 +152,11 @@ class Factory extends \G4\DataMapper\Selection\Factory
         $sort = [];
         foreach ($this->identity->getOrderBy() as $key => $value) {
             if (strpos($key, 'random') !== false) {
-//                 $sort["_script"] = [
-//                     "script" => "org.elasticsearch.common.Digest.md5Hex(dailySalt + doc['_id'].value)",
-//                     "type" => "string",
-//                     "params" => [
-//                         "dailySalt" => "184-2013",
-//                     ],
-//                     "order" => "asc"
-//                 ];
+                $sort["_script"] = [
+                    "type"   => "number",
+                    "script" => "Math.random()",
+                    "order"  => "asc"
+                ];
             } elseif ($key === Consts::GEO_DISTANCE_SORT) {
                 $sort[$key] = $value;
             } elseif ($key !== null) {

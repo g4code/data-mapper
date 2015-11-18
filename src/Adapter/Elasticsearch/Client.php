@@ -73,13 +73,14 @@ class Client
 //         return $this->client->get($params);
 //     }
 
+    //TODO: Drasko: This needs refactoring!!!
     public function search(SelectionFactory $selectionFactory)
     {
+        $result = [];
         try {
-//             echo '<pre>';print_r($selectionFactory->query());
             $result = $this->client->search($selectionFactory->query());
         } catch (\Exception $e) {
-//             var_dump($e);
+
         }
         return $result;
     }

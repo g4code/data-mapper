@@ -53,7 +53,6 @@ class Elasticsearch
     {
         $this->getSelectionFactory()->setIdentity($identity);
         $this->response = $this->adapter->search($this->getSelectionFactory());
-//         print_r($this->response);
         return $this->returnCollection();
     }
 
