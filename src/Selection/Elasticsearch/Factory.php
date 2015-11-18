@@ -114,7 +114,11 @@ class Factory extends \G4\DataMapper\Selection\Factory
             if ($comp['operator'] === Consts::WILDCARD) {
                 $queries['bool']['must'][][Consts::WILDCARD][$comp['name']] = $comp['value'];
             } else {
-                $filters[$comp['operator']][][$this->getTerm($comp['value'])][$comp['name']] = $comp['value'];
+                if ($comp['name'] === 'geo_distance') {
+                    $filters[$comp['operator']][][$this->getTerm($comp['value'])] = $comp['value'];
+                } else {
+                    $filters[$comp['operator']][][$this->getTerm($comp['value'])][$comp['name']] = $comp['value'];
+                }
             }
         }
         if (empty($queries)) {
@@ -146,7 +150,16 @@ class Factory extends \G4\DataMapper\Selection\Factory
         }
         $sort = [];
         foreach ($this->identity->getOrderBy() as $key => $value) {
-            if ($key !== null) {
+            if (strpos($key, 'random') !== false) {
+//                 $sort["_script"] = [
+//                     "script" => "org.elasticsearch.common.Digest.md5Hex(dailySalt + doc['_id'].value)",
+//                     "type" => "string",
+//                     "params" => [
+//                         "dailySalt" => "184-2013",
+//                     ],
+//                     "order" => "asc"
+//                 ];
+            } elseif ($key !== null) {
                 $sort[$key] = (strtolower($value) == 'desc' ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING);
             }
         }
@@ -155,8 +168,16 @@ class Factory extends \G4\DataMapper\Selection\Factory
 
     private function getTerm($value)
     {
-        return is_array($value)
-            ? (count(array_intersect(Consts::rangeParams(), array_keys($value))) > 0 ? Consts::RANGE : Consts::TERMS)
-            : Consts::TERM;
+        $term = Consts::TERM;
+        if (is_array($value)) {
+            $term = Consts::TERMS;
+        }
+        if (is_array($value) && count(array_intersect(Consts::rangeParams(), array_keys($value))) > 0) {
+            $term = Consts::RANGE;
+        }
+        if (is_array($value) && count(array_intersect(Consts::geoParams(), array_keys($value))) > 0) {
+            $term = 'geo_distance';
+        }
+        return $term;
     }
 }

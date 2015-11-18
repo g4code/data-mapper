@@ -75,8 +75,13 @@ class Client
 
     public function search(SelectionFactory $selectionFactory)
     {
-//         echo '<pre>';print_r($selectionFactory->query());
-        return $this->client->search($selectionFactory->query());
+        try {
+//             echo '<pre>';print_r($selectionFactory->query());
+            $result = $this->client->search($selectionFactory->query());
+        } catch (\Exception $e) {
+//             var_dump($e);
+        }
+        return $result;
     }
 
     public function getIndex()

@@ -31,6 +31,21 @@ class Consts
 
     const RANGE                   = 'range';
 
+    const LATITUDE                = 'lat';
+
+    const LONGITUDE               = 'lon';
+
+    const DISTANCE                = 'distance';
+
+
+    static public function geoParams()
+    {
+        return [
+            static::LATITUDE,
+            static::LONGITUDE,
+            static::DISTANCE,
+        ];
+    }
 
     static public function rangeParams()
     {

@@ -55,6 +55,19 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $this->operator(Consts::MUST, $value);
     }
 
+    public function geodist($latitude, $longitude, $distance)
+    {
+        $this->field('geo_distance');
+        $value = null;
+        if ($latitude !== null && $longitude !== null && $distance !== null) {
+            $value = [
+                "distance" => $distance . 'km',
+                "location" => $latitude . ',' . $longitude,
+            ];
+        }
+        return $this->operator(Consts::MUST, $value);
+    }
+
     public function greaterThan($value)
     {
         throw new \Exception('Not implemented yet!', 501);
