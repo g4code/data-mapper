@@ -65,7 +65,24 @@ class Client
 
     public function index(SelectionFactory $selectionFactory)
     {
-        return $this->client->index($selectionFactory->prepareForIndexing());
+        $result = [];
+        try {
+            $result = $this->client->index($selectionFactory->prepareForIndexing());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+        return $result;
+    }
+
+    public function update(SelectionFactory $selectionFactory)
+    {
+        $result = [];
+        try {
+            $result = $this->client->update($selectionFactory->prepareForUpdate());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+        return $result;
     }
 
 //     public function get($params)
@@ -80,7 +97,7 @@ class Client
         try {
             $result = $this->client->search($selectionFactory->query());
         } catch (\Exception $e) {
-
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return $result;
     }

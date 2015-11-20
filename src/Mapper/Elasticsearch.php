@@ -83,6 +83,14 @@ class Elasticsearch
         return $this->adapter->index($this->getSelectionFactory());
     }
 
+    public function updateSet(DomainAbstract $domain)
+    {
+        $this->getSelectionFactory()
+            ->setBody($domain->getRawData())
+            ->setId($domain->getId());
+        return $this->adapter->update($this->getSelectionFactory());
+    }
+
     /**
      * @throws \Exception
      * @return string

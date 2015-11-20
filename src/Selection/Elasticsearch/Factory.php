@@ -50,6 +50,16 @@ class Factory extends \G4\DataMapper\Selection\Factory
         ];
     }
 
+    public function prepareForUpdate()
+    {
+        return $this->prepareType() + [
+            'id'   => $this->id,
+            'body' => [
+                'doc' => $this->body,
+            ],
+        ];
+    }
+
 
     public function prepareIndex()
     {
