@@ -45,6 +45,11 @@ class Elasticsearch
         return $this->adapter->putMapping($this->getSelectionFactory());
     }
 
+    public function bulkUpdate(\G4\DataMapper\Bulk\Elasticsearch $bulk)
+    {
+        return $this->adapter->bulk($bulk);
+    }
+
     /**
      * @param SelectionIdentity $identity
      * @return CollectionContent
@@ -59,6 +64,11 @@ class Elasticsearch
     public function flush()
     {
         return $this->adapter->deleteMapping($this->getSelectionFactory());
+    }
+
+    public function getBulk()
+    {
+        return new \G4\DataMapper\Bulk\Elasticsearch($this->getSelectionFactory());
     }
 
     /**

@@ -139,7 +139,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         if ($value !== null) {
             $value = [
                 Consts::GREATER_THAN       => 'now' . $value . 'm/m',
-                Consts::LESS_THAN_OR_EQUAL => 'now/m',
+                Consts::LESS_THAN_OR_EQUAL => 'now+24h/m',
             ];
         }
         return $this->operator(Consts::MUST_NOT, $value);
@@ -156,7 +156,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         if ($value !== null) {
             $value = [
                 Consts::GREATER_THAN       => 'now' . $value . 'm/m',
-                Consts::LESS_THAN_OR_EQUAL => 'now/m',
+                Consts::LESS_THAN_OR_EQUAL => 'now+24h/m',
             ];
         }
         return $this->operator(Consts::MUST, $value);

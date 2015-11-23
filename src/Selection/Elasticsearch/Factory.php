@@ -68,6 +68,13 @@ class Factory extends \G4\DataMapper\Selection\Factory
         ];
     }
 
+    public function prepareId()
+    {
+        return $this->prepareType() + [
+            'id' => $this->id,
+        ];
+    }
+
     public function prepareType()
     {
         return $this->prepareIndex() + [

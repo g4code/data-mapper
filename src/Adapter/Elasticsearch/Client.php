@@ -5,7 +5,9 @@ namespace G4\DataMapper\Adapter\Elasticsearch;
 use Elasticsearch\ClientBuilder;
 use Elasticsearch\Client as ElasticsearchClient;
 use Elasticsearch\Namespaces\IndicesNamespace;
+use Elasticsearch\Transport;
 use G4\DataMapper\Selection\Elasticsearch\Factory as SelectionFactory;
+use G4\DataMapper\Bulk\Elasticsearch as Bulk;
 
 class Client
 {
@@ -46,6 +48,17 @@ class Client
         $this->filterParams($params);
         $this->client        = ClientBuilder::create()->setHosts($this->hosts)->build();
         $this->clientIndices = $this->client->indices();
+    }
+
+    public function bulk(Bulk $bulk)
+    {
+        $result = [];
+        try {
+            $result = $this->client->bulk($bulk->getData());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+        return $result;
     }
 
     public function putMapping(SelectionFactory $selectionFactory)
