@@ -11,14 +11,12 @@ class Elasticsearch
 
     private $data;
 
-    private $idsForDelete;
 
 
     public function __construct(SelectionFactory $selectionFactory)
     {
         $this->selectionFactory = $selectionFactory;
         $this->data             = [];
-        $this->idsForDelete     = [];
     }
 
     public function getData()
@@ -30,18 +28,16 @@ class Elasticsearch
 
     public function markForDelete(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
-        $this->idsForDelete[] = $domain->getId();
+        $this->data[] = [
+            'delete' => $this->getMetaData($domain->getId()),
+        ];
         return $this;
     }
 
     public function markForSet(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
         $this->data[] = [
-            'update' => [
-                '_index' => $this->selectionFactory->prepareType()['index'],
-                '_type'  => $this->selectionFactory->prepareType()['type'],
-                '_id'    => $domain->getId(),
-            ],
+            'update' => $this->getMetaData($domain->getId()),
         ];
         $this->data[] = [
             'doc' => $domain->getRawData(),
@@ -49,4 +45,12 @@ class Elasticsearch
         return $this;
     }
 
+    private function getMetaData($id)
+    {
+        return [
+            '_index' => $this->selectionFactory->prepareType()['index'],
+            '_type'  => $this->selectionFactory->prepareType()['type'],
+            '_id'    => $id,
+        ];
+    }
 }
