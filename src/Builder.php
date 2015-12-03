@@ -4,8 +4,8 @@ namespace G4\DataMapper;
 
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
-use G4\DataMapper\MySQL\MySQLAdapter;
-use G4\DataMapper\MySQL\MySQLMapper;
+use G4\DataMapper\Engine\MySQL\MySQLAdapter;
+use G4\DataMapper\Engine\MySQL\MySQLMapper;
 
 class Builder
 {
@@ -74,6 +74,7 @@ class Builder
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
                 $mapper = new MySQLMapper($this->adapter, $this->type);
+                break;
             default:
                 throw new \Exception('Unknown engine', 601);
         }

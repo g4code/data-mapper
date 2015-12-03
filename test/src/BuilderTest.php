@@ -1,5 +1,7 @@
 <?php
 
+use G4\DataMapper\Builder;
+
 class BuilderTest extends PHPUnit_Framework_TestCase
 {
 
@@ -11,7 +13,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = \G4\DataMapper\Builder::create();
+        $this->builder = Builder::create();
     }
 
     protected function tearDown()
@@ -21,6 +23,37 @@ class BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf();
+        $this->assertInstanceOf('\G4\DataMapper\Builder', $this->builder);
+    }
+
+    public function testBuild()
+    {
+        $this->builder
+            ->type('profiles')
+            ->adapter($this->getMock('\G4\DataMapper\Engine\MySQL\MySQLAdapter', null, [[]]));
+        $this->builder->build();
+    }
+
+    public function testBuildWithNoAdapter()
+    {
+        $this->builder->type('profiles');
+        $this->setExpectedException('\Exception', 'Adapter instance must implement AdapterInterface');
+        $this->builder->build();
+    }
+
+    public function testBuildWithNoType()
+    {
+        $this->builder->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'));
+        $this->setExpectedException('\Exception', 'Type must be set');
+        $this->builder->build();
+    }
+
+    public function testBuildForUnknownEngine()
+    {
+        $this->builder
+            ->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'))
+            ->type('profiles');
+        $this->setExpectedException('\Exception', 'Unknown engine');
+        $this->builder->build();
     }
 }

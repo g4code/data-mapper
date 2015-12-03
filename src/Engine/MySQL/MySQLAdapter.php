@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Engine\MySQL;
 
-use G4\DataMapper\AdapterInterface;
+use G4\DataMapper\Common\AdapterInterface;
 
 class MySQLAdapter implements AdapterInterface
 {
@@ -14,6 +14,30 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
+    public function connect()
+    {
+
+    }
+
+    public function delete()
+    {
+
+    }
+
+    public function insert()
+    {
+
+    }
+
+    public function select()
+    {
+
+    }
+
+    public function update()
+    {
+
+    }
 
 
 }
