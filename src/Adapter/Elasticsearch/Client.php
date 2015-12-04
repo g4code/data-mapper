@@ -98,6 +98,17 @@ class Client
         return $result;
     }
 
+    public function updateAppend(SelectionFactory $selectionFactory)
+    {
+        $result = [];
+        try {
+            $result = $this->client->update($selectionFactory->prepareForUpdateAppend());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+        return $result;
+    }
+
 //     public function get($params)
 //     {
 //         return $this->client->get($params);

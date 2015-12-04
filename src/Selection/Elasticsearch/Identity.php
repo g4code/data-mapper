@@ -9,7 +9,15 @@ use G4\DataMapper\Selection\Solr\IdentityValue\BetweenDates;
 class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 {
 
+    /**
+     * @var array
+     */
     private $fieldList = [];
+
+    /**
+     * @var string
+     */
+    private $groupBy;
 
 
     public function between($min, $max)
@@ -86,6 +94,16 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         throw new \Exception('Not implemented yet!', 501);
     }
 
+    public function getGroupBy()
+    {
+        return $this->groupBy;
+    }
+
+    public function hasGroupBy()
+    {
+        return !empty($this->groupBy);
+    }
+
     public function in(array $values = null)
     {
         if (empty($values)) {
@@ -148,6 +166,12 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
     public function setFieldList(array $fieldList)
     {
         $this->fieldList = $fieldList;
+        return $this;
+    }
+
+    public function setGroupBy($fieldname)
+    {
+        $this->groupBy = $fieldname;
         return $this;
     }
 
