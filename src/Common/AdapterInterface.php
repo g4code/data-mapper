@@ -10,7 +10,7 @@ interface AdapterInterface
 
     public function delete();
 
-    public function insert();
+    public function insert(array $data);
 
     public function select();
 

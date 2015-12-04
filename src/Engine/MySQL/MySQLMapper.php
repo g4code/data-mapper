@@ -38,7 +38,7 @@ class MySQLMapper implements MapperInterface
 
     public function insert(MappingInterface $mappings)
     {
-
+        $this->adapter->insert($mappings->map());
     }
 
     public function update(MappingInterface $mappings)
