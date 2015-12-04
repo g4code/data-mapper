@@ -93,6 +93,14 @@ class Elasticsearch
         return $this->adapter->index($this->getSelectionFactory());
     }
 
+    public function updateAdd(DomainAbstract $domain)
+    {
+        $this->getSelectionFactory()
+            ->setBody($domain->getRawData())
+            ->setId($domain->getId());
+        return $this->adapter->updateAppend($this->getSelectionFactory());
+    }
+
     public function updateSet(DomainAbstract $domain)
     {
         $this->getSelectionFactory()
@@ -118,9 +126,19 @@ class Elasticsearch
      */
     private function getRawData()
     {
-        return empty($this->response['hits']['hits'])
-            ? []
-            : $this->response['hits']['hits'];
+        $hits = [];
+        if (!empty($this->response['hits']['hits'])) {
+            $hits = $this->response['hits']['hits'];
+        }
+        if (!empty($this->response['aggregations'])) {
+            $hits = array_map(
+                function($value){
+                    return $value['group_by_hits']['hits']['hits'][0];
+                },
+                $this->response['aggregations']['group_by']['buckets']
+            );
+        }
+        return $hits;
     }
 
     /**
@@ -142,9 +160,14 @@ class Elasticsearch
      */
     private function getTotalItemsCount()
     {
-        return empty($this->response['hits']['total'])
-            ? 0
-            : $this->response['hits']['total'];
+        $totalItemsCount = 0;
+        if (!empty($this->response['hits']['total'])) {
+            $totalItemsCount = $this->response['hits']['total'];
+        }
+        if (!empty($this->response['aggregations']) && !empty($this->response['aggregations']['group_by']['buckets'])) {
+            $totalItemsCount = count($this->response['aggregations']['group_by']['buckets']);
+        }
+        return $totalItemsCount;
     }
 
     /**

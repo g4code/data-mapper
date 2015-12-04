@@ -205,22 +205,6 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
             : $this;
     }
 
-    public function timeFromInMinutes($value)
-    {
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
-        );
-    }
-
-    public function timeToInMinutes($value)
-    {
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
-        );
-    }
-
     private function getValue(\G4\DataMapper\Selection\Solr\IdentityValue\IdentityValueInterface $identityValue)
     {
         return $identityValue->value();

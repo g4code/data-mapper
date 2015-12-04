@@ -38,7 +38,9 @@ class Factory extends \G4\DataMapper\Selection\Factory
     public function prepareForMapping()
     {
         return $this->prepareType() + [
-            'body' => $this->mappings,
+            'body' => [
+                $this->typeName => $this->mappings,
+            ],
         ];
     }
 
@@ -60,6 +62,21 @@ class Factory extends \G4\DataMapper\Selection\Factory
         ];
     }
 
+    public function prepareForUpdateAppend()
+    {
+        return $this->prepareType() + [
+            'id'   => $this->id,
+            'body' => [
+                'script' => 'ctx._source.' . key($this->body) . ' += data',
+                'params' => [
+                    'data' => current($this->body),
+                ],
+                'upsert' => [
+                    key($this->body) => []
+                ]
+            ],
+        ];
+    }
 
     public function prepareIndex()
     {
@@ -124,6 +141,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
     {
         $filters = [];
         $queries = [];
+
         foreach ($this->identity->getComps() as $comp) {
             if ($comp['value'] === null || (is_array($comp['value']) && empty($comp['value']))) {
                 continue;
@@ -138,12 +156,14 @@ class Factory extends \G4\DataMapper\Selection\Factory
                 }
             }
         }
+
         if (empty($queries)) {
             $queries = [
                 'match_all' => [],
             ];
         }
-        return $this->prepareType() + [
+
+        $result = $this->prepareType() + [
             'from'  => $this->offset($this->identity),
             'size'  => $this->limit($this->identity),
             'body'  => [
@@ -158,6 +178,14 @@ class Factory extends \G4\DataMapper\Selection\Factory
                 'sort' => $this->orderBy(),
             ]
         ];
+
+        $groupBy = $this->groupBy();
+        if (count($groupBy) > 0) {
+            $result['body']['aggs'] = $groupBy;
+            $result['size'] = 0;
+        }
+
+        return $result;
     }
 
     //TODO: Drasko: This needs refactoring!!!
@@ -196,5 +224,32 @@ class Factory extends \G4\DataMapper\Selection\Factory
             $term = Consts::GEO_DISTANCE;
         }
         return $term;
+    }
+
+    private function groupBy()
+    {
+        if (is_null($this->identity) || !$this->identity->hasGroupBy()) {
+            return [];
+        }
+        return [
+            'group_by' => [
+                'terms' => [
+                    'field' => $this->identity->getGroupBy(),
+                    'size' => $this->identity->getLimit(),
+                ],
+                'aggs' => [
+                    'group_by_hits' => [
+                        'top_hits' => [
+                            'sort' => [
+                                'id' => [
+                                    'order' => 'desc',
+                                ],
+                            ],
+                            'size' => 1,
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }
