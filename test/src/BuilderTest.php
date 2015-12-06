@@ -30,7 +30,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->builder
             ->type('profiles')
-            ->adapter($this->getMock('\G4\DataMapper\Engine\MySQL\MySQLAdapter', null, [[]]));
+            ->adapter($this->getMockForMySQLAdapter());
         $this->builder->build();
     }
 
@@ -55,5 +55,23 @@ class BuilderTest extends PHPUnit_Framework_TestCase
             ->type('profiles');
         $this->setExpectedException('\Exception', 'Unknown engine');
         $this->builder->build();
+    }
+
+    private function getMockForMySQLAdapter()
+    {
+        $params = [
+            'host'     => 'localhost',
+            'port'     => 3306,
+            'username' => 'test_username',
+            'password' => 'test_password',
+            'dbname'   => 'test_dbname',
+        ];
+        return $this->getMock(
+            '\G4\DataMapper\Engine\MySQL\MySQLAdapter',
+            null,
+            [
+                $this->getMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory', null, [$params]),
+            ]
+        );
     }
 }

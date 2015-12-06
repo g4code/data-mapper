@@ -36,6 +36,7 @@
         "php"          : ">=5.4",
         "g4/collection": "1.*",
         "g4/factory"   : "1.*",
-        "g4/profiler"  : "*"
+        "g4/profiler"  : "*",
+        "zf1/zend-db"  : "1.12.*"
     }
 }

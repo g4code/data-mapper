@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper;
 
+use G4\Factory\CreateInterface;
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
