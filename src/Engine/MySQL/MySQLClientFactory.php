@@ -56,10 +56,16 @@ class MySQLClientFactory implements CreateInterface
         if (empty($params['dbname'])) {
             throw new \Exception('No dbname param', 101);
         }
-        $this->params = $params;
-        $this->params['charset'] = self::CHARSET;
-        $this->params['driver_options'] = [
-            1002 => self::CHARSET_NAMES,
+        $this->params = [
+            'host'     => $params['host'],
+            'port'     => $params['port'],
+            'username' => $params['username'],
+            'password' => $params['password'],
+            'dbname'   => $params['dbname'],
+            'charset'  => self::CHARSET,
+            'driver_options' => [
+                1002 => self::CHARSET_NAMES,
+            ]
         ];
     }
 }
