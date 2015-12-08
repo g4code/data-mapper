@@ -13,12 +13,12 @@ class MySQLMapper implements MapperInterface
 
     private $adapter;
 
-    private $type;
+    private $table;
 
-    public function __construct(AdapterInterface $adapter, $type)
+    public function __construct(AdapterInterface $adapter, $table)
     {
         $this->adapter = $adapter;
-        $this->type    = $type;
+        $this->type    = $table;
     }
 
     public function delete(MappingInterface $mappings)

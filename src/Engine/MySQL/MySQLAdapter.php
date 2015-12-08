@@ -31,9 +31,12 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
-    public function insert(array $data)
+    public function insert($table, array $data)
     {
-
+        if (empty($data)) {
+            throw new \Exception('Empty data for insert', 101);
+        }
+        $this->client->insert($table, $data);
     }
 
     public function select()

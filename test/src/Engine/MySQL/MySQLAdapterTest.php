@@ -7,19 +7,10 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     private $adapter;
 
-    private $params;
-
 
     protected function setUp()
     {
-        $this->params = [
-            'host'     => '127.0.0.1',
-            'port'     => '3306',
-            'username' => 'test',
-            'password' => 'test',
-            'dbname'   => 'data_mapper',
-        ];
-        $this->adapter = new MySQLAdapter($this->getMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory', null, [$this->params]));
+        $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
     }
 
     protected function tearDown()
@@ -28,8 +19,34 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = null;
     }
 
+    public function testEmptyDataForInsert()
+    {
+        $this->setExpectedException('\Exception', 'Empty data for insert');
+        $this->adapter->insert('data', []);
+    }
+
     public function testInsert()
     {
+        $this->adapter->insert('data', ['id' => 1]);
+    }
 
+    private function getMockForMySQLClientFactory()
+    {
+        $clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Abstract')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $clientMock->expects($this->once())
+            ->method('insert')
+            ->willReturn(true);
+
+        $clientFactoryMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLClientFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $clientFactoryMock->method('create')
+            ->willReturn($clientMock);
+
+        return $clientFactoryMock;
     }
 }
