@@ -26,9 +26,12 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
-    public function delete()
+    public function delete($table, array $identifiers)
     {
-
+        if (empty($identifiers)) {
+            throw new \Exception('Empty identifiers for delete', 101);
+        }
+        $this->client->delete($table, http_build_query($identifiers, '', ' AND '));
     }
 
     public function insert($table, array $data)

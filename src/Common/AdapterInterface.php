@@ -5,7 +5,7 @@ namespace G4\DataMapper\Common;
 interface AdapterInterface
 {
 
-    public function delete();
+    public function delete($type, array $identifiers);
 
     public function insert($type, array $data);
 

@@ -21,6 +21,21 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientStub = null;
     }
 
+    public function testDelete()
+    {
+        $this->clientStub->expects($this->once())
+            ->method('delete');
+        $this->adapter->delete('data', ['id' => 1]);
+    }
+
+    public function testEmptyDataForDelete()
+    {
+        $this->clientStub->expects($this->never())
+            ->method('delete');
+        $this->setExpectedException('\Exception', 'Empty identifiers for delete');
+        $this->adapter->delete('data', []);
+    }
+
     public function testEmptyDataForInsert()
     {
         $this->clientStub->expects($this->never())
@@ -40,7 +55,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientStub = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
-            ->setMethods(['insert'])
+            ->setMethods(['insert', 'delete'])
             ->getMock();
 
         $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLClientFactory')
