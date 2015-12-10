@@ -11,5 +11,5 @@ interface AdapterInterface
 
     public function select();
 
-    public function update();
+    public function update($table, array $data, array $identifiers);
 }

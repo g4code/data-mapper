@@ -47,8 +47,14 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
-    public function update()
+    public function update($table, array $data, array $identifiers)
     {
-
+        if (empty($data)) {
+            throw new \Exception('Empty data for update', 101);
+        }
+        if (empty($identifiers)) {
+            throw new \Exception('Empty identifiers for update', 101);
+        }
+        $this->client->update($table, $data, http_build_query($identifiers, '', ' AND '));
     }
 }

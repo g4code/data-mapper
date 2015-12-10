@@ -11,6 +11,9 @@ use G4\Factory\ReconstituteInterface;
 class MySQLMapper implements MapperInterface
 {
 
+    /**
+     * @var MySQLAdapter
+     */
     private $adapter;
 
     private $table;
@@ -43,6 +46,6 @@ class MySQLMapper implements MapperInterface
 
     public function update(MappingInterface $mappings)
     {
-
+        $this->adapter->update($this->table, $mappings->map(), $mappings->id());
     }
 }

@@ -44,6 +44,16 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insert('data', []);
     }
 
+    public function testEmptyDataForUpdate()
+    {
+        $this->clientStub->expects($this->never())
+            ->method('update');
+        $this->setExpectedException('\Exception', 'Empty data for update');
+        $this->adapter->update('data', [], []);
+        $this->setExpectedException('\Exception', 'Empty identifiers for update');
+        $this->adapter->update('data', ['id' => 1], []);
+    }
+
     public function testInsert()
     {
         $this->clientStub->expects($this->once())
@@ -51,11 +61,18 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insert('data', ['id' => 1]);
     }
 
+    public function testUpdate()
+    {
+        $this->clientStub->expects($this->once())
+            ->method('update');
+        $this->adapter->update('data', ['ts' => 123], ['id' => 1]);
+    }
+
     private function getMockForMySQLClientFactory()
     {
         $this->clientStub = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
-            ->setMethods(['insert', 'delete'])
+            ->setMethods(['insert', 'delete', 'update'])
             ->getMock();
 
         $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLClientFactory')
