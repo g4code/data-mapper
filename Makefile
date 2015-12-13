@@ -19,7 +19,7 @@ self-update:
 
 test:
 	@/bin/echo -e "${TITLE} testing suite started..." \
-	&& vendor/bin/phpunit -c test/phpunit.xml
+	&& vendor/bin/phpunit -c test/phpunit.xml --coverage-html test/coverage
 
 test-group:
 	@/bin/echo -e "${TITLE} testing suite started..." \

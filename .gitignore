@@ -13,3 +13,6 @@ vendor
 .project
 .settings
 .idea
+
+test/coverage/*
+!test/coverage/.gitkeep
