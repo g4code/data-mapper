@@ -9,7 +9,7 @@ interface AdapterInterface
 
     public function delete($type, MappingInterface $mappings);
 
-    public function insert($type, array $data);
+    public function insert($type, MappingInterface $mappings);
 
     public function select();
 

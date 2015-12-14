@@ -26,7 +26,13 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientStub->expects($this->once())
             ->method('delete');
 
-        $this->adapter->delete('data', $this->getMockForMappings(['id' => 1]));
+        $mappingsStub = $this->getMockForMappings();
+        $mappingsStub
+            ->expects($this->once())
+            ->method('identifiers')
+            ->willReturn(['id' => 1]);
+
+        $this->adapter->delete('data', $mappingsStub);
     }
 
     public function testEmptyDataForDelete()
@@ -34,16 +40,29 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientStub->expects($this->never())
             ->method('delete');
 
+        $mappingsStub = $this->getMockForMappings();
+        $mappingsStub
+            ->expects($this->once())
+            ->method('identifiers')
+            ->willReturn([]);
+
         $this->setExpectedException('\Exception', 'Empty identifiers for delete');
-        $this->adapter->delete('data', $this->getMockForMappings([]));
+        $this->adapter->delete('data', $mappingsStub);
     }
 
     public function testEmptyDataForInsert()
     {
         $this->clientStub->expects($this->never())
             ->method('insert');
+
+        $mappingsStub = $this->getMockForMappings();
+        $mappingsStub
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
         $this->setExpectedException('\Exception', 'Empty data for insert');
-        $this->adapter->insert('data', []);
+        $this->adapter->insert('data', $mappingsStub);
     }
 
     public function testEmptyDataForUpdate()
@@ -60,7 +79,14 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientStub->expects($this->once())
             ->method('insert');
-        $this->adapter->insert('data', ['id' => 1]);
+
+        $mappingsStub = $this->getMockForMappings();
+        $mappingsStub
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn(['id' => 1]);
+
+        $this->adapter->insert('data', $mappingsStub);
     }
 
     public function testUpdate()
@@ -87,14 +113,10 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         return $clientFactoryStub;
     }
 
-    private function getMockForMappings($returnData)
+    private function getMockForMappings()
     {
-        $mappings = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
+        $mappingsStub = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
             ->getMock();
-        $mappings
-            ->expects($this->once())
-            ->method('identifiers')
-            ->willReturn($returnData);
-        return $mappings;
+        return $mappingsStub;
     }
 }

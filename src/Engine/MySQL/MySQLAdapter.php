@@ -27,17 +27,18 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
-    public function delete($table, MappingInterface $mappings)
+    public function delete($table, MappingInterface $mapping)
     {
-        $identifiers = $mappings->identifiers();
+        $identifiers = $mapping->identifiers();
         if (empty($identifiers)) {
             throw new \Exception('Empty identifiers for delete', 101);
         }
         $this->client->delete($table, http_build_query($identifiers, '', ' AND '));
     }
 
-    public function insert($table, array $data)
+    public function insert($table, MappingInterface $mappings)
     {
+        $data = $mappings->map();
         if (empty($data)) {
             throw new \Exception('Empty data for insert', 101);
         }
