@@ -5,7 +5,7 @@ namespace G4\DataMapper\Common;
 interface MappingInterface
 {
 
-    public function id();
+    public function identifiers();
 
     public function map();
 }

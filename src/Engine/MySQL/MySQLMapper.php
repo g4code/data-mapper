@@ -26,7 +26,7 @@ class MySQLMapper implements MapperInterface
 
     public function delete(MappingInterface $mappings)
     {
-        $this->adapter->delete($this->table, $mappings->id());
+        $this->adapter->delete($this->table, $mappings->identifiers());
     }
 
     public function findAll(SelectionIdentityInterface $identity, ReconstituteInterface $factory)
@@ -46,6 +46,6 @@ class MySQLMapper implements MapperInterface
 
     public function update(MappingInterface $mappings)
     {
-        $this->adapter->update($this->table, $mappings->map(), $mappings->id());
+        $this->adapter->update($this->table, $mappings->map(), $mappings->identifiers());
     }
 }
