@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
+use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
@@ -26,8 +27,9 @@ class MySQLAdapter implements AdapterInterface
 
     }
 
-    public function delete($table, array $identifiers)
+    public function delete($table, MappingInterface $mappings)
     {
+        $identifiers = $mappings->identifiers();
         if (empty($identifiers)) {
             throw new \Exception('Empty identifiers for delete', 101);
         }

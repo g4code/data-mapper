@@ -25,15 +25,17 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientStub->expects($this->once())
             ->method('delete');
-        $this->adapter->delete('data', ['id' => 1]);
+
+        $this->adapter->delete('data', $this->getMockForMappings(['id' => 1]));
     }
 
     public function testEmptyDataForDelete()
     {
         $this->clientStub->expects($this->never())
             ->method('delete');
+
         $this->setExpectedException('\Exception', 'Empty identifiers for delete');
-        $this->adapter->delete('data', []);
+        $this->adapter->delete('data', $this->getMockForMappings([]));
     }
 
     public function testEmptyDataForInsert()
@@ -83,5 +85,16 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->willReturn($this->clientStub);
 
         return $clientFactoryStub;
+    }
+
+    private function getMockForMappings($returnData)
+    {
+        $mappings = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
+            ->getMock();
+        $mappings
+            ->expects($this->once())
+            ->method('identifiers')
+            ->willReturn($returnData);
+        return $mappings;
     }
 }

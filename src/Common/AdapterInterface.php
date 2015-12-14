@@ -2,10 +2,12 @@
 
 namespace G4\DataMapper\Common;
 
+use G4\DataMapper\Common\MappingInterface;
+
 interface AdapterInterface
 {
 
-    public function delete($type, array $identifiers);
+    public function delete($type, MappingInterface $mappings);
 
     public function insert($type, array $data);
 
