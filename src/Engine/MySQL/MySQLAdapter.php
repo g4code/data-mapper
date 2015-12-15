@@ -7,6 +7,7 @@ use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
+use G4\DataMapper\Common\SelectionFactoryInterface;
 
 class MySQLAdapter implements AdapterInterface
 {
@@ -20,11 +21,6 @@ class MySQLAdapter implements AdapterInterface
     public function __construct(MySQLClientFactory $clientFactory)
     {
         $this->client = $clientFactory->create();
-    }
-
-    public function connect()
-    {
-
     }
 
     public function delete($table, MappingInterface $mapping)
@@ -49,9 +45,16 @@ class MySQLAdapter implements AdapterInterface
         $this->client->insert($table, $data);
     }
 
-    public function select()
+    public function select($table, SelectionFactoryInterface $selectionFactory)
     {
+        $select = $this->client
+            ->select()
+            ->from($table, $selectionFactory->fields())
+            ->where($selectionFactory->where())
+            ->order($selectionFactory->sort())
+            ->limit($selectionFactory->limit());
 
+        $this->client->fetchAll($select);
     }
 
     public function update($table, MappingInterface $mapping)
