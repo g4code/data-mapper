@@ -8,6 +8,7 @@ use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
 use G4\DataMapper\Common\SelectionFactoryInterface;
+use G4\DataMapper\Common\RawData;
 
 class MySQLAdapter implements AdapterInterface
 {
@@ -47,14 +48,24 @@ class MySQLAdapter implements AdapterInterface
 
     public function select($table, SelectionFactoryInterface $selectionFactory)
     {
-        $select = $this->client
+        $selectForData = $this->client
             ->select()
             ->from($table, $selectionFactory->fields())
             ->where($selectionFactory->where())
             ->order($selectionFactory->sort())
             ->limit($selectionFactory->limit());
 
-        $this->client->fetchAll($select);
+        $data = $this->client->fetchAll($selectForData);
+
+        $selectForTotal = $this->client
+            ->select()
+            ->from($table, 'COUNT(*) AS cnt')
+            ->where($selectionFactory->where())
+            ->order($selectionFactory->sort());
+
+        $total = $this->client->fetchOne($selectForTotal);
+
+        return new RawData($data, $total);
     }
 
     public function update($table, MappingInterface $mapping)
@@ -73,4 +84,5 @@ class MySQLAdapter implements AdapterInterface
 
         $this->client->update($table, $data, http_build_query($identifiers, '', ' AND '));
     }
+
 }

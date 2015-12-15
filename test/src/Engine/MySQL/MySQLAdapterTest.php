@@ -12,6 +12,11 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->clientStub = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
+            ->disableOriginalConstructor()
+            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne'])
+            ->getMock();
+
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
     }
 
@@ -118,6 +123,37 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insert('data', $mappingStub);
     }
 
+    public function testSelect()
+    {
+        $zendDbSelectStub = $this->getMockBuilder('\Zend_Db_Select')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $zendDbSelectStub->method('from')->willReturnSelf();
+        $zendDbSelectStub->method('where')->willReturnSelf();
+        $zendDbSelectStub->method('order')->willReturnSelf();
+
+        $this->clientStub
+            ->expects($this->exactly(2))
+            ->method('select')
+            ->willReturn($zendDbSelectStub);
+
+        $this->clientStub
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn([['data' => 1]]);
+
+        $this->clientStub
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->willReturn(1);
+
+        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select('data', $selectionFactoryStub));
+    }
+
     public function testUpdate()
     {
         $this->clientStub->expects($this->once())
@@ -138,11 +174,6 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     private function getMockForMySQLClientFactory()
     {
-        $this->clientStub = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
-            ->disableOriginalConstructor()
-            ->setMethods(['insert', 'delete', 'update'])
-            ->getMock();
-
         $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLClientFactory')
             ->disableOriginalConstructor()
             ->getMock();
