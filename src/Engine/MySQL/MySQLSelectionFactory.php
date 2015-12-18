@@ -8,11 +8,17 @@ use G4\DataMapper\Common\SelectionIdentityInterface;
 class MySQLSelectionFactory implements SelectionFactoryInterface
 {
 
-    private $selectionIdentity;
+    /**
+     * @var SelectionIdentityInterface
+     */
+    private $identity;
 
-    public function __construct(SelectionIdentityInterface $selectionIdentity)
+    /**
+     * @param SelectionIdentityInterface $identity
+     */
+    public function __construct(SelectionIdentityInterface $identity)
     {
-        $this->selectionIdentity = $selectionIdentity;
+        $this->identity = $identity;
     }
 
     public function fields()
@@ -32,7 +38,25 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
     public function where()
     {
+        if ($this->identity->isVoid()) {
+            return '1';
+        }
 
+        $compstrings = [];
+
+        foreach ($identity->getComps() as $comp) {
+            $s = sprintf("%s %s ", $comp['name'], $comp['operator']);
+
+            $s .= ($comp['operator'] != 'IN')
+            ? sprintf("%s", $this->db->quote($comp['value']))
+            : $comp['value'];
+
+            $compstrings[] = $s;
+        }
+
+        $where = implode(" AND ", $compstrings);
+
+        return $where;
     }
 
     public function limit()
