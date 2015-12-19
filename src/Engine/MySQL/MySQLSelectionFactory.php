@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\SelectionIdentityInterface;
+use G4\DataMapper\Common\Selection\Comparision;
 
 class MySQLSelectionFactory implements SelectionFactoryInterface
 {
@@ -42,25 +43,24 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
             return '1';
         }
 
-        $compstrings = [];
+        $comparisons = [];
 
-        foreach ($identity->getComps() as $comp) {
-            $s = sprintf("%s %s ", $comp['name'], $comp['operator']);
-
-            $s .= ($comp['operator'] != 'IN')
-            ? sprintf("%s", $this->db->quote($comp['value']))
-            : $comp['value'];
-
-            $compstrings[] = $s;
+        foreach ($this->identity->getComparisons() as $oneComparison) {
+            if ($oneComparison instanceof Comparision) {
+                $comparisons[] = (string) $oneComparison;
+            }
         }
 
-        $where = implode(" AND ", $compstrings);
-
-        return $where;
+        return join(' AND ', $comparisons);
     }
 
     public function limit()
     {
 
+    }
+
+    private function quote($value)
+    {
+        return $value;
     }
 }

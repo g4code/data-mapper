@@ -58,10 +58,13 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testGetFields()
     {
-        $this->identity->field('id')->equal(123);
+        $this->identity
+            ->field('id')->equal(123)
+            ->field('username')->equal('me');
         $comparisons = $this->identity->getComparisons();
 
         $this->assertTrue(is_array($comparisons));
+        $this->assertEquals(2, count($comparisons));
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparision', $comparisons[0]);
     }
 }

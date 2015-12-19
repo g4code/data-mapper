@@ -2,8 +2,12 @@
 
 namespace G4\DataMapper\Common;
 
+use G4\DataMapper\Common\SelectionIdentityInterface;
+
 interface SelectionFactoryInterface
 {
+
+    public function __construct(SelectionIdentityInterface $identity);
 
     public function fields();
 

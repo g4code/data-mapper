@@ -18,6 +18,13 @@ class Comparision
         $this->value    = $value;
     }
 
+    public function __toString()
+    {
+        return sprintf("%s %s %s", $this->name, $this->operator, $this->quoteValue());
+    }
 
-
+    private function quoteValue()
+    {
+        return $this->value;
+    }
 }
