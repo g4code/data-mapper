@@ -14,8 +14,10 @@ class RawDataTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->data = [
-            'id' => 1,
-            'data' => 'lorem ipsum',
+            [
+                'id' => 1,
+                'data' => 'lorem ipsum',
+            ]
         ];
 
         $this->total = 9;
@@ -28,6 +30,11 @@ class RawDataTest extends PHPUnit_Framework_TestCase
         $this->data = null;
         $this->total = null;
         $this->rawData = null;
+    }
+
+    public function testCount()
+    {
+        $this->assertEquals(1, $this->rawData->count());
     }
 
     public function testGetData()

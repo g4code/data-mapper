@@ -2,8 +2,13 @@
 
 namespace G4\DataMapper\Common;
 
-class RawData
+class RawData implements \Countable
 {
+
+    /**
+     * @var int
+     */
+    private $count;
 
     /**
      * @var array
@@ -23,6 +28,14 @@ class RawData
     {
         $this->data = $data;
         $this->total = $total;
+    }
+
+    public function count()
+    {
+        if ($this->count === null) {
+            $this->count = count($this->data);
+        }
+        return $this->count;
     }
 
     public function getData()

@@ -31,7 +31,7 @@ class MySQLMapper implements MapperInterface
 
     public function findAll(SelectionIdentityInterface $identity, ReconstituteInterface $factory)
     {
-        $this->adapter->select($this->table, $this->makeSelectionFactory($selectionIdentity));
+        return $this->adapter->select($this->table, $this->makeSelectionFactory($selectionIdentity));
     }
 
     public function findOne(SelectionIdentityInterface $identity, ReconstituteInterface $factory)
