@@ -62,11 +62,11 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
     {
         $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Comparision')
             ->disableOriginalConstructor()
-            ->setMethods(['__toString'])
+            ->setMethods(['getComparison'])
             ->getMock();
 
         $mock->expects($this->once())
-            ->method('__toString')
+            ->method('getComparison')
             ->willReturn('id = 1');
 
         return $mock;

@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Common\Selection;
 
 use G4\DataMapper\Common\Quote;
+
 class Comparision
 {
 
@@ -19,11 +20,17 @@ class Comparision
         $this->value    = $value;
     }
 
-    public function __toString()
+    public function getComparison()
     {
         return sprintf("%s %s %s",
             $this->name,
             $this->operator,
-            (string) new Quote($this->value));
+            (string) $this->getQuotedValue()
+        );
+    }
+
+    public function getQuotedValue()
+    {
+        return new Quote($this->value);
     }
 }

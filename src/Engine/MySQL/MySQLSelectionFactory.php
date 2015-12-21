@@ -47,7 +47,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparision) {
-                $comparisons[] = (string) $oneComparison;
+                $comparisons[] = $oneComparison->getComparison();
             }
         }
 
