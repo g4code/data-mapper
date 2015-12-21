@@ -86,7 +86,12 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function greaterThan($value)
     {
-        throw new \Exception('Not implemented yet!', 501);
+        if ($value !== null) {
+            $value = [
+                Consts::GREATER_THAN => $value,
+            ];
+        }
+        return $this->operator(Consts::MUST, $value);
     }
 
     public function greaterThanOrEqual($value)

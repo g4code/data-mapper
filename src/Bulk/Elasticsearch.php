@@ -37,7 +37,7 @@ class Elasticsearch
     public function markForSet(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
         $this->data[] = [
-            'update' => $this->getMetaData($domain->getId()),
+            'index' => $this->getMetaData($domain->getId()),
         ];
         $this->data[] = [
             'doc' => $domain->getRawData(),
