@@ -11,9 +11,7 @@ interface MapperInterface
 
     public function delete(MappingInterface $mappings);
 
-    public function findAll(SelectionIdentityInterface $identity, ReconstituteInterface $factory);
-
-    public function findOne(SelectionIdentityInterface $identity, ReconstituteInterface $factory);
+    public function find(SelectionIdentityInterface $identity);
 
     public function insert(MappingInterface $mappings);
 
