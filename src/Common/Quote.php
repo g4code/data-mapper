@@ -16,7 +16,7 @@ class Quote
     public function __toString()
     {
         if (is_int($this->value)) {
-            return $this->value;
+            return (string) $this->value;
         }
         if (is_float($this->value)) {
             return sprintf('%F', $this->value);
