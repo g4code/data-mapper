@@ -13,3 +13,5 @@ vendor
 .project
 .settings
 .idea
+
+test/coverage/*
