@@ -4,7 +4,7 @@ namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\SelectionIdentityInterface;
-use G4\DataMapper\Common\Selection\Comparision;
+use G4\DataMapper\Common\Selection\Comparison;
 
 class MySQLSelectionFactory implements SelectionFactoryInterface
 {
@@ -46,7 +46,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
         $comparisons = [];
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
-            if ($oneComparison instanceof Comparision) {
+            if ($oneComparison instanceof Comparison) {
                 $comparisons[] = $oneComparison->getComparison();
             }
         }

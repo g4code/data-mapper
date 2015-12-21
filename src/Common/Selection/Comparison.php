@@ -3,8 +3,9 @@
 namespace G4\DataMapper\Common\Selection;
 
 use G4\DataMapper\Common\Quote;
+use G4\DataMapper\Common\ComparisonInterface;
 
-class Comparision
+class Comparison implements ComparisonInterface
 {
 
     private $name;

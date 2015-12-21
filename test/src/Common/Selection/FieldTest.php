@@ -22,7 +22,7 @@ class FieldTest extends PHPUnit_Framework_TestCase
         $this->field->add('symbol', 123);
 
         $this->assertFalse($this->field->isIncomplete());
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparision', $this->field->getComparisions()[0]);
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $this->field->getComparisons()[0]);
     }
 
     public function testIsIncomplete()

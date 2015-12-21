@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common\Selection;
 
-use G4\DataMapper\Common\Selection\Comparision;
+use G4\DataMapper\Common\Selection\Comparison;
 
 class Field
 {
@@ -28,10 +28,10 @@ class Field
 
     public function add($symbol, $value)
     {
-        $this->comparisons[] = new Comparision($this->name, $symbol, $value);
+        $this->comparisons[] = new Comparison($this->name, $symbol, $value);
     }
 
-    public function getComparisions()
+    public function getComparisons()
     {
         return $this->comparisons;
     }

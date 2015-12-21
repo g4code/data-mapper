@@ -65,6 +65,6 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($comparisons));
         $this->assertEquals(2, count($comparisons));
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparision', $comparisons[0]);
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $comparisons[0]);
     }
 }

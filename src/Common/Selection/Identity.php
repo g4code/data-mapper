@@ -64,7 +64,7 @@ class Identity implements SelectionIdentityInterface
         $comparisons = [];
         foreach ($this->fields as $field) {
             if ($field instanceof Field) {
-                $comparisons = array_merge($comparisons, $field->getComparisions());
+                $comparisons = array_merge($comparisons, $field->getComparisons());
             }
         }
         return $comparisons;
