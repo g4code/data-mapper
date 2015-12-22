@@ -2,10 +2,9 @@
 
 namespace G4\DataMapper\Common\Selection;
 
-use G4\DataMapper\Common\Quote;
-use G4\DataMapper\Common\ComparisonInterface;
+use G4\DataMapper\Common\ComparisonFormatterInterface;
 
-class Comparison implements ComparisonInterface
+class Comparison
 {
 
     private $name;
@@ -21,17 +20,8 @@ class Comparison implements ComparisonInterface
         $this->value    = $value;
     }
 
-    public function getComparison()
+    public function getComparison(ComparisonFormatterInterface $comparisonFormatter)
     {
-        return sprintf("%s %s %s",
-            $this->name,
-            $this->operator,
-            (string) $this->getQuotedValue()
-        );
-    }
-
-    public function getQuotedValue()
-    {
-        return new Quote($this->value);
+        return $comparisonFormatter->format($name, $operator, $value);
     }
 }

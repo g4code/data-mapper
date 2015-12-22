@@ -1,6 +1,6 @@
 <?php
 
-use G4\DataMapper\Common\Quote;
+use G4\DataMapper\Engine\MySQL\Quote;
 
 class QuoteTest extends PHPUnit_Framework_TestCase
 {

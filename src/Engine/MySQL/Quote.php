@@ -1,6 +1,6 @@
 <?php
 
-namespace G4\DataMapper\Common;
+namespace G4\DataMapper\Engine\MySQL;
 
 class Quote
 {
