@@ -22,6 +22,6 @@ class Comparison
 
     public function getComparison(ComparisonFormatterInterface $comparisonFormatter)
     {
-        return $comparisonFormatter->format($name, $operator, $value);
+        return $comparisonFormatter->format($this->name, $this->operator, $this->value);
     }
 }
