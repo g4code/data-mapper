@@ -11,25 +11,23 @@ interface SelectionIdentityInterface
 
     public function isVoid();
 
-//     public function field();
+    public function field($fieldName);
 
-//     public function greaterThan();
+    public function greaterThan($value);
 
-//     public function greaterThanOrEqual();
+    public function greaterThanOrEqual($value);
 
-//     public function in();
+    public function in($value);
 
-//     public function like();
+    public function like($value);
 
-//     public function lessThan();
+    public function lessThan($value);
 
-//     public function lessThanOrEqual();
+    public function lessThanOrEqual($value);
 
-//     public function notEqual();
+    public function notEqual($value);
 
-//     public function notIn();
+    public function notIn($value);
 
-//     public function sort();
-
-
+    public function sort();
 }

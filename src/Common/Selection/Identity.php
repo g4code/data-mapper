@@ -35,6 +35,51 @@ class Identity implements SelectionIdentityInterface
         return $this;
     }
 
+    public function greaterThan($value)
+    {
+        $this->operator(Operator::GRATER_THAN, $value);
+    }
+
+    public function greaterThanOrEqual($value)
+    {
+        $this->operator(Operator::GRATER_THAN_OR_EQUAL, $value);
+    }
+
+    public function in($value)
+    {
+        $this->operator(Operator::IN, $value);
+    }
+
+    public function like($value)
+    {
+        $this->operator(Operator::LIKE, $value);
+    }
+
+    public function lessThan($value)
+    {
+        $this->operator(Operator::LESS_THAN, $value);
+    }
+
+    public function lessThanOrEqual($value)
+    {
+        $this->operator(Operator::LESS_THAN_OR_EQUAL, $value);
+    }
+
+    public function notEqual($value)
+    {
+        $this->operator(Operator::NOT_EQUAL, $value);
+    }
+
+    public function notIn($value)
+    {
+        $this->operator(Operator::NOT_IN, $value);
+    }
+
+    public function sort()
+    {
+
+    }
+
     /**
      * @param string $fieldName
      * @throws \Exception
