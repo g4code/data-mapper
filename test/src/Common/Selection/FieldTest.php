@@ -19,7 +19,11 @@ class FieldTest extends PHPUnit_Framework_TestCase
 
     public function testAdd()
     {
-        $this->field->add('symbol', 123);
+        $operatorStub = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Operator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->field->add($operatorStub, 123);
 
         $this->assertFalse($this->field->isIncomplete());
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $this->field->getComparisons()[0]);

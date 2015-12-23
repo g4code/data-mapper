@@ -15,7 +15,6 @@ class ComparisonTest extends PHPUnit_Framework_TestCase
 
         $comparisonFormatterMock = $this->getMockBuilder('\G4\DataMapper\Common\ComparisonFormatterInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['format'])
             ->getMock();
 
         $comparisonFormatterMock->expects($this->once())

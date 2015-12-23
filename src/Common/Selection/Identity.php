@@ -88,6 +88,6 @@ class Identity implements SelectionIdentityInterface
         if ($this->isVoid()) {
             throw new \Exception('Field is not defined', 101);
         }
-        $this->currentField->add($symbol, $value);
+        $this->currentField->add(new Operator($symbol), $value);
     }
 }
