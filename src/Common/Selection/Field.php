@@ -32,6 +32,9 @@ class Field
         $this->comparisons[] = new Comparison($this->name, $operator, $value);
     }
 
+    /**
+     * @return array
+     */
     public function getComparisons()
     {
         return $this->comparisons;

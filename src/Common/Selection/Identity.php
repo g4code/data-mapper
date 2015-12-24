@@ -31,43 +31,73 @@ class Identity implements SelectionIdentityInterface
      */
     public function equal($value)
     {
+        if (is_array($value)) {
+            throw new \Exception('Value cannot be array', 101);
+        }
         $this->operator(Operator::EQUAL, $value);
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Identity
+     */
     public function greaterThan($value)
     {
         $this->operator(Operator::GRATER_THAN, $value);
+        return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Identity
+     */
     public function greaterThanOrEqual($value)
     {
         $this->operator(Operator::GRATER_THAN_OR_EQUAL, $value);
+        return $this;
     }
 
-    public function in($value)
+    /**
+     * @param array $value
+     * @return Identity
+     */
+    public function in(array $value)
     {
         $this->operator(Operator::IN, $value);
+        return $this;
     }
 
     public function like($value)
     {
         $this->operator(Operator::LIKE, $value);
+        return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Identity
+     */
     public function lessThan($value)
     {
         $this->operator(Operator::LESS_THAN, $value);
+        return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Identity
+     */
     public function lessThanOrEqual($value)
     {
         $this->operator(Operator::LESS_THAN_OR_EQUAL, $value);
+        return $this;
     }
 
     public function notEqual($value)
     {
         $this->operator(Operator::NOT_EQUAL, $value);
+        return $this;
     }
 
     public function notIn($value)
@@ -75,7 +105,12 @@ class Identity implements SelectionIdentityInterface
         $this->operator(Operator::NOT_IN, $value);
     }
 
-    public function sort()
+    public function sortAscending($fieldName)
+    {
+
+    }
+
+    public function sortDescending($fieldName)
     {
 
     }

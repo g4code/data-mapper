@@ -17,7 +17,7 @@ interface SelectionIdentityInterface
 
     public function greaterThanOrEqual($value);
 
-    public function in($value);
+    public function in(array $value);
 
     public function like($value);
 
@@ -29,5 +29,7 @@ interface SelectionIdentityInterface
 
     public function notIn($value);
 
-    public function sort();
+    public function sortAscending($fieldName);
+
+    public function sortDescending($fieldName);
 }
