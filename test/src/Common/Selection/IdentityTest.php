@@ -34,11 +34,17 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     public function testGreaterThan()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->greaterThan(1));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->greaterThan([1]);
     }
 
     public function testGreaterThanOrEqual()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->greaterThanOrEqual(1));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->greaterThanOrEqual([1]);
     }
 
     public function testIn()
@@ -48,17 +54,26 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testLessThan()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->lessThan([1]));
+        $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->lessThan(1));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->lessThan([1]);
     }
 
     public function testLessThanOrEqual()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->lessThanOrEqual(1));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->lessThanOrEqual([1]);
     }
 
     public function testNotEqual()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->notEqual(1));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->notEqual([1]);
     }
 
     public function testNotIn()

@@ -27,7 +27,7 @@ interface SelectionIdentityInterface
 
     public function notEqual($value);
 
-    public function notIn($value);
+    public function notIn(array $value);
 
     public function sortAscending($fieldName);
 

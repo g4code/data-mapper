@@ -5,6 +5,7 @@ namespace G4\DataMapper\Common\Selection;
 use G4\DataMapper\Common\SelectionIdentityInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
+use G4\DataMapper\Selection\Sort;
 
 class Identity implements SelectionIdentityInterface
 {
@@ -19,10 +20,16 @@ class Identity implements SelectionIdentityInterface
      */
     private $fields;
 
+    /**
+     * @var array
+     */
+    private $sort;
+
 
     public function __construct()
     {
         $this->fields = [];
+        $this->sort   = [];
     }
 
     /**
@@ -31,9 +38,7 @@ class Identity implements SelectionIdentityInterface
      */
     public function equal($value)
     {
-        if (is_array($value)) {
-            throw new \Exception('Value cannot be array', 101);
-        }
+        $this->arrayException($value);
         $this->operator(Operator::EQUAL, $value);
         return $this;
     }
@@ -44,6 +49,7 @@ class Identity implements SelectionIdentityInterface
      */
     public function greaterThan($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::GRATER_THAN, $value);
         return $this;
     }
@@ -54,6 +60,7 @@ class Identity implements SelectionIdentityInterface
      */
     public function greaterThanOrEqual($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::GRATER_THAN_OR_EQUAL, $value);
         return $this;
     }
@@ -70,6 +77,7 @@ class Identity implements SelectionIdentityInterface
 
     public function like($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::LIKE, $value);
         return $this;
     }
@@ -80,6 +88,7 @@ class Identity implements SelectionIdentityInterface
      */
     public function lessThan($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::LESS_THAN, $value);
         return $this;
     }
@@ -90,29 +99,38 @@ class Identity implements SelectionIdentityInterface
      */
     public function lessThanOrEqual($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::LESS_THAN_OR_EQUAL, $value);
         return $this;
     }
 
     public function notEqual($value)
     {
+        $this->arrayException($value);
         $this->operator(Operator::NOT_EQUAL, $value);
         return $this;
     }
 
-    public function notIn($value)
+    public function notIn(array $value)
     {
         $this->operator(Operator::NOT_IN, $value);
+        return $this;
     }
 
     public function sortAscending($fieldName)
     {
-
+        if ($fieldName !== null) {
+            $this->sort[$fieldName] = new Sort($fieldName, Sort::ASCENDING);
+        }
+        return $this;
     }
 
     public function sortDescending($fieldName)
     {
-
+        if ($fieldName !== null) {
+            $this->sort[$fieldName] = new Sort($fieldName, Sort::DESCENDING);
+        }
+        return $this;
     }
 
     /**
@@ -156,6 +174,13 @@ class Identity implements SelectionIdentityInterface
     public function isVoid()
     {
         return count($this->fields) === 0;
+    }
+
+    private function arrayException($value)
+    {
+        if (is_array($value)) {
+            throw new \Exception('Value cannot be array', 101);
+        }
     }
 
     /**
