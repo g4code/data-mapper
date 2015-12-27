@@ -5,7 +5,7 @@ namespace G4\DataMapper\Common\Selection;
 use G4\DataMapper\Common\SelectionIdentityInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
-use G4\DataMapper\Selection\Sort;
+use G4\DataMapper\Common\Selection\Sort;
 
 class Identity implements SelectionIdentityInterface
 {

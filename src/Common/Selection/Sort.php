@@ -1,6 +1,6 @@
 <?php
 
-namespace G4\DataMapper\Selection;
+namespace G4\DataMapper\Common\Selection;
 
 class Sort
 {

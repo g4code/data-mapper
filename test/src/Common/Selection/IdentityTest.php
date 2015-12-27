@@ -121,11 +121,15 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $comparisons[0]);
     }
 
-    public function testSortAscending()
+    public function testSorting()
     {
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Identity', $this->identity->sortAscending('name'));
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Identity', $this->identity->sortDescending('ts'));
 
+        $sorting = $this->identity->getSorting();
 
-
+        $this->assertEquals(2, count($sorting));
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['name']);
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['ts']);
     }
 }
