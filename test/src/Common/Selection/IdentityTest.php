@@ -120,4 +120,12 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($comparisons));
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $comparisons[0]);
     }
+
+    public function testSortAscending()
+    {
+        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Identity', $this->identity->sortAscending('name'));
+
+
+
+    }
 }

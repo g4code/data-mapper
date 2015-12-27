@@ -23,13 +23,13 @@ class Identity implements SelectionIdentityInterface
     /**
      * @var array
      */
-    private $sort;
+    private $sorting;
 
 
     public function __construct()
     {
-        $this->fields = [];
-        $this->sort   = [];
+        $this->fields  = [];
+        $this->sorting = [];
     }
 
     /**
@@ -120,7 +120,7 @@ class Identity implements SelectionIdentityInterface
     public function sortAscending($fieldName)
     {
         if ($fieldName !== null) {
-            $this->sort[$fieldName] = new Sort($fieldName, Sort::ASCENDING);
+            $this->sorting[$fieldName] = new Sort($fieldName, Sort::ASCENDING);
         }
         return $this;
     }
@@ -128,7 +128,7 @@ class Identity implements SelectionIdentityInterface
     public function sortDescending($fieldName)
     {
         if ($fieldName !== null) {
-            $this->sort[$fieldName] = new Sort($fieldName, Sort::DESCENDING);
+            $this->sorting[$fieldName] = new Sort($fieldName, Sort::DESCENDING);
         }
         return $this;
     }
@@ -166,6 +166,11 @@ class Identity implements SelectionIdentityInterface
             }
         }
         return $comparisons;
+    }
+
+    public function getSorting()
+    {
+        return $this->sorting;
     }
 
     /**
