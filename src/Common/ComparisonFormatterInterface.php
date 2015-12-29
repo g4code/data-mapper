@@ -8,5 +8,4 @@ interface ComparisonFormatterInterface
 {
 
     public function format($name, Operator $operator, $value);
-
 }

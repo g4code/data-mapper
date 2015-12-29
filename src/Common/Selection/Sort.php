@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Common\Selection;
 
+use G4\DataMapper\Common\SortFormatterInterface;
+
 class Sort
 {
 
@@ -19,5 +21,8 @@ class Sort
         $this->order = $order;
     }
 
-
+    public function getSort(SortFormatterInterface $sortFormatter)
+    {
+        return $sortFormatter->format($this->name, $this->order);
+    }
 }

@@ -6,6 +6,7 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\SelectionIdentityInterface;
 use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter;
+use G4\DataMapper\Common\Selection\Sort;
 
 class MySQLSelectionFactory implements SelectionFactoryInterface
 {
@@ -35,7 +36,20 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
     public function sort()
     {
+        $rawSorting = $this->identity->getSorting();
 
+        if (empty($rawSorting)) {
+            return [];
+        }
+
+        $sorting = [];
+
+        foreach ($rawSorting as $oneSort) {
+            if ($oneSort instanceof Sort) {
+                $sorting[] = $oneSort->getSort();
+            }
+        }
+        return $sorting;
     }
 
     public function where()
@@ -51,7 +65,6 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
                 $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
             }
         }
-
         return join(' AND ', $comparisons);
     }
 
@@ -63,6 +76,11 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
     public function makeComparisonFormatter()
     {
         return new MySQLComparisonFormatter();
+    }
+
+    public function makeSortingFormatter()
+    {
+        return new MySQLSortingFormatter();
     }
 
     private function quote($value)

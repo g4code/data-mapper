@@ -7,17 +7,19 @@ interface SelectionIdentityInterface
 
     public function equal($value);
 
+    public function field($fieldName);
+
     public function getComparisons();
 
-    public function isVoid();
-
-    public function field($fieldName);
+    public function getSorting();
 
     public function greaterThan($value);
 
     public function greaterThanOrEqual($value);
 
     public function in(array $value);
+
+    public function isVoid();
 
     public function like($value);
 

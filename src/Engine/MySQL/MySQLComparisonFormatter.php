@@ -26,11 +26,11 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
         return sprintf("%s %s %s",
                 $name,
                 $this->operatorMap($operator),
-                $this->makeQuote($value)
+                $this->quote($value)
         );
     }
 
-    private function makeQuote($value)
+    private function quote($value)
     {
         return (string) new Quote($value);
     }
