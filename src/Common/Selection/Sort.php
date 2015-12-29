@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common\Selection;
 
-use G4\DataMapper\Common\SortFormatterInterface;
+use G4\DataMapper\Common\SortingFormatterInterface;
 
 class Sort
 {
@@ -15,14 +15,27 @@ class Sort
     private $order;
 
 
-    public function __construct($name, $order)
+public function __construct($name, $order)
     {
         $this->name  = $name;
         $this->order = $order;
+        $this->isValid();
     }
 
-    public function getSort(SortFormatterInterface $sortFormatter)
+    public function getSort(SortingFormatterInterface $sortFormatter)
     {
         return $sortFormatter->format($this->name, $this->order);
+    }
+
+    private function isValid()
+    {
+        $validSymbols = [
+            self::ASCENDING,
+            self::DESCENDING,
+        ];
+
+        if (!in_array($this->order, $validSymbols)) {
+            throw new \Exception('Sort order is not valid', 101);
+        }
     }
 }
