@@ -46,7 +46,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
         foreach ($rawSorting as $oneSort) {
             if ($oneSort instanceof Sort) {
-                $sorting[] = $oneSort->getSort();
+                $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
             }
         }
         return $sorting;

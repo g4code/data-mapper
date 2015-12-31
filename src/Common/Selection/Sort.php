@@ -15,7 +15,7 @@ class Sort
     private $order;
 
 
-public function __construct($name, $order)
+    public function __construct($name, $order)
     {
         $this->name  = $name;
         $this->order = $order;

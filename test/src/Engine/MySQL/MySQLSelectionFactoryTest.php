@@ -30,6 +30,32 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort(),
+                $this->getMockForSort(),
+            ]);
+
+        $this->assertEquals([
+            ['name' => 'ASC'],
+            ['name' => 'ASC'],
+        ], $this->selectionFactory->sort());
+    }
+
+    public function testEmptySort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->sort());
+    }
+
     public function testWhere()
     {
         $this->identityMock
@@ -58,6 +84,12 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1', $this->selectionFactory->where());
     }
 
+    public function testMakeFactoryMethods()
+    {
+        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter', $this->selectionFactory->makeComparisonFormatter());
+        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLSortingFormatter', $this->selectionFactory->makeSortingFormatter());
+    }
+
     private function getMockForComparison()
     {
         $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Comparison')
@@ -65,9 +97,25 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->setMethods(['getComparison'])
             ->getMock();
 
-        $mock->expects($this->once())
+        $mock
+            ->expects($this->once())
             ->method('getComparison')
             ->willReturn('id = 1');
+
+        return $mock;
+    }
+
+    private function getMockForSort()
+    {
+        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Sort')
+            ->disableOriginalConstructor()
+            ->setMethods(['getSort'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getSort')
+            ->willReturn(['name' => 'ASC']);
 
         return $mock;
     }
