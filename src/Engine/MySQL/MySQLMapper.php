@@ -21,7 +21,7 @@ class MySQLMapper implements MapperInterface
     public function __construct(AdapterInterface $adapter, $table)
     {
         $this->adapter = $adapter;
-        $this->type    = $table;
+        $this->table   = $table;
     }
 
     public function delete(MappingInterface $mappings)
@@ -36,7 +36,7 @@ class MySQLMapper implements MapperInterface
 
     public function insert(MappingInterface $mappings)
     {
-        $this->adapter->insert($this->table, $mappings->map());
+        $this->adapter->insert($this->table, $mappings);
     }
 
     public function update(MappingInterface $mappings)
