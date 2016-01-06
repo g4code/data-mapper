@@ -68,6 +68,14 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->identity->field('name')->lessThanOrEqual([1]);
     }
 
+    public function testLike()
+    {
+        $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->like('this'));
+
+        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->identity->field('name')->like([1]);
+    }
+
     public function testNotEqual()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->notEqual(1));
