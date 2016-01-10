@@ -70,7 +70,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
     public function limit()
     {
-
+        return (int) $this->identity->getLimit();
     }
 
     public function makeComparisonFormatter()
@@ -81,6 +81,11 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
     public function makeSortingFormatter()
     {
         return new MySQLSortingFormatter();
+    }
+
+    public function offset()
+    {
+
     }
 
     private function quote($value)

@@ -13,10 +13,12 @@ interface SelectionFactoryInterface
 
     public function group();
 
+    public function limit();
+
+    public function offset();
+
     public function sort();
 
     public function where();
-
-    public function limit();
 
 }

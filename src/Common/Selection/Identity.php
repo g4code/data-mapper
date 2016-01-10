@@ -10,6 +10,9 @@ use G4\DataMapper\Common\Selection\Sort;
 class Identity implements SelectionIdentityInterface
 {
 
+    const DEFAULT_LIMIT  = 20;
+    const DEFAULT_OFFSET = 0;
+
     /**
      * @var Field
      */
@@ -19,6 +22,21 @@ class Identity implements SelectionIdentityInterface
      * @var array
      */
     private $fields;
+
+    /**
+     * @var int
+     */
+    private $limit;
+
+    /**
+     * @var int
+     */
+    private $offset;
+
+    /**
+     * @var int
+     */
+    private $page;
 
     /**
      * @var array
@@ -41,6 +59,20 @@ class Identity implements SelectionIdentityInterface
         $this->arrayException($value);
         $this->operator(Operator::EQUAL, $value);
         return $this;
+    }
+
+    public function getLimit()
+    {
+        return $this->limit === null
+            ? self::DEFAULT_LIMIT
+            : $this->limit;
+    }
+
+    public function getOffset()
+    {
+        return $this->offset === null
+            ? $this->getOffsetFromPage()
+            : $this->offset;
     }
 
     /**
@@ -75,6 +107,10 @@ class Identity implements SelectionIdentityInterface
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Identity
+     */
     public function like($value)
     {
         $this->arrayException($value);
@@ -115,6 +151,29 @@ class Identity implements SelectionIdentityInterface
     {
         $this->operator(Operator::NOT_IN, $value);
         return $this;
+    }
+
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    public function setOffset($offset)
+    {
+        $this->offset = $offset;
+        return $this;
+    }
+
+    public function setPage($page)
+    {
+        $this->page = $page;
+        return $this;
+    }
+
+    public function setPerPage($perPage)
+    {
+        return $this->setLimit($perPage);
     }
 
     public function sortAscending($fieldName)
@@ -186,6 +245,13 @@ class Identity implements SelectionIdentityInterface
         if (is_array($value)) {
             throw new \Exception('Value cannot be array', 101);
         }
+    }
+
+    private function getOffsetFromPage()
+    {
+        return $this->page === null
+            ? self::DEFAULT_OFFSET
+            : $this->getLimit() * (abs((int) $this->page) - 1);
     }
 
     /**

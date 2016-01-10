@@ -53,7 +53,7 @@ class MySQLAdapter implements AdapterInterface
             ->from($table, $selectionFactory->fields())
             ->where($selectionFactory->where())
             ->order($selectionFactory->sort())
-            ->limit($selectionFactory->limit());
+            ->limit($selectionFactory->limit(), $selectionFactory->offset());
 
         $data = $this->client->fetchAll($selectForData);
 

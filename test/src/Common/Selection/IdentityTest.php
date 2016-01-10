@@ -76,6 +76,17 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->identity->field('name')->like([1]);
     }
 
+    public function testLimit()
+    {
+        $this->assertEquals(20, $this->identity->getLimit());
+
+        $this->identity->setLimit(9);
+        $this->assertEquals(9, $this->identity->getLimit());
+
+        $this->identity->setPerPage(15);
+        $this->assertEquals(15, $this->identity->getLimit());
+    }
+
     public function testNotEqual()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->notEqual(1));
@@ -139,5 +150,16 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($sorting));
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['name']);
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['ts']);
+    }
+
+    public function testOffset()
+    {
+        $this->assertEquals(0, $this->identity->getOffset());
+
+        $this->identity->setPage(2);
+        $this->assertEquals(20, $this->identity->getOffset());
+
+        $this->identity->setOffset(3);
+        $this->assertEquals(3, $this->identity->getOffset());
     }
 }
