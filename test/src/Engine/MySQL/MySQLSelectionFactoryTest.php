@@ -30,6 +30,26 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testLimit()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getLimit')
+            ->willReturn(9);
+
+        $this->assertEquals(9, $this->selectionFactory->limit());
+    }
+
+    public function testOffset()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getOffset')
+            ->willReturn(2);
+
+        $this->assertEquals(2, $this->selectionFactory->offset());
+    }
+
     public function testSort()
     {
         $this->identityMock

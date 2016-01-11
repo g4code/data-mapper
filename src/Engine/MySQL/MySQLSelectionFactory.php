@@ -85,11 +85,6 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
     public function offset()
     {
-
-    }
-
-    private function quote($value)
-    {
-        return $value;
+        return (int) $this->identity->getOffset();
     }
 }

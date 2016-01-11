@@ -11,6 +11,10 @@ interface SelectionIdentityInterface
 
     public function getComparisons();
 
+    public function getLimit();
+
+    public function getOffset();
+
     public function getSorting();
 
     public function greaterThan($value);
