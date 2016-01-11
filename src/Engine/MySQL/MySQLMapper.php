@@ -6,7 +6,6 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\SelectionIdentityInterface;
-use G4\Factory\ReconstituteInterface;
 
 class MySQLMapper implements MapperInterface
 {

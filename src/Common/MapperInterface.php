@@ -4,7 +4,6 @@ namespace G4\DataMapper\Common;
 
 use G4\DataMapper\Common\SelectionIdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
-use G4\Factory\ReconstituteInterface;
 
 interface MapperInterface
 {
