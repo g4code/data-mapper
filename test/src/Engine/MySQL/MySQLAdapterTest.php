@@ -7,12 +7,12 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     private $adapter;
 
-    private $clientStub;
+    private $clientMock;
 
 
     protected function setUp()
     {
-        $this->clientStub = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
+        $this->clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
             ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne'])
             ->getMock();
@@ -23,12 +23,12 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->adapter = null;
-        $this->clientStub = null;
+        $this->clientMock = null;
     }
 
     public function testDelete()
     {
-        $this->clientStub->expects($this->once())
+        $this->clientMock->expects($this->once())
             ->method('delete');
 
         $mappingStub = $this->getMockForMappings();
@@ -42,7 +42,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyDataForDelete()
     {
-        $this->clientStub->expects($this->never())
+        $this->clientMock->expects($this->never())
             ->method('delete');
 
         $mappingStub = $this->getMockForMappings();
@@ -57,7 +57,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyDataForInsert()
     {
-        $this->clientStub->expects($this->never())
+        $this->clientMock->expects($this->never())
             ->method('insert');
 
         $mappingStub = $this->getMockForMappings();
@@ -72,7 +72,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyDataForUpdate()
     {
-        $this->clientStub->expects($this->never())
+        $this->clientMock->expects($this->never())
             ->method('update');
 
         $mappingStub = $this->getMockForMappings();
@@ -91,7 +91,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyIdentifiersForUpdate()
     {
-        $this->clientStub->expects($this->never())
+        $this->clientMock->expects($this->never())
             ->method('update');
 
         $mappingStub = $this->getMockForMappings();
@@ -111,7 +111,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
-        $this->clientStub->expects($this->once())
+        $this->clientMock->expects($this->once())
             ->method('insert');
 
         $mappingStub = $this->getMockForMappings();
@@ -125,24 +125,39 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
-        $zendDbSelectStub = $this->getMockBuilder('\Zend_Db_Select')
+        $zendDbSelectMock = $this->getMockBuilder('\Zend_Db_Select')
             ->disableOriginalConstructor()
             ->getMock();
-        $zendDbSelectStub->method('from')->willReturnSelf();
-        $zendDbSelectStub->method('where')->willReturnSelf();
-        $zendDbSelectStub->method('order')->willReturnSelf();
+        $zendDbSelectMock
+            ->expects($this->exactly(2))
+            ->method('from')
+            ->willReturnSelf();
+        $zendDbSelectMock
+            ->expects($this->exactly(2))
+            ->method('where')
+            ->willReturnSelf();
+        $zendDbSelectMock
+            ->expects($this->once())
+            ->method('order')
+            ->willReturnSelf();
+        $zendDbSelectMock
+            ->expects($this->once())
+            ->method('limit')
+            ->willReturnSelf();
+        $zendDbSelectMock
+            ->expects($this->exactly(2))
+            ->method('group')
+            ->willReturnSelf();
 
-        $this->clientStub
+        $this->clientMock
             ->expects($this->exactly(2))
             ->method('select')
-            ->willReturn($zendDbSelectStub);
-
-        $this->clientStub
+            ->willReturn($zendDbSelectMock);
+        $this->clientMock
             ->expects($this->once())
             ->method('fetchAll')
             ->willReturn([['data' => 1]]);
-
-        $this->clientStub
+        $this->clientMock
             ->expects($this->once())
             ->method('fetchOne')
             ->willReturn(1);
@@ -156,7 +171,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        $this->clientStub->expects($this->once())
+        $this->clientMock->expects($this->once())
             ->method('update');
 
         $mappingStub = $this->getMockForMappings();
@@ -179,7 +194,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $clientFactoryStub->method('create')
-            ->willReturn($this->clientStub);
+            ->willReturn($this->clientMock);
 
         return $clientFactoryStub;
     }

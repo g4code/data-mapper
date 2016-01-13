@@ -11,6 +11,8 @@ interface SelectionIdentityInterface
 
     public function getComparisons();
 
+    public function getGrouping();
+
     public function getLimit();
 
     public function getOffset();
@@ -20,6 +22,8 @@ interface SelectionIdentityInterface
     public function greaterThan($value);
 
     public function greaterThanOrEqual($value);
+
+    public function groupBy($field);
 
     public function in(array $value);
 

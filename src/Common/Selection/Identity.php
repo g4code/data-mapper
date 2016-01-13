@@ -24,6 +24,11 @@ class Identity implements SelectionIdentityInterface
     private $fields;
 
     /**
+     * @var array
+     */
+    private $grouping;
+
+    /**
      * @var int
      */
     private $limit;
@@ -46,8 +51,9 @@ class Identity implements SelectionIdentityInterface
 
     public function __construct()
     {
-        $this->fields  = [];
-        $this->sorting = [];
+        $this->fields   = [];
+        $this->sorting  = [];
+        $this->grouping = [];
     }
 
     /**
@@ -59,6 +65,11 @@ class Identity implements SelectionIdentityInterface
         $this->arrayException($value);
         $this->operator(Operator::EQUAL, $value);
         return $this;
+    }
+
+    public function getGrouping()
+    {
+        return $this->grouping;
     }
 
     public function getLimit()
@@ -150,6 +161,12 @@ class Identity implements SelectionIdentityInterface
     public function notIn(array $value)
     {
         $this->operator(Operator::NOT_IN, $value);
+        return $this;
+    }
+
+    public function groupBy($field)
+    {
+        $this->grouping[] = $field;
         return $this;
     }
 

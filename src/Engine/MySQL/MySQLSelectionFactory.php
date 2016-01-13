@@ -31,7 +31,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 
     public function group()
     {
-
+        return $this->identity->getGrouping();
     }
 
     public function sort()

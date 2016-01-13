@@ -30,6 +30,16 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testGroup()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getGrouping')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->group());
+    }
+
     public function testLimit()
     {
         $this->identityMock

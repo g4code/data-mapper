@@ -152,6 +152,13 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['ts']);
     }
 
+    public function testGrouping()
+    {
+        $this->assertSame($this->identity, $this->identity->groupBy('name'));
+        $this->identity->groupBy('ts');
+        $this->assertEquals(['name', 'ts'], $this->identity->getGrouping());
+    }
+
     public function testOffset()
     {
         $this->assertEquals(0, $this->identity->getOffset());

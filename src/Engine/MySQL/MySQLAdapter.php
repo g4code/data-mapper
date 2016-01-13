@@ -53,7 +53,8 @@ class MySQLAdapter implements AdapterInterface
             ->from($table, $selectionFactory->fields())
             ->where($selectionFactory->where())
             ->order($selectionFactory->sort())
-            ->limit($selectionFactory->limit(), $selectionFactory->offset());
+            ->limit($selectionFactory->limit(), $selectionFactory->offset())
+            ->group($selectionFactory->group());
 
         $data = $this->client->fetchAll($selectForData);
 
@@ -61,7 +62,7 @@ class MySQLAdapter implements AdapterInterface
             ->select()
             ->from($table, 'COUNT(*) AS cnt')
             ->where($selectionFactory->where())
-            ->order($selectionFactory->sort());
+            ->group($selectionFactory->group());
 
         $total = $this->client->fetchOne($selectForTotal);
 
