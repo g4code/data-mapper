@@ -26,6 +26,11 @@ class Identity implements SelectionIdentityInterface
     /**
      * @var array
      */
+    private $fieldNames;
+
+    /**
+     * @var array
+     */
     private $grouping;
 
     /**
@@ -65,6 +70,11 @@ class Identity implements SelectionIdentityInterface
         $this->arrayException($value);
         $this->operator(Operator::EQUAL, $value);
         return $this;
+    }
+
+    public function getFieldNames()
+    {
+        return $this->fieldNames;
     }
 
     public function getGrouping()
@@ -164,9 +174,9 @@ class Identity implements SelectionIdentityInterface
         return $this;
     }
 
-    public function groupBy($field)
+    public function groupBy($fieldName)
     {
-        $this->grouping[] = $field;
+        $this->grouping[] = $fieldName;
         return $this;
     }
 
@@ -255,6 +265,12 @@ class Identity implements SelectionIdentityInterface
     public function isVoid()
     {
         return count($this->fields) === 0;
+    }
+
+    public function setFieldNames(array $fieldNames)
+    {
+        $this->fieldNames = $fieldNames;
+        return $this;
     }
 
     private function arrayException($value)

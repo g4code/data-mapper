@@ -11,6 +11,8 @@ interface SelectionIdentityInterface
 
     public function getComparisons();
 
+    public function getFieldNames();
+
     public function getGrouping();
 
     public function getLimit();
@@ -23,7 +25,7 @@ interface SelectionIdentityInterface
 
     public function greaterThanOrEqual($value);
 
-    public function groupBy($field);
+    public function groupBy($fieldName);
 
     public function in(array $value);
 
@@ -42,4 +44,6 @@ interface SelectionIdentityInterface
     public function sortAscending($fieldName);
 
     public function sortDescending($fieldName);
+
+    public function setFieldNames(array $fieldNames);
 }

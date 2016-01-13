@@ -9,7 +9,7 @@ interface SelectionFactoryInterface
 
     public function __construct(SelectionIdentityInterface $identity);
 
-    public function fields();
+    public function fieldNames();
 
     public function group();
 

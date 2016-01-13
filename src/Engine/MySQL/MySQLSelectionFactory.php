@@ -24,9 +24,13 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
         $this->identity = $identity;
     }
 
-    public function fields()
+    public function fieldNames()
     {
+        $fieldNames = $this->identity->getFieldNames();
 
+        return count($fieldNames) === 0
+            ? '*'
+            : $fieldNames;
     }
 
     public function group()

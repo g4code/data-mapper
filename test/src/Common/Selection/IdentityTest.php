@@ -31,6 +31,13 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->identity->field('name')->equal([1]);
     }
 
+    public function testFieldNames()
+    {
+        $this->assertSame($this->identity, $this->identity->setFieldNames(['name', 'user_id']));
+
+        $this->assertEquals(['name', 'user_id'], $this->identity->getFieldNames());
+    }
+
     public function testGreaterThan()
     {
         $this->assertInstanceOf('G4\DataMapper\Common\Selection\Identity', $this->identity->field('id')->greaterThan(1));
