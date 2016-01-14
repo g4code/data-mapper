@@ -47,6 +47,20 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->mapper->delete($this->mappingMock);
     }
 
+    public function testFind()
+    {
+        $rawDataStub = $this->getMockBuilder('\G4\DataMapper\Common\RawData')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('select')
+            ->willReturn($rawDataStub);
+
+        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock('\G4\DataMapper\Common\Selection\Identity')));
+    }
+
     public function testInsert()
     {
         $this->adapterMock

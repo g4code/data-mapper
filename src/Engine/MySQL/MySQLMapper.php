@@ -30,7 +30,7 @@ class MySQLMapper implements MapperInterface
 
     public function find(SelectionIdentityInterface $identity)
     {
-        return $this->adapter->select($this->table, $this->makeSelectionFactory($selectionIdentity));
+        return $this->adapter->select($this->table, $this->makeSelectionFactory($identity));
     }
 
     public function insert(MappingInterface $mappings)
@@ -43,8 +43,8 @@ class MySQLMapper implements MapperInterface
         $this->adapter->update($this->table, $mappings);
     }
 
-    private function makeSelectionFactory(SelectionIdentityInterface $selectionIdentity)
+    private function makeSelectionFactory(SelectionIdentityInterface $identity)
     {
-        return new MySQLSelectionFactory($selectionIdentity);
+        return new MySQLSelectionFactory($identity);
     }
 }
