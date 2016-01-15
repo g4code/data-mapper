@@ -16,3 +16,4 @@ vendor
 
 test/coverage/*
 !test/coverage/.gitkeep
+.vagrant/
