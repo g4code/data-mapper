@@ -210,6 +210,17 @@ class Identity
     /**
      * @return Identity
      */
+    public function notIn($fields = array())
+    {
+        $fields = "('" . implode("', '", $fields) . "')";
+
+        $this->_operator('NOT IN', $fields);
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
     public function ge($value = null)
     {
         $this->_operator(">=", $value);
