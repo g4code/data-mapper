@@ -37,9 +37,14 @@ class RawDataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->rawData->count());
     }
 
-    public function testGetData()
+    public function testGetAll()
     {
-        $this->assertEquals($this->data, $this->rawData->getData());
+        $this->assertEquals($this->data, $this->rawData->getAll());
+    }
+
+    public function testGetOne()
+    {
+        $this->assertEquals($this->data[0], $this->rawData->getOne());
     }
 
     public function testGetTotal()
