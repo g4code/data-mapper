@@ -32,7 +32,7 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty identifiers for delete', 101);
         }
 
-        $this->client->delete($table, http_build_query($identifiers, '', ' AND '));
+        $this->client->delete($table, $identifiers);
     }
 
     public function insert($table, MappingInterface $mappings)
