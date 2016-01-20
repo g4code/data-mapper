@@ -83,7 +83,7 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty identifiers for update', 101);
         }
 
-        $this->client->update($table, $data, http_build_query($identifiers, '', ' AND '));
+        $this->client->update($table, $data, $identifiers);
     }
 
 }
