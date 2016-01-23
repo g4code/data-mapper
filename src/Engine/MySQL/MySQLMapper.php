@@ -23,9 +23,9 @@ class MySQLMapper implements MapperInterface
         $this->table   = $table;
     }
 
-    public function delete(MappingInterface $mappings)
+    public function delete(IdentityInterface $identity)
     {
-        $this->adapter->delete($this->table, $mappings);
+        $this->adapter->delete($this->table, $this->makeSelectionFactory($identity));
     }
 
     public function find(IdentityInterface $identity)

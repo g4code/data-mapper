@@ -8,7 +8,7 @@ use G4\DataMapper\Common\MappingInterface;
 interface MapperInterface
 {
 
-    public function delete(MappingInterface $mappings);
+    public function delete(IdentityInterface $mappings);
 
     public function find(IdentityInterface $identity);
 

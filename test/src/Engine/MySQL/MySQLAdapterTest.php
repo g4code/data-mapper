@@ -28,31 +28,19 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->clientMock->expects($this->once())
+        $this->clientMock
+            ->expects($this->once())
             ->method('delete');
 
-        $mappingStub = $this->getMockForMappings();
-        $mappingStub
+        $selectionFactoryMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryMock
             ->expects($this->once())
-            ->method('identifiers')
-            ->willReturn(['id' => 1]);
+            ->method('where');
 
-        $this->adapter->delete('data', $mappingStub);
-    }
-
-    public function testEmptyDataForDelete()
-    {
-        $this->clientMock->expects($this->never())
-            ->method('delete');
-
-        $mappingStub = $this->getMockForMappings();
-        $mappingStub
-            ->expects($this->once())
-            ->method('identifiers')
-            ->willReturn([]);
-
-        $this->setExpectedException('\Exception', 'Empty identifiers for delete');
-        $this->adapter->delete('data', $mappingStub);
+        $this->adapter->delete('data', $selectionFactoryMock);
     }
 
     public function testEmptyDataForInsert()

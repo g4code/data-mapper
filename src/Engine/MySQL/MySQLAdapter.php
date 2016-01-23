@@ -24,15 +24,9 @@ class MySQLAdapter implements AdapterInterface
         $this->client = $clientFactory->create();
     }
 
-    public function delete($table, MappingInterface $mapping)
+    public function delete($table, SelectionFactoryInterface $selectionFactory)
     {
-        $identifiers = $mapping->identifiers();
-
-        if (empty($identifiers)) {
-            throw new \Exception('Empty identifiers for delete', 101);
-        }
-
-        $this->client->delete($table, $identifiers);
+        $this->client->delete($table, $selectionFactory->where());
     }
 
     public function insert($table, MappingInterface $mappings)

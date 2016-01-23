@@ -39,12 +39,15 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
+        $identityStub = $this->getMock('\G4\DataMapper\Common\IdentityInterface');
+
+        $selectionFactoryStub = $this->getMock('\G4\DataMapper\Common\SelectionFactoryInterface');
+
         $this->adapterMock
             ->expects($this->once())
-            ->method('delete')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock));
+            ->method('delete');
 
-        $this->mapper->delete($this->mappingMock);
+        $this->mapper->delete($identityStub);
     }
 
     public function testFind()

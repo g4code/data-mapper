@@ -8,7 +8,7 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 interface AdapterInterface
 {
 
-    public function delete($type, MappingInterface $mapping);
+    public function delete($type, SelectionFactoryInterface $selectionFactory);
 
     public function insert($type, MappingInterface $mapping);
 
