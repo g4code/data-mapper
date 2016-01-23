@@ -12,7 +12,7 @@ interface MapperInterface
 
     public function find(IdentityInterface $identity);
 
-    public function insert(MappingInterface $mappings);
+    public function insert(MappingInterface $mapping);
 
-    public function update(MappingInterface $mappings);
+    public function update(MappingInterface $mapping, IdentityInterface $identity);
 }

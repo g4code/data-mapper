@@ -63,7 +63,7 @@ class MySQLAdapter implements AdapterInterface
         return new RawData($data, $total);
     }
 
-    public function update($table, MappingInterface $mapping)
+    public function update($table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
     {
         $data = $mapping->map();
 
@@ -71,13 +71,7 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty data for update', 101);
         }
 
-        $identifiers = $mapping->identifiers();
-
-        if (empty($identifiers)) {
-            throw new \Exception('Empty identifiers for update', 101);
-        }
-
-        $this->client->update($table, $data, $identifiers);
+        $this->client->update($table, $data, $selectionFactory->where());
     }
 
 }

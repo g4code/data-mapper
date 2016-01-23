@@ -38,9 +38,9 @@ class MySQLMapper implements MapperInterface
         $this->adapter->insert($this->table, $mappings);
     }
 
-    public function update(MappingInterface $mappings)
+    public function update(MappingInterface $mapping, IdentityInterface $identity)
     {
-        $this->adapter->update($this->table, $mappings);
+        $this->adapter->update($this->table, $mapping, $this->makeSelectionFactory($identity));
     }
 
     private function makeSelectionFactory(IdentityInterface $identity)

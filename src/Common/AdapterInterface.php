@@ -14,5 +14,5 @@ interface AdapterInterface
 
     public function select($type, SelectionFactoryInterface $selectionFactory);
 
-    public function update($table, MappingInterface $mapping);
+    public function update($table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory);
 }

@@ -69,32 +69,10 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
+        $selectionFactoryStub = $this->getMock('G4\DataMapper\Common\SelectionFactoryInterface');
+
         $this->setExpectedException('\Exception', 'Empty data for update');
-        $this->adapter->update('data', $mappingStub);
-
-
-        $this->setExpectedException('\Exception', 'Empty identifiers for update');
-        $this->adapter->update('data', $mappingStub);
-    }
-
-    public function testEmptyIdentifiersForUpdate()
-    {
-        $this->clientMock->expects($this->never())
-            ->method('update');
-
-        $mappingStub = $this->getMockForMappings();
-        $mappingStub
-            ->expects($this->once())
-            ->method('map')
-            ->willReturn(['id' => 1]);
-
-        $mappingStub
-            ->expects($this->once())
-            ->method('identifiers')
-            ->willReturn([]);
-
-        $this->setExpectedException('\Exception', 'Empty identifiers for update');
-        $this->adapter->update('data', $mappingStub);
+        $this->adapter->update('data', $mappingStub, $selectionFactoryStub);
     }
 
     public function testInsert()
@@ -162,17 +140,20 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock->expects($this->once())
             ->method('update');
 
-        $mappingStub = $this->getMockForMappings();
-        $mappingStub
-            ->expects($this->once())
-            ->method('identifiers')
-            ->willReturn(['id' => 1]);
-        $mappingStub
+        $mappingMock = $this->getMockForMappings();
+        $mappingMock
             ->expects($this->once())
             ->method('map')
             ->willReturn(['id' => 1]);
 
-        $this->adapter->update('data', $mappingStub);
+        $selectionFactoryMock = $this->getMockBuilder('G4\DataMapper\Common\SelectionFactoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectionFactoryMock
+            ->expects($this->once())
+            ->method('where');
+
+        $this->adapter->update('data', $mappingMock, $selectionFactoryMock);
     }
 
     private function getMockForMySQLClientFactory()
