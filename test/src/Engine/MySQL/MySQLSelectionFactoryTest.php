@@ -1,7 +1,7 @@
 <?php
 
 use G4\DataMapper\Engine\MySQL\MySQLSelectionFactory;
-use G4\DataMapper\Common\Selection\Identity;
+use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\Selection\Comparison;
 
 class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
@@ -17,7 +17,7 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identityMock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Identity')
+        $this->identityMock = $this->getMockBuilder('\G4\DataMapper\Common\Identity')
             ->disableOriginalConstructor()
             ->getMock();
 

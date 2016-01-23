@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common;
 
-interface SelectionIdentityInterface
+interface IdentityInterface
 {
 
     public function equal($value);

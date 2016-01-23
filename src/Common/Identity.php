@@ -1,13 +1,13 @@
 <?php
 
-namespace G4\DataMapper\Common\Selection;
+namespace G4\DataMapper\Common;
 
-use G4\DataMapper\Common\SelectionIdentityInterface;
+use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
 use G4\DataMapper\Common\Selection\Sort;
 
-class Identity implements SelectionIdentityInterface
+class Identity implements IdentityInterface
 {
 
     const DEFAULT_LIMIT  = 20;

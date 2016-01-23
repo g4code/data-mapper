@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common;
 
-use G4\DataMapper\Common\SelectionIdentityInterface;
+use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
 
 interface MapperInterface
@@ -10,7 +10,7 @@ interface MapperInterface
 
     public function delete(MappingInterface $mappings);
 
-    public function find(SelectionIdentityInterface $identity);
+    public function find(IdentityInterface $identity);
 
     public function insert(MappingInterface $mappings);
 

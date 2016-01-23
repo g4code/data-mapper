@@ -3,7 +3,7 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\SelectionFactoryInterface;
-use G4\DataMapper\Common\SelectionIdentityInterface;
+use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter;
 use G4\DataMapper\Common\Selection\Sort;
@@ -12,14 +12,14 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
 {
 
     /**
-     * @var SelectionIdentityInterface
+     * @var IdentityInterface
      */
     private $identity;
 
     /**
-     * @param SelectionIdentityInterface $identity
+     * @param IdentityInterface $identity
      */
-    public function __construct(SelectionIdentityInterface $identity)
+    public function __construct(IdentityInterface $identity)
     {
         $this->identity = $identity;
     }

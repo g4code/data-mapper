@@ -2,12 +2,12 @@
 
 namespace G4\DataMapper\Common;
 
-use G4\DataMapper\Common\SelectionIdentityInterface;
+use G4\DataMapper\Common\IdentityInterface;
 
 interface SelectionFactoryInterface
 {
 
-    public function __construct(SelectionIdentityInterface $identity);
+    public function __construct(IdentityInterface $identity);
 
     public function fieldNames();
 
