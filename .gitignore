@@ -17,3 +17,6 @@ vendor
 test/coverage/*
 !test/coverage/.gitkeep
 .vagrant/
+.bash_history
+.cache/motd.legal-displayed
+.sudo_as_admin_successful

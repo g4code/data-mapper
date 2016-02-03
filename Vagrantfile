@@ -16,7 +16,12 @@ Vagrant.configure(2) do |config|
         vb.cpus = 2
     end
 
-    config.vm.provision "basics", type: "chef_solo" do |chef|
-        chef.add_recipe "basics"
+    config.berkshelf.enabled = true
+
+    config.berkshelf.berksfile_path = './cookbooks/engine/Berksfile'
+
+    config.vm.provision :chef_solo do |chef|
+        chef.add_recipe 'engine'
     end
+
 end
