@@ -14,7 +14,7 @@ vendor
 .settings
 .idea
 
-tests/coverage/*
+tests/unit/coverage/*
 .vagrant/
 .bash_history
 .cache/motd.legal-displayed
