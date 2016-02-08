@@ -35,7 +35,11 @@ class MySQLMapper implements MapperInterface
 
     public function insert(MappingInterface $mappings)
     {
-        $this->adapter->insert($this->table, $mappings);
+        try {
+            $this->adapter->insert($this->table, $mappings);
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage(), 101);
+        }
     }
 
     public function update(MappingInterface $mapping, IdentityInterface $identity)
