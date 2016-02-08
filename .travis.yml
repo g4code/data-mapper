@@ -8,4 +8,4 @@ php:
 before_script:
     - composer install --prefer-source
 
-script: make test
+script: make unit-tests
