@@ -1,23 +1,4 @@
 
-include_recipe "apt"
-
-package 'python-software-properties'
-
-bash 'apt_ppa' do
-  code <<-EOH
-    sudo add-apt-repository ppa:ondrej/php5-5.6 -y
-    sudo apt-get update
-    EOH
-end
-
-package 'php5'
-
-package 'php5-dev'
-
-package 'apache2' do
-  action :remove
-end
-
 mysql_service 'd' do
   port '3306'
   version '5.5'
@@ -29,11 +10,10 @@ mysql_client 'd' do
   action :create
 end
 
-package 'php5-mysql'
-
-bash 'install_composer' do
+bash 'grant_privileges' do
   code <<-EOH
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+    mysql -h 127.0.0.1 -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root';"
+    mysql -h 127.0.0.1 -u root -proot -e "FLUSH PRIVILEGES;"
+    mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS data_mapper DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
     EOH
-  not_if { ::File.exists?("/usr/bin/composer") }
 end
