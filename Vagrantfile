@@ -20,10 +20,13 @@ Vagrant.configure(2) do |config|
 
     config.berkshelf.berksfile_path = './cookbooks/engine/Berksfile'
 
-    config.vm.provision :chef_solo do |chef|
+    config.vm.provision "infra", type: "chef_solo" do |chef|
         chef.add_recipe 'apt'
         chef.add_recipe 'engine'
         chef.add_recipe 'engine::php5'
     end
 
+    config.vm.provision "test", type: "chef_solo" do |chef|
+        chef.add_recipe 'engine::test'
+    end
 end

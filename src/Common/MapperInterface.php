@@ -4,15 +4,30 @@ namespace G4\DataMapper\Common;
 
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Common\RawData;
 
 interface MapperInterface
 {
 
-    public function delete(IdentityInterface $mappings);
+    /**
+     * @param IdentityInterface $identity
+     */
+    public function delete(IdentityInterface $identity);
 
+    /**
+     * @param IdentityInterface $identity
+     * @return RawData
+     */
     public function find(IdentityInterface $identity);
 
+    /**
+     * @param MappingInterface $mapping
+     */
     public function insert(MappingInterface $mapping);
 
+    /**
+     * @param MappingInterface $mapping
+     * @param IdentityInterface $identity
+     */
     public function update(MappingInterface $mapping, IdentityInterface $identity);
 }
