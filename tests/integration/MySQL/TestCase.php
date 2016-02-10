@@ -56,6 +56,18 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->builder = null;
     }
 
+    public function testExceptionOnInsert()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
+
+        $this->getBuilder()
+            ->type($this->getTableName() . '_fail')
+            ->build()
+            ->insert($this->makeMapping());
+    }
+
     public function getBuilder()
     {
         return $this->builder;
@@ -69,6 +81,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
     public function getId()
     {
         return $this->id;
+    }
+
+    public function makeMapper()
+    {
+        return $this->getBuilder()
+            ->type($this->getTableName())
+            ->build();
     }
 
     public function makeMapping()

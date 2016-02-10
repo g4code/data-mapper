@@ -45,7 +45,9 @@ class RawData implements \Countable
 
     public function getOne()
     {
-        return current($this->data);
+        return $this->count() > 0
+            ? current($this->data)
+            : null;
     }
 
     public function getTotal()

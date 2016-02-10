@@ -65,6 +65,32 @@ INSERT INTO `test_update` VALUES (12345,'This is a sample text title','Lorem ips
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+--
+-- Table structure for table `test_delete`
+--
+
+DROP TABLE IF EXISTS `test_delete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_delete` (
+  `id` int(10) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_delete`
+--
+
+LOCK TABLES `test_delete` WRITE;
+/*!40000 ALTER TABLE `test_delete` DISABLE KEYS */;
+INSERT INTO `test_delete` VALUES (12345,'This is a sample text title','Lorem ipsum dolor sit amet, dolores noluisse iracundia qui an.');
+/*!40000 ALTER TABLE `test_delete` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

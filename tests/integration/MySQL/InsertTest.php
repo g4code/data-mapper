@@ -2,11 +2,6 @@
 
 namespace G4\DataMapper\Test\Integration\MySQL;
 
-use G4\DataMapper\Builder;
-use G4\DataMapper\Engine\MySQL\MySQLAdapter;
-use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
-use G4\DataMapper\Common\Identity;
-use G4\DataMapper\Test\Integration\MySQL\TestCase;
 
 class InsertTest extends TestCase
 {
@@ -21,23 +16,8 @@ class InsertTest extends TestCase
         $this->assertEquals($this->getData(), $rawData->getOne());
     }
 
-    public function testExceptionOnInsert()
+    public function getTableName()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionCode(101);
-        $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
-
-        $this->getBuilder()
-            ->type('test_insert_fail')
-            ->build()
-            ->insert($this->makeMapping());
+        return 'test_insert';
     }
-
-    public function makeMapper()
-    {
-        return $this->getBuilder()
-            ->type('test_insert')
-            ->build();
-    }
-
 }
