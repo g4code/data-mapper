@@ -16,6 +16,18 @@ class InsertTest extends TestCase
         $this->assertEquals($this->getData(), $rawData->getOne());
     }
 
+    public function testException()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
+
+        $this->getBuilder()
+            ->type($this->getTableName() . '_fail')
+            ->build()
+            ->insert($this->makeMapping());
+    }
+
     public function getTableName()
     {
         return 'test_insert';

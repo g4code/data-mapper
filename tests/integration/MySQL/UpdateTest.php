@@ -16,6 +16,18 @@ class UpdateTest extends TestCase
         $this->assertEquals($this->getData(), $rawData->getOne());
     }
 
+    public function testException()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
+
+        $this->getBuilder()
+            ->type($this->getTableName() . '_fail')
+            ->build()
+            ->update($this->makeMapping(), $this->makeIdentityById());
+    }
+
     public function getData()
     {
         $data = parent::getData();
