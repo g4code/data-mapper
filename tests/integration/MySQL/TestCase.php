@@ -1,11 +1,13 @@
 <?php
 
+namespace G4\DataMapper\Test\Integration\MySQL;
+
 use G4\DataMapper\Builder;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Common\Identity;
 
-class InsertTest extends PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -18,10 +20,17 @@ class InsertTest extends PHPUnit_Framework_TestCase
      */
     private $data;
 
+    /**
+     * @var int
+     */
+    private $id;
+
     protected function setUp()
     {
+        $this->id = 12345;
+
         $this->data = [
-            'id'      => '12345',
+            'id'      => $this->getId(),
             'title'   => 'This is a sample text title',
             'content' => 'Lorem ipsum dolor sit amet, dolores noluisse iracundia qui an.',
         ];
@@ -47,41 +56,22 @@ class InsertTest extends PHPUnit_Framework_TestCase
         $this->builder = null;
     }
 
-    public function testInsert()
+    public function getBuilder()
     {
-        $this->builder
-            ->type('test_insert')
-            ->build()
-            ->insert($this->makeMapping());
-
-        $identity = new Identity();
-        $identity
-            ->field('id')
-            ->equal(12345);
-
-        $rawData = $this->builder
-            ->type('test_insert')
-            ->build()
-            ->find($identity);
-
-        $this->assertEquals(1, $rawData->count());
-        $this->assertEquals($this->data, $rawData->getOne());
+        return $this->builder;
     }
 
-    public function testExceptionOnInsert()
+    public function getData()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionCode(101);
-        $this->expectExceptionMessage(
-            "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'data_mapper.test_insert_fail' doesn't exist, query was: INSERT INTO `test_insert_fail` (`id`, `title`, `content`) VALUES (?, ?, ?)"
-        );
-        $this->builder
-            ->type('test_insert_fail')
-            ->build()
-            ->insert($this->makeMapping());
+        return $this->data;
     }
 
-    private function makeMapping()
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function makeMapping()
     {
         $mapping = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
             ->disableOriginalConstructor()
@@ -90,8 +80,18 @@ class InsertTest extends PHPUnit_Framework_TestCase
         $mapping
             ->expects($this->once())
             ->method('map')
-            ->willReturn($this->data);
+            ->willReturn($this->getData());
 
         return $mapping;
+    }
+
+    public function makeIdentityById()
+    {
+        $identity = new Identity();
+        $identity
+            ->field('id')
+            ->equal($this->getId());
+
+        return $identity;
     }
 }

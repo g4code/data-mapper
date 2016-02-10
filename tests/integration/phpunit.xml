@@ -1,7 +1,7 @@
 <phpunit bootstrap="bootstrap.php" colors="true">
 
     <testsuite name="Integration Test Suite">
-        <directory>./mysql</directory>
+        <directory>./</directory>
     </testsuite>
 
     <filter>

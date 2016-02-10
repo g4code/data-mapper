@@ -31,10 +31,15 @@ class MySQLMapper implements MapperInterface
 
     /**
      * @param IdentityInterface $identity
+     * @throws \Exception
      */
     public function delete(IdentityInterface $identity)
     {
-        $this->adapter->delete($this->table, $this->makeSelectionFactory($identity));
+        try {
+            $this->adapter->delete($this->table, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
     }
 
     /**
@@ -55,17 +60,31 @@ class MySQLMapper implements MapperInterface
         try {
             $this->adapter->insert($this->table, $mappings);
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage(), 101);
+            $this->handleException($exception);
         }
     }
 
     /**
      * @param MappingInterface $mapping
      * @param IdentityInterface $identity
+     * @throws \Exception
      */
     public function update(MappingInterface $mapping, IdentityInterface $identity)
     {
-        $this->adapter->update($this->table, $mapping, $this->makeSelectionFactory($identity));
+        try {
+            $this->adapter->update($this->table, $mapping, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * @param \Exception $exception
+     * @throws \Exception
+     */
+    private function handleException(\Exception $exception)
+    {
+        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
     }
 
     /**

@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `test_insert`;
 CREATE TABLE `test_insert` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(255) NOT NULL DEFAULT '',
-  `content` text NOT NULL DEFAULT '',
+  `content` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,6 +38,31 @@ LOCK TABLES `test_insert` WRITE;
 /*!40000 ALTER TABLE `test_insert` DISABLE KEYS */;
 /*!40000 ALTER TABLE `test_insert` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `test_update`
+--
+
+DROP TABLE IF EXISTS `test_update`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_update` (
+  `id` int(10) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_update`
+--
+
+LOCK TABLES `test_update` WRITE;
+/*!40000 ALTER TABLE `test_update` DISABLE KEYS */;
+INSERT INTO `test_update` VALUES (12345,'This is a sample text title','Lorem ipsum dolor sit amet, dolores noluisse iracundia qui an.');
+/*!40000 ALTER TABLE `test_update` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -48,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-08 13:41:45
+-- Dump completed on 2016-02-10 11:30:05

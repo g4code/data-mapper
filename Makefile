@@ -6,6 +6,7 @@ unit-tests:
 
 integration-tests:
 	@/bin/echo -e "${TITLE} importing clear database..." \
+	&& vagrant up \
 	&& vagrant provision --provision-with test \
 	&& /bin/echo -e "${TITLE} integration test suite started..." \
 	&& ./vendor/bin/phpunit -c tests/integration/phpunit.xml --coverage-html tests/integration/coverage

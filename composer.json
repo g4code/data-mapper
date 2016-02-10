@@ -27,7 +27,10 @@
         }
     ],
     "autoload": {
-        "psr-4": {"G4\\DataMapper\\": "src/"}
+        "psr-4": {
+            "G4\\DataMapper\\": "src/",
+            "G4\\DataMapper\\Test\\Integration\\": "tests/integration"
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "5.*",
