@@ -27,7 +27,7 @@ class DeleteTest extends TestCase
         $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
 
         $this->getBuilder()
-            ->type($this->getTableName() . '_fail')
+            ->table($this->getTableName() . '_fail')
             ->build()
             ->delete($this->makeIdentityById());
     }

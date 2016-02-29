@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper;
 
-use G4\Factory\CreateInterface;
+use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
@@ -19,7 +19,7 @@ class Builder
     /**
      * @var string
      */
-    private $type;
+    private $dataSet;
 
     /**
      * @return Builder
@@ -40,6 +40,16 @@ class Builder
     }
 
     /**
+     * @param array $params
+     * @return Builder
+     */
+    public function engineMySQL(array $params)
+    {
+        $this->adapter = new MySQLAdapter(new MySQLClientFactory($params));
+        return $this;
+    }
+
+    /**
      * @throws \Exception
      * @return MapperInterface
      */
@@ -49,20 +59,20 @@ class Builder
             throw new \Exception('Adapter instance must implement AdapterInterface', 601);
         }
 
-        if ($this->type === null) {
-            throw new \Exception('Type must be set', 601);
+        if ($this->dataSet === null) {
+            throw new \Exception('DataSet cannot be emty', 601);
         }
 
         return $this->strategy();
     }
 
     /**
-     * @param string $type
+     * @param string $table
      * @return Builder
      */
-    public function type($type)
+    public function table($table)
     {
-        $this->type = $type;
+        $this->dataSet = $table;
         return $this;
     }
 
@@ -74,7 +84,7 @@ class Builder
     {
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
-                $mapper = new MySQLMapper($this->adapter, $this->type);
+                $mapper = new MySQLMapper($this->adapter, $this->dataSet);
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);

@@ -10,14 +10,27 @@ class BuilderTest extends PHPUnit_Framework_TestCase
      */
     private $builder;
 
+    /**
+     * @var array
+     */
+    private $params;
+
 
     protected function setUp()
     {
+        $this->params = [
+            'host'     => 'localhost',
+            'port'     => 3306,
+            'username' => 'test_username',
+            'password' => 'test_password',
+            'dbname'   => 'test_dbname',
+        ];
         $this->builder = Builder::create();
     }
 
     protected function tearDown()
     {
+        $this->params = null;
         $this->builder = null;
     }
 
@@ -26,25 +39,38 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\G4\DataMapper\Builder', $this->builder);
     }
 
+    public function testEngineMySQL()
+    {
+        $mapper = $this->builder
+            ->engineMySQL($this->params)
+            ->table('profiles')
+            ->build();
+        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLMapper', $mapper);
+    }
+
     public function testBuild()
     {
         $this->builder
-            ->type('profiles')
+            ->table('profiles')
             ->adapter($this->getMockForMySQLAdapter());
         $this->builder->build();
     }
 
     public function testBuildWithNoAdapter()
     {
-        $this->builder->type('profiles');
-        $this->setExpectedException('\Exception', 'Adapter instance must implement AdapterInterface');
+        $this->builder->table('profiles');
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(601);
+        $this->expectExceptionMessage('Adapter instance must implement AdapterInterface');
         $this->builder->build();
     }
 
     public function testBuildWithNoType()
     {
         $this->builder->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'));
-        $this->setExpectedException('\Exception', 'Type must be set');
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(601);
+        $this->expectExceptionMessage('DataSet cannot be emty');
         $this->builder->build();
     }
 
@@ -52,25 +78,20 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->builder
             ->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'))
-            ->type('profiles');
-        $this->setExpectedException('\Exception', 'Unknown engine');
+            ->table('profiles');
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(601);
+        $this->expectExceptionMessage('Unknown engine');
         $this->builder->build();
     }
 
     private function getMockForMySQLAdapter()
     {
-        $params = [
-            'host'     => 'localhost',
-            'port'     => 3306,
-            'username' => 'test_username',
-            'password' => 'test_password',
-            'dbname'   => 'test_dbname',
-        ];
         return $this->getMock(
             '\G4\DataMapper\Engine\MySQL\MySQLAdapter',
             null,
             [
-                $this->getMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory', null, [$params]),
+                $this->getMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory', null, [$this->params]),
             ]
         );
     }

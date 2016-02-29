@@ -74,7 +74,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     public function makeMapper()
     {
         return $this->getBuilder()
-            ->type($this->getTableName())
+            ->table($this->getTableName())
             ->build();
     }
 
