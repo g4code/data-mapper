@@ -48,7 +48,12 @@ class MySQLMapper implements MapperInterface
      */
     public function find(IdentityInterface $identity)
     {
-        return $this->adapter->select($this->table, $this->makeSelectionFactory($identity));
+        try {
+            $rawData = $this->adapter->select($this->table, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
     }
 
     /**
@@ -76,6 +81,16 @@ class MySQLMapper implements MapperInterface
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
+    }
+
+    public function query($query)
+    {
+        try {
+            $queryResult = $this->adapter->query($query);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $queryResult;
     }
 
     /**

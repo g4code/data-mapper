@@ -74,4 +74,22 @@ class MySQLAdapter implements AdapterInterface
         $this->client->update($table, $data, $selectionFactory->where());
     }
 
+    public function query($query)
+    {
+        if (empty($query)) {
+            throw new \Exception('Query cannot be empty', 101);
+        }
+
+        if (preg_match('~^\s*(insert\sinto|delete\sfrom|update\s)~usxi', $query) === 1) {
+            $this->client->query($query);
+            return;
+        }
+
+        if (preg_match('~^\s*(select\s|show\s)~usxi', $query) === 1) {
+            $data = $this->client->fetchAll($query);
+            return new RawData($data, 0);
+        }
+
+        throw new \Exception('Query does not match a known pattern (insert, delete, update, select)', 101);
+    }
 }

@@ -30,4 +30,11 @@ interface MapperInterface
      * @param IdentityInterface $identity
      */
     public function update(MappingInterface $mapping, IdentityInterface $identity);
+
+    /**
+     * @param mixed $query
+     * @return mixed
+     */
+    public function query($query);
+
 }

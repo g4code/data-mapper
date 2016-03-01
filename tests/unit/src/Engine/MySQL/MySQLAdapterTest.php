@@ -5,8 +5,14 @@ use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @var MySQLAdapter
+     */
     private $adapter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $clientMock;
 
 
@@ -14,7 +20,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
-            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne'])
+            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne', 'query'])
             ->getMock();
 
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
@@ -77,7 +83,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
-        $this->clientMock->expects($this->once())
+        $this->clientMock
+            ->expects($this->once())
             ->method('insert');
 
         $mappingStub = $this->getMockForMappings();
@@ -154,6 +161,44 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('where');
 
         $this->adapter->update('data', $mappingMock, $selectionFactoryMock);
+    }
+
+    public function testQueryForDelete()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+
+        $this->assertNull($this->adapter->query('delete from table_name where 1'));
+    }
+
+    public function testQueryForSelect()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn([['data' => 1]]);
+
+        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->query('select * from table_name where 1'));
+    }
+
+    public function testQueryWithEmptyQuery()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessage('Query cannot be empty');
+
+        $this->adapter->query('');
+    }
+
+    public function testQueryWithUnknown()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessage('Query does not match a known pattern (insert, delete, update, select)');
+
+        $this->adapter->query('tralala');
     }
 
     private function getMockForMySQLClientFactory()

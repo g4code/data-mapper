@@ -7,6 +7,9 @@ use G4\DataMapper\Common\MappingInterface;
 class MySQLMapperTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $adapterMock;
 
     /**
@@ -76,6 +79,18 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->assertSame($rawDataStub, $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity')));
     }
 
+    public function testFindException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('select')
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity'));
+    }
+
     public function testInsert()
     {
         $this->adapterMock
@@ -120,5 +135,27 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->expectException('\Exception');
 
         $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
+    }
+
+    public function testQuery()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+
+        $this->assertTrue($this->mapper->query('query sql'));
+    }
+
+    public function testQueryException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $this->expectException('\Exception');
+
+        $this->mapper->query('sql');
     }
 }
