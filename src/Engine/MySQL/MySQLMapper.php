@@ -16,6 +16,9 @@ class MySQLMapper implements MapperInterface
      */
     private $adapter;
 
+    /**
+     * @var string
+     */
     private $table;
 
     /**
