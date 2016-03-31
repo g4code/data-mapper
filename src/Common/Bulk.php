@@ -8,13 +8,26 @@ class Bulk implements \Countable
 {
 
     /**
-     * @var array
+     * @var AdapterInterface
+     */
+    private $adapter;
+
+    /**
+     * @var \ArrayIterator
      */
     private $data;
 
-    public function __construct()
+    /**
+     * @var string
+     */
+    private $type;
+
+
+    public function __construct(AdapterInterface $adapter, $type)
     {
-        $this->data = [];
+        $this->adapter = $adapter;
+        $this->type    = $type;
+        $this->data    = new \ArrayIterator([]);
     }
 
     /**
@@ -23,22 +36,25 @@ class Bulk implements \Countable
      */
     public function add(MappingInterface $mapping)
     {
-        $this->data[] = $mapping;
+        $this->data->append($mapping);
         return $this;
     }
 
-    public function insert(){}
-
-    public function update() {}
-
-    public function upsert() {}
+    public function insert()
+    {
+        try {
+            $this->adapter->insertBulk($this->type, $this->getData());
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+        }
+    }
 
     /**
      * @return \ArrayIterator
      */
     public function getData()
     {
-        return new \ArrayIterator($this->data);
+        return $this->data;
     }
 
     /**

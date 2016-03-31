@@ -12,6 +12,8 @@ interface AdapterInterface
 
     public function insert($type, MappingInterface $mapping);
 
+    public function insertBulk($type, \ArrayIterator $mappings);
+
     public function select($type, SelectionFactoryInterface $selectionFactory);
 
     public function update($table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory);

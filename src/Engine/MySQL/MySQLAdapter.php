@@ -50,6 +50,11 @@ class MySQLAdapter implements AdapterInterface
         $this->client->insert($table, $data);
     }
 
+    public function insertBulk($table, \ArrayIterator $mappings)
+    {
+        // TODO: Implement insertBulk() method.
+    }
+
     public function select($table, SelectionFactoryInterface $selectionFactory)
     {
         $selectForData = $this->client
