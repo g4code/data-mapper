@@ -12,7 +12,7 @@ interface AdapterInterface
 
     public function insert($type, MappingInterface $mapping);
 
-    public function insertBulk($type, \ArrayIterator $mappings);
+    public function insertBulk($type, \ArrayIterator $mappingsCollection);
 
     public function select($type, SelectionFactoryInterface $selectionFactory);
 

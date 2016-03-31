@@ -50,9 +50,27 @@ class MySQLAdapter implements AdapterInterface
         $this->client->insert($table, $data);
     }
 
-    public function insertBulk($table, \ArrayIterator $mappings)
+    public function insertBulk($table, \ArrayIterator $mappingsCollection)
     {
-        // TODO: Implement insertBulk() method.
+        if (count($mappingsCollection) > 0) {
+            throw new \Exception('Collection in insertBulk() must not be empty.', 101);
+        }
+
+        $currentMapping = $mappingsCollection->rewind()->current();
+        $fields = "`" . implode("`,`", array_keys($currentMapping->map())) . "`";
+
+        $values = [];
+        foreach ($mappingsCollection as $mapping) {
+            $quotedValues = array();
+            foreach ($mapping->map() as $value){
+                $quotedValues[] = $value;
+//                $quotedValues[] = $this->_db->quote($value);
+            }
+            $values[] = "(" .implode(",", $quotedValues) . ")";
+        }
+
+        $query = "INSERT INTO {$table} ({$fields}) VALUES " . implode(',', $values);
+        $this->client->query($query);
     }
 
     public function select($table, SelectionFactoryInterface $selectionFactory)
