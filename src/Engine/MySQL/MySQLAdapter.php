@@ -63,8 +63,7 @@ class MySQLAdapter implements AdapterInterface
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
             foreach ($mapping->map() as $value){
-                $quotedValues[] = $value;
-//                $quotedValues[] = $this->_db->quote($value);
+                $quotedValues[] = $this->client->quote($value);
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
