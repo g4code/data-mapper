@@ -27,6 +27,12 @@ class Bulk implements \Countable
         return $this;
     }
 
+    public function insert(){}
+
+    public function update() {}
+
+    public function upsert() {}
+
     /**
      * @return \ArrayIterator
      */

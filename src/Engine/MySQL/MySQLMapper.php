@@ -33,11 +33,6 @@ class MySQLMapper implements MapperInterface
         $this->table   = $table;
     }
 
-    public function bulkInsert(Bulk $bulk)
-    {
-        $this->adapter->bulkInsert($this->table, $bulk);
-    }
-
     /**
      * @param IdentityInterface $identity
      * @throws \Exception
