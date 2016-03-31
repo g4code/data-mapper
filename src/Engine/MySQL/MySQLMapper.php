@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
+use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\IdentityInterface;
@@ -30,6 +31,11 @@ class MySQLMapper implements MapperInterface
     {
         $this->adapter = $adapter;
         $this->table   = $table;
+    }
+
+    public function bulkInsert(Bulk $bulk)
+    {
+        $this->adapter->bulkInsert($this->table, $bulk);
     }
 
     /**

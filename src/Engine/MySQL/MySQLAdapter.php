@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
+use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
@@ -22,6 +23,15 @@ class MySQLAdapter implements AdapterInterface
     public function __construct(MySQLClientFactory $clientFactory)
     {
         $this->client = $clientFactory->create();
+    }
+
+    public function bulkInsert($table, Bulk $bulk)
+    {
+        if (count($bulk) < 1) {
+            throw new \Exception('No data for bulk insert', 101);
+        }
+
+
     }
 
     public function delete($table, SelectionFactoryInterface $selectionFactory)
