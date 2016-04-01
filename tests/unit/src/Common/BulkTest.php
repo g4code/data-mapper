@@ -51,8 +51,19 @@ class BulkTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('insertBulk')
-//            ->with('test_table_name', new \ArrayIterator([]))
-        ;
+            ->with($this->equalTo('test_table'), $this->equalTo(new \ArrayIterator([])));
+
+        $this->bulk->insert();
+    }
+
+    public function testInsertException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('insertBulk')
+            ->willThrowException(new \Exception());
+
+        $this->expectException('\Exception');
 
         $this->bulk->insert();
     }
