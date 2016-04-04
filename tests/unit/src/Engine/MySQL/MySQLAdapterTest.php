@@ -20,7 +20,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
-            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne', 'query'])
+            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne', 'query', 'quote'])
             ->getMock();
 
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
@@ -94,6 +94,30 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->willReturn(['id' => 1]);
 
         $this->adapter->insert('data', $mappingStub);
+    }
+
+    public function testInsertBulk()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('query');
+
+        $this->clientMock
+            ->expects($this->any())
+            ->method('quote')
+            ->with($this->anything())
+            ->willReturn(123);
+
+        $mappingStub = $this->getMockForMappings();
+        $mappingStub
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => 123,
+                'ts' => 456
+            ]);
+
+        $this->adapter->insertBulk('data', new \ArrayIterator([$mappingStub]));
     }
 
     public function testSelect()

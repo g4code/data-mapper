@@ -25,15 +25,6 @@ class MySQLAdapter implements AdapterInterface
         $this->client = $clientFactory->create();
     }
 
-    public function bulkInsert($table, Bulk $bulk)
-    {
-        if (count($bulk) < 1) {
-            throw new \Exception('No data for bulk insert', 101);
-        }
-
-
-    }
-
     public function delete($table, SelectionFactoryInterface $selectionFactory)
     {
         $this->client->delete($table, $selectionFactory->where());
@@ -52,14 +43,15 @@ class MySQLAdapter implements AdapterInterface
 
     public function insertBulk($table, \ArrayIterator $mappingsCollection)
     {
-        if (count($mappingsCollection) > 0) {
+        if (count($mappingsCollection) === 0) {
             throw new \Exception('Collection in insertBulk() must not be empty.', 101);
         }
 
-        $currentMapping = $mappingsCollection->rewind()->current();
-        $fields = "`" . implode("`,`", array_keys($currentMapping->map())) . "`";
-
+        $mappingsCollection->rewind();
+        $currentMapping = $mappingsCollection->current();
+        $fields = "'" . implode("','", array_keys($currentMapping->map())) . "'";
         $values = [];
+
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
             foreach ($mapping->map() as $value){
@@ -69,6 +61,7 @@ class MySQLAdapter implements AdapterInterface
         }
 
         $query = "INSERT INTO {$table} ({$fields}) VALUES " . implode(',', $values);
+
         $this->client->query($query);
     }
 
