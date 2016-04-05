@@ -51,33 +51,32 @@ class Builder
     }
 
     /**
+     * @deprecated use buildMapper() instead
      * @throws \Exception
      * @return MapperInterface
      */
     public function build()
     {
-        if (!$this->adapter instanceof AdapterInterface) {
-            throw new \Exception('Adapter instance must implement AdapterInterface', 601);
-        }
+        return $this->buildMapper();
+    }
 
-        if ($this->dataSet === null) {
-            throw new \Exception('DataSet cannot be emty', 601);
-        }
-
+    /**
+     * @return MapperInterface
+     * @throws \Exception
+     */
+    public function buildMapper()
+    {
+        $this->validateDependencies();
         return $this->strategy();
     }
 
-    //TODO: Drasko - refactor this!
+    /**
+     * @return Bulk
+     * @throws \Exception
+     */
     public function buildBulk()
     {
-        if (!$this->adapter instanceof AdapterInterface) {
-            throw new \Exception('Adapter instance must implement AdapterInterface', 601);
-        }
-
-        if ($this->dataSet === null) {
-            throw new \Exception('DataSet cannot be emty', 601);
-        }
-
+        $this->validateDependencies();
         return new Bulk($this->adapter, $this->dataSet);
     }
 
@@ -105,5 +104,16 @@ class Builder
                 throw new \Exception('Unknown engine', 601);
         }
         return $mapper;
+    }
+
+    private function validateDependencies()
+    {
+        if (!$this->adapter instanceof AdapterInterface) {
+            throw new \Exception('Adapter instance must implement AdapterInterface', 601);
+        }
+
+        if ($this->dataSet === null) {
+            throw new \Exception('DataSet cannot be emty', 601);
+        }
     }
 }

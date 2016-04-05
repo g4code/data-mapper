@@ -44,16 +44,24 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $mapper = $this->builder
             ->engineMySQL($this->params)
             ->table('profiles')
-            ->build();
+            ->buildMapper();
         $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLMapper', $mapper);
     }
 
-    public function testBuild()
+    public function testBuildMapper()
     {
         $this->builder
             ->table('profiles')
             ->adapter($this->getMockForMySQLAdapter());
-        $this->builder->build();
+        $this->builder->buildMapper();
+    }
+
+    public function testBuildBulk()
+    {
+        $this->builder
+            ->table('profiles')
+            ->adapter($this->getMockForMySQLAdapter());
+        $this->assertInstanceOf('\G4\DataMapper\Common\Bulk', $this->builder->buildBulk());
     }
 
     public function testBuildWithNoAdapter()
@@ -62,7 +70,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('Adapter instance must implement AdapterInterface');
-        $this->builder->build();
+        $this->builder->buildMapper();
     }
 
     public function testBuildWithNoType()
@@ -71,7 +79,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('DataSet cannot be emty');
-        $this->builder->build();
+        $this->builder->buildMapper();
     }
 
     public function testBuildForUnknownEngine()
@@ -82,7 +90,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('Unknown engine');
-        $this->builder->build();
+        $this->builder->buildMapper();
     }
 
     private function getMockForMySQLAdapter()
