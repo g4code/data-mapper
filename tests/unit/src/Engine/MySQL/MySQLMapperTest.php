@@ -124,6 +124,16 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
     }
 
+    public function testUpsert()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsert')
+            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock));
+
+        $this->mapper->upsert($this->mappingMock);
+    }
+
     public function testExceptionUpdate()
     {
         $this->adapterMock

@@ -27,6 +27,11 @@ interface MapperInterface
 
     /**
      * @param MappingInterface $mapping
+     */
+    public function upsert(MappingInterface $mapping);
+
+    /**
+     * @param MappingInterface $mapping
      * @param IdentityInterface $identity
      */
     public function update(MappingInterface $mapping, IdentityInterface $identity);

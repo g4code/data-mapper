@@ -99,6 +99,11 @@ class MySQLAdapter implements AdapterInterface
         $this->client->update($table, $data, $selectionFactory->where());
     }
 
+    public function upsert($table, MappingInterface $mapping)
+    {
+
+    }
+
     public function query($query)
     {
         if (empty($query)) {

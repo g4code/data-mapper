@@ -87,6 +87,19 @@ class MySQLMapper implements MapperInterface
         }
     }
 
+    /**
+     * @param MappingInterface $mapping
+     * @throws \Exception
+     */
+    public function upsert(MappingInterface $mapping)
+    {
+        try {
+            $this->adapter->upsert($this->table, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
     public function query($query)
     {
         try {
