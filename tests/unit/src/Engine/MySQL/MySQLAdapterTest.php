@@ -100,16 +100,11 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientMock
             ->expects($this->once())
-            ->method('query');
+            ->method('query')
+            ->with($this->equalTo("INSERT INTO data ('id','ts') VALUES (123,456),(789,321)"));
 
-        $this->clientMock
-            ->expects($this->any())
-            ->method('quote')
-            ->with($this->anything())
-            ->willReturn(123);
-
-        $mappingStub = $this->getMockForMappings();
-        $mappingStub
+        $mappingStubFirst = $this->getMockForMappings();
+        $mappingStubFirst
             ->expects($this->any())
             ->method('map')
             ->willReturn([
@@ -117,7 +112,16 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
                 'ts' => 456
             ]);
 
-        $this->adapter->insertBulk('data', new \ArrayIterator([$mappingStub]));
+        $mappingStubSecond = $this->getMockForMappings();
+        $mappingStubSecond
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => 789,
+                'ts' => 321
+            ]);
+
+        $this->adapter->insertBulk('data', new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
     }
 
     public function testSelect()
