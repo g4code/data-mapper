@@ -124,6 +124,15 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insertBulk('data', new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
     }
 
+    public function testInsertBulkException()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessage('Collection in insertBulk() must not be empty.');
+
+        $this->adapter->insertBulk('data', new \ArrayIterator([]));
+    }
+
     public function testSelect()
     {
         $zendDbSelectMock = $this->getMockBuilder('\Zend_Db_Select')
