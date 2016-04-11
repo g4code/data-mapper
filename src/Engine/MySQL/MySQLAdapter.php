@@ -101,7 +101,19 @@ class MySQLAdapter implements AdapterInterface
 
     public function upsert($table, MappingInterface $mapping)
     {
+        $data = $mapping->map();
 
+        if (empty($data)) {
+            throw new \Exception('Empty data for upsert', 101);
+        }
+
+        $fields = implode(", ", array_keys($data));
+        $values = implode(", ", array_fill(1, count($data), "?"));
+        $update = implode(" = ?, ", array_keys($data)) . " = ?";
+
+        $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
+
+        $this->client->query($query, array_merge(array_values($data), array_values($data)));
     }
 
     public function query($query)

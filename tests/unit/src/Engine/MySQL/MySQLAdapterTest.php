@@ -200,6 +200,45 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update('data', $mappingMock, $selectionFactoryMock);
     }
 
+    public function testUpsert()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->equalTo("INSERT INTO data (id, ts) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = ?, ts = ?"), $this->equalTo([123, 456, 123, 456]));
+
+        $mappingMock = $this->getMockForMappings();
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([
+                'id' => 123,
+                'ts' => 456,
+            ]);
+
+        $this->adapter->upsert('data', $mappingMock);
+    }
+
+
+        public function testUpsertException()
+    {
+        $this->clientMock
+            ->expects($this->never())
+            ->method('query');
+
+        $mappingMock = $this->getMockForMappings();
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Empty data for upsert');
+        $this->expectExceptionCode(101);
+
+        $this->adapter->upsert('table', $mappingMock);
+    }
+
     public function testQueryForDelete()
     {
         $this->clientMock
