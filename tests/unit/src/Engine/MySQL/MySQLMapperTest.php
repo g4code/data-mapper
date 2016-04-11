@@ -134,6 +134,18 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->mapper->upsert($this->mappingMock);
     }
 
+    public function testUpsertException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsert')
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->upsert($this->mappingMock);
+    }
+
     public function testExceptionUpdate()
     {
         $this->adapterMock
