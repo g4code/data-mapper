@@ -49,7 +49,7 @@ class MySQLAdapter implements AdapterInterface
 
         $mappingsCollection->rewind();
         $currentMapping = $mappingsCollection->current();
-        $fields = "'" . implode("','", array_keys($currentMapping->map())) . "'";
+        $fields = "`" . implode("`,`", array_keys($currentMapping->map())) . "`";
         $values = [];
 
         foreach ($mappingsCollection as $mapping) {
