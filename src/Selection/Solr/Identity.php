@@ -11,6 +11,7 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     private $geodist = [];
 
+    private $rawQuery;
 
     public function addToFieldList($field)
     {
@@ -59,6 +60,11 @@ class Identity extends \G4\DataMapper\Selection\Identity
         return $this;
     }
 
+    public function getRawQuery()
+    {
+        return $this->rawQuery;
+    }
+
     public function getFieldList()
     {
         return $this->fieldList;
@@ -67,6 +73,11 @@ class Identity extends \G4\DataMapper\Selection\Identity
     public function getGeodist()
     {
         return $this->geodist;
+    }
+
+    public function hasRawQuery()
+    {
+        return !empty($this->rawQuery);
     }
 
     public function getGroupBy()
@@ -111,6 +122,12 @@ class Identity extends \G4\DataMapper\Selection\Identity
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Like($value))
         );
+    }
+
+    public function setRawQuery($rawQuery)
+    {
+        $this->rawQuery = $rawQuery;
+        return $this;
     }
 
     public function setFieldList(array $fieldList)
