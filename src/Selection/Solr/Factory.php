@@ -77,9 +77,14 @@ class Factory extends \G4\DataMapper\Selection\Factory
                                  (is_array($comp['value']) ? $this->between($comp['value']) : $comp['value']);
             }
         }
-        return empty($compstrings)
+
+        $query = empty($compstrings)
             ? $this->queryAll()
             : join(' ' . \G4\DataMapper\Selection\Solr\Consts\Query::CONNECTOR_AND . ' ', $compstrings);
+
+        return $identity->hasRawQuery()
+            ? sprintf('%s AND %s', $identity->getRawQuery(), $query)
+            : $query;
     }
 
     private function between($value)
