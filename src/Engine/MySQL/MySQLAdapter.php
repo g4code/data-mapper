@@ -25,6 +25,16 @@ class MySQLAdapter implements AdapterInterface
         $this->client = $clientFactory->create();
     }
 
+    public function beginTransaction()
+    {
+        $this->client->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->client->commit();
+    }
+
     public function delete($table, SelectionFactoryInterface $selectionFactory)
     {
         $this->client->delete($table, $selectionFactory->where());
@@ -63,6 +73,11 @@ class MySQLAdapter implements AdapterInterface
         $query = "INSERT INTO {$table} ({$fields}) VALUES " . implode(',', $values);
 
         $this->client->query($query);
+    }
+
+    public function rollBackTransaction()
+    {
+        $this->client->rollBack();
     }
 
     public function select($table, SelectionFactoryInterface $selectionFactory)

@@ -20,7 +20,18 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
             ->disableOriginalConstructor()
-            ->setMethods(['insert', 'delete', 'update', 'select', 'fetchAll', 'fetchOne', 'query', 'quote'])
+            ->setMethods([
+                'insert',
+                'delete',
+                'update',
+                'select',
+                'fetchAll',
+                'fetchOne',
+                'query',
+                'beginTransaction',
+                'commit',
+                'rollBack',
+            ])
             ->getMock();
 
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
@@ -30,6 +41,24 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->adapter = null;
         $this->clientMock = null;
+    }
+
+    public function testBeginTransaction()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('beginTransaction');
+
+        $this->adapter->beginTransaction();
+    }
+
+    public function testCommitTransaction()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('commit');
+
+        $this->adapter->commitTransaction();
     }
 
     public function testDelete()
@@ -131,6 +160,15 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Collection in insertBulk() must not be empty.');
 
         $this->adapter->insertBulk('data', new \ArrayIterator([]));
+    }
+
+    public function testRollBack()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('rollBack');
+
+        $this->adapter->rollBackTransaction();
     }
 
     public function testSelect()
