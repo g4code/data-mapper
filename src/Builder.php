@@ -8,6 +8,7 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Engine\MySQL\MySQLMapper;
+use G4\DataMapper\Engine\MySQL\MySQLTransaction;
 
 class Builder
 {
@@ -78,6 +79,13 @@ class Builder
     {
         $this->validateDependencies();
         return new Bulk($this->adapter, $this->dataSetName);
+    }
+
+    //TODO: Drasko - change this!!!
+    public function buildTransaction()
+    {
+        $this->validateDependencies();
+        return new MySQLTransaction($this->adapter);
     }
 
     /**
