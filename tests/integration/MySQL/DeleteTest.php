@@ -28,7 +28,7 @@ class DeleteTest extends TestCase
 
         $this->getBuilder()
             ->table($this->getTableName() . '_fail')
-            ->build()
+            ->buildMapper()
             ->delete($this->makeIdentityById());
     }
 

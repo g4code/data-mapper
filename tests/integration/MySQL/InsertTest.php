@@ -24,7 +24,7 @@ class InsertTest extends TestCase
 
         $this->getBuilder()
             ->table($this->getTableName() . '_fail')
-            ->build()
+            ->buildMapper()
             ->insert($this->makeMapping());
     }
 

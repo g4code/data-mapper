@@ -3,20 +3,17 @@ package 'python-software-properties'
 
 bash 'apt_ppa' do
   code <<-EOH
-    sudo add-apt-repository ppa:ondrej/php5-5.6 -y
+    sudo add-apt-repository ppa:ondrej/php -y
     sudo apt-get update
+    sudo apt-get install php5.6 -y --force-yes
+    sudo apt-get install php5.6-dev -y --force-yes
+    sudo apt-get install php5.6-mysql -y --force-yes
     EOH
 end
-
-package 'php5'
-
-package 'php5-dev'
 
 package 'apache2' do
   action :remove
 end
-
-package 'php5-mysql'
 
 bash 'install_composer' do
   code <<-EOH

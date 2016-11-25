@@ -24,7 +24,7 @@ class UpdateTest extends TestCase
 
         $this->getBuilder()
             ->table($this->getTableName() . '_fail')
-            ->build()
+            ->buildMapper()
             ->update($this->makeMapping(), $this->makeIdentityById());
     }
 
