@@ -3,7 +3,6 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
-use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\IdentityInterface;
