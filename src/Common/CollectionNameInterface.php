@@ -5,6 +5,6 @@ namespace G4\DataMapper\Common;
 interface CollectionNameInterface
 {
 
-    public function getCollectionName();
+    public function __toString();
 
 }

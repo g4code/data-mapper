@@ -5,7 +5,7 @@ namespace G4\DataMapper\Engine\MySQL;
 use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Exception\TableNameException;
 
-class TableName implements CollectionNameInterface
+class MySQLTableName implements CollectionNameInterface
 {
 
     /**
@@ -25,7 +25,7 @@ class TableName implements CollectionNameInterface
         $this->tableName = $tableName;
     }
 
-    public function getCollectionName()
+    public function __toString()
     {
         return $this->tableName;
     }

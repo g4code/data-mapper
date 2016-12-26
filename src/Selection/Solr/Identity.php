@@ -188,9 +188,25 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         );
     }
 
-    public function timeToInMinutes($value)
+    public function notTimeToInMinutes($value)
     {
         $this->getCurrentField()->addPrefixToName('-');
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
+        );
+    }
+
+    public function timeFromInMinutes($value)
+    {
+        return $this->operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
+        );
+    }
+
+    public function timeToInMinutes($value)
+    {
         return $this->operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
