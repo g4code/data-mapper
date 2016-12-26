@@ -2,12 +2,10 @@
 
 namespace G4\DataMapper\Selection\Solr;
 
-use G4\DataMapper\Selection\IdentityInterface;
-
 class Factory extends \G4\DataMapper\Selection\Factory
 {
 
-    public function fieldList(IdentityInterface $identity = null)
+    public function fieldList(\G4\DataMapper\Selection\Solr\Identity $identity = null)
     {
         if (!$identity->hasFieldList()) {
             return \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD;
@@ -23,7 +21,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
             : join(",", $fieldList);
     }
 
-    public function orderBy(IdentityInterface $identity = null)
+    public function orderBy(\G4\DataMapper\Selection\Identity $identity = null)
     {
         if (is_null($identity) || !$identity->hasOrderBy()) {
             return '';
@@ -37,7 +35,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
         return empty($sort) ? '' : join(",", $sort);
     }
 
-    public function requestParams(IdentityInterface $identity = null)
+    public function requestParams(\G4\DataMapper\Selection\Solr\Identity $identity = null)
     {
         $params = [
             'fl'    => $this->fieldList($identity),
@@ -64,7 +62,7 @@ class Factory extends \G4\DataMapper\Selection\Factory
         return $params;
     }
 
-    public function query(IdentityInterface $identity = null)
+    public function query(\G4\DataMapper\Selection\Solr\Identity $identity = null)
     {
         if ($identity->isVoid()) {
             return $this->queryAll();
