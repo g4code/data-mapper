@@ -21,7 +21,7 @@ class Builder
     /**
      * @var string
      */
-    private $dataSetName;
+    private $collectionName;
 
     /**
      * @return Builder
@@ -79,7 +79,7 @@ class Builder
     public function buildBulk()
     {
         $this->validateDependencies();
-        return new Bulk($this->adapter, $this->dataSetName);
+        return new Bulk($this->adapter, $this->collectionName);
     }
 
     //TODO: Drasko - change this!!!
@@ -95,7 +95,7 @@ class Builder
      */
     public function table($table)
     {
-        $this->dataSetName = $table;
+        $this->collectionName = $table;
         return $this;
     }
 
@@ -107,7 +107,7 @@ class Builder
     {
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
-                $mapper = new MySQLMapper($this->adapter, $this->dataSetName);
+                $mapper = new MySQLMapper($this->adapter, $this->collectionName);
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);
@@ -121,7 +121,7 @@ class Builder
             throw new \Exception('Adapter instance must implement AdapterInterface', 601);
         }
 
-        if ($this->dataSetName === null) {
+        if ($this->collectionName === null) {
             throw new \Exception('DataSet cannot be emty', 601);
         }
     }
