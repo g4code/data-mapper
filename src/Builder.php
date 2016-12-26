@@ -58,6 +58,7 @@ class Builder
      */
     public function build()
     {
+        trigger_error("Method build() is deprecated, use buildMapper() instead.", E_USER_DEPRECATED);
         return $this->buildMapper();
     }
 
