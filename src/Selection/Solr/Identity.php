@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Selection\Solr;
 
-class Identity extends \G4\DataMapper\Selection\IdentityAbstract
+class Identity extends \G4\DataMapper\Selection\Identity
 {
 
     private $fieldList = [];
@@ -21,7 +21,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function between($min, $max)
     {
-        return $this->operator(
+        return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Between($min, $max))
         );
@@ -29,25 +29,18 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
 
     public function betweenDates($min, $max)
     {
-        return $this->operator(
+        return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\BetweenDates($min, $max))
         );
     }
 
-    public function equal($value)
+    public function eq($value = null)
     {
-        return $this->operator(
+        return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $value
         );
-    }
-    /**
-     * OBSOLETE !!! USE equal($value)
-     */
-    public function eq($value = null)
-    {
-        return $this->equal($value);
     }
 
     public function geodist($latitude, $longitude, $distance = null)
@@ -92,16 +85,6 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $this->groupBy;
     }
 
-    public function greaterThan($value)
-    {
-        throw new \Exception('Not implemented yet', 501);
-    }
-
-    public function greaterThanOrEqual($value)
-    {
-        throw new \Exception('Not implemented yet', 501);
-    }
-
     public function hasFieldList()
     {
         return !empty($this->fieldList);
@@ -122,94 +105,22 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return !empty($this->geodist['latitude']) && !empty($this->geodist['longitude']);
     }
 
-    public function in(array $values = null)
+    public function in($value = array())
     {
-        if (empty($values)) {
-            $values = null;
+        if (empty($value)) {
+            $value = null;
         }
-        return $this->operator(
+        return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($values))
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($value))
         );
     }
 
-    public function like($value, $wildCardPosition = null)
+    public function like($value = null)
     {
-        return $this->operator(
+        return $this->_operator(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
             $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\Like($value))
-        );
-    }
-
-    public function lessThan($value)
-    {
-        throw new \Exception('Not implemented yet', 501);
-    }
-
-    public function lessThanOrEqual($value)
-    {
-        throw new \Exception('Not implemented yet', 501);
-    }
-
-    public function notEqual($value)
-    {
-        $this->getCurrentField()->addPrefixToName('-');
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $value
-        );
-    }
-
-    public function notIn(array $values = null)
-    {
-        if (empty($values)) {
-            $values = null;
-        }
-        $this->getCurrentField()->addPrefixToName('-');
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\In($values))
-        );
-    }
-    /**
-     * OBSOLETE !!! USE notIn(array $values)
-     */
-    public function nin(array $values)
-    {
-        return $this->notIn($values);
-    }
-
-    public function notTimeFromInMinutes($value)
-    {
-        $this->getCurrentField()->addPrefixToName('-');
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
-        );
-    }
-
-    public function notTimeToInMinutes($value)
-    {
-        $this->getCurrentField()->addPrefixToName('-');
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
-        );
-    }
-
-    public function timeFromInMinutes($value)
-    {
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
-        );
-    }
-
-    public function timeToInMinutes($value)
-    {
-        return $this->operator(
-            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
         );
     }
 
@@ -236,6 +147,22 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         return $param !== null
             ? parent::setOrderBy($param, $value)
             : $this;
+    }
+
+    public function timeFromInMinutes($value)
+    {
+        return $this->_operatorAttach(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
+        );
+    }
+
+    public function timeToInMinutes($value)
+    {
+        return $this->_operatorAttach(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
+        );
     }
 
     private function getValue(\G4\DataMapper\Selection\Solr\IdentityValue\IdentityValueInterface $identityValue)
