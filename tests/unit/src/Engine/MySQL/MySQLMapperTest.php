@@ -3,6 +3,7 @@
 use G4\DataMapper\Engine\MySQL\MySQLMapper;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
 class MySQLMapperTest extends PHPUnit_Framework_TestCase
 {
@@ -19,6 +20,8 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
 
     private $mappingMock;
 
+    private $tableNameMock;
+
 
     protected function setUp()
     {
@@ -30,7 +33,11 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mapper = new MySQLMapper($this->adapterMock, 'users');
+        $this->tableNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLTableName')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mapper = new MySQLMapper($this->adapterMock, $this->tableNameMock);
     }
 
     protected function tearDown()
@@ -96,7 +103,7 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('insert')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock));
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock));
 
         $this->mapper->insert($this->mappingMock);
     }
@@ -106,7 +113,7 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('insert')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock))
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock))
             ->will($this->throwException(new \Exception()));
 
         $this->expectException('\Exception');
@@ -119,7 +126,7 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('update')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock));
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock));
 
         $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
     }
@@ -129,7 +136,7 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('upsert')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock));
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock));
 
         $this->mapper->upsert($this->mappingMock);
     }
@@ -151,7 +158,7 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('update')
-            ->with($this->equalTo('users'), $this->equalTo($this->mappingMock))
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock))
             ->will($this->throwException(new \Exception()));
 
         $this->expectException('\Exception');

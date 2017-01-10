@@ -8,6 +8,7 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Engine\MySQL\MySQLMapper;
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 use G4\DataMapper\Engine\MySQL\MySQLTransaction;
 
 class Builder
@@ -107,7 +108,7 @@ class Builder
     {
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
-                $mapper = new MySQLMapper($this->adapter, $this->collectionName);
+                $mapper = new MySQLMapper($this->adapter, new MySQLTableName($this->collectionName));
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);

@@ -17,7 +17,7 @@ class MySQLMapper implements MapperInterface
     private $adapter;
 
     /**
-     * @var string
+     * @var MySQLTableName
      */
     private $table;
 
@@ -26,7 +26,7 @@ class MySQLMapper implements MapperInterface
      * @param AdapterInterface $adapter
      * @param $table
      */
-    public function __construct(AdapterInterface $adapter, $table)
+    public function __construct(AdapterInterface $adapter, MySQLTableName $table)
     {
         $this->adapter = $adapter;
         $this->table   = $table;
