@@ -15,6 +15,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
      */
     private $clientMock;
 
+    private $tableNameMock;
+
 
     protected function setUp()
     {
@@ -34,13 +36,23 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
+        $this->tableNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLTableName')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->tableNameMock
+            ->expects($this->any())
+            ->method('__toString')
+            ->willReturn('data');
+
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
     }
 
     protected function tearDown()
     {
-        $this->adapter = null;
-        $this->clientMock = null;
+        $this->adapter          = null;
+        $this->clientMock       = null;
+        $this->tableNameMock    = null;
     }
 
     public function testBeginTransaction()
@@ -75,7 +87,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('where');
 
-        $this->adapter->delete('data', $selectionFactoryMock);
+        $this->adapter->delete($this->tableNameMock, $selectionFactoryMock);
     }
 
     public function testEmptyDataForInsert()
@@ -90,7 +102,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $this->setExpectedException('\Exception', 'Empty data for insert');
-        $this->adapter->insert('data', $mappingStub);
+        $this->adapter->insert($this->tableNameMock, $mappingStub);
     }
 
     public function testEmptyDataForUpdate()
@@ -107,7 +119,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $selectionFactoryStub = $this->getMock('G4\DataMapper\Common\SelectionFactoryInterface');
 
         $this->setExpectedException('\Exception', 'Empty data for update');
-        $this->adapter->update('data', $mappingStub, $selectionFactoryStub);
+        $this->adapter->update($this->tableNameMock, $mappingStub, $selectionFactoryStub);
     }
 
     public function testInsert()
@@ -122,7 +134,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn(['id' => 1]);
 
-        $this->adapter->insert('data', $mappingStub);
+        $this->adapter->insert($this->tableNameMock, $mappingStub);
     }
 
     public function testInsertBulk()
@@ -150,7 +162,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
                 'ts' => 321
             ]);
 
-        $this->adapter->insertBulk('data', new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
+        $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
     }
 
     public function testInsertBulkException()
@@ -159,7 +171,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Collection in insertBulk() must not be empty.');
 
-        $this->adapter->insertBulk('data', new \ArrayIterator([]));
+        $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([]));
     }
 
     public function testRollBack()
@@ -214,7 +226,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select('data', $selectionFactoryStub));
+        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->tableNameMock, $selectionFactoryStub));
     }
 
     public function testUpdate()
@@ -235,7 +247,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('where');
 
-        $this->adapter->update('data', $mappingMock, $selectionFactoryMock);
+        $this->adapter->update($this->tableNameMock, $mappingMock, $selectionFactoryMock);
     }
 
     public function testUpsert()
@@ -254,7 +266,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
                 'ts' => 456,
             ]);
 
-        $this->adapter->upsert('data', $mappingMock);
+        $this->adapter->upsert($this->tableNameMock, $mappingMock);
     }
 
 
@@ -274,7 +286,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Empty data for upsert');
         $this->expectExceptionCode(101);
 
-        $this->adapter->upsert('table', $mappingMock);
+        $this->adapter->upsert($this->tableNameMock, $mappingMock);
     }
 
     public function testQueryForDelete()

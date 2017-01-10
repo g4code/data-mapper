@@ -42,9 +42,10 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->adapterMock = null;
-        $this->mappingMock = null;
-        $this->mapper      = null;
+        $this->adapterMock      = null;
+        $this->mappingMock      = null;
+        $this->mapper           = null;
+        $this->tableNameMock    = null;
     }
 
     public function testDelete()

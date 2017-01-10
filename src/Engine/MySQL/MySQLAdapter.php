@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\Bulk;
+use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
@@ -35,12 +36,12 @@ class MySQLAdapter implements AdapterInterface
         $this->client->commit();
     }
 
-    public function delete($table, SelectionFactoryInterface $selectionFactory)
+    public function delete(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
         $this->client->delete($table, $selectionFactory->where());
     }
 
-    public function insert($table, MappingInterface $mappings)
+    public function insert(CollectionNameInterface $table, MappingInterface $mappings)
     {
         $data = $mappings->map();
 
@@ -51,7 +52,7 @@ class MySQLAdapter implements AdapterInterface
         $this->client->insert($table, $data);
     }
 
-    public function insertBulk($table, \ArrayIterator $mappingsCollection)
+    public function insertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
     {
         if (count($mappingsCollection) === 0) {
             throw new \Exception('Collection in insertBulk() must not be empty.', 101);
@@ -80,7 +81,7 @@ class MySQLAdapter implements AdapterInterface
         $this->client->rollBack();
     }
 
-    public function select($table, SelectionFactoryInterface $selectionFactory)
+    public function select(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
         $selectForData = $this->client
             ->select()
@@ -103,7 +104,7 @@ class MySQLAdapter implements AdapterInterface
         return new RawData($data, $total);
     }
 
-    public function update($table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
+    public function update(CollectionNameInterface $table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
     {
         $data = $mapping->map();
 
@@ -114,7 +115,7 @@ class MySQLAdapter implements AdapterInterface
         $this->client->update($table, $data, $selectionFactory->where());
     }
 
-    public function upsert($table, MappingInterface $mapping)
+    public function upsert(CollectionNameInterface $table, MappingInterface $mapping)
     {
         $data = $mapping->map();
 

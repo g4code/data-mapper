@@ -18,16 +18,16 @@ class Bulk implements \Countable
     private $data;
 
     /**
-     * @var string
+     * @var CollectionNameInterface
      */
-    private $type;
+    private $collectionName;
 
 
-    public function __construct(AdapterInterface $adapter, $type)
+    public function __construct(AdapterInterface $adapter, CollectionNameInterface $collectionName)
     {
-        $this->adapter = $adapter;
-        $this->type    = $type;
-        $this->data    = new \ArrayIterator([]);
+        $this->adapter          = $adapter;
+        $this->collectionName   = $collectionName;
+        $this->data             = new \ArrayIterator([]);
     }
 
     /**
@@ -43,7 +43,7 @@ class Bulk implements \Countable
     public function insert()
     {
         try {
-            $this->adapter->insertBulk($this->type, $this->getData());
+            $this->adapter->insertBulk($this->collectionName, $this->getData());
         } catch (\Exception $exception) {
             throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
         }

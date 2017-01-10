@@ -80,7 +80,7 @@ class Builder
     public function buildBulk()
     {
         $this->validateDependencies();
-        return new Bulk($this->adapter, $this->collectionName);
+        return new Bulk($this->adapter, new MySQLTableName($this->collectionName));
     }
 
     //TODO: Drasko - change this!!!

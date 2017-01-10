@@ -15,18 +15,35 @@ class BulkTest extends PHPUnit_Framework_TestCase
      */
     private $bulk;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tableNameMock;
+
+
     protected function setUp()
     {
         $this->adapterMock = $this->getMockBuilder('\G4\DataMapper\Common\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bulk = new Bulk($this->adapterMock, 'test_table');
+        $this->tableNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLTableName')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->tableNameMock
+            ->expects($this->any())
+            ->method('__toString')
+            ->willReturn('test_table');
+
+        $this->bulk = new Bulk($this->adapterMock, $this->tableNameMock);
     }
 
     protected function tearDown()
     {
-        $this->bulk = null;
+        $this->adapterMock      = null;
+        $this->tableNameMock    = null;
+        $this->bulk             = null;
     }
 
     public function testAdd()
@@ -51,7 +68,7 @@ class BulkTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('insertBulk')
-            ->with($this->equalTo('test_table'), $this->equalTo(new \ArrayIterator([])));
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo(new \ArrayIterator([])));
 
         $this->bulk->insert();
     }
