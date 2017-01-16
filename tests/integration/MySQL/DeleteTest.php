@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Test\Integration\MySQL;
 
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
 class DeleteTest extends TestCase
 {
@@ -27,7 +28,7 @@ class DeleteTest extends TestCase
         $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
 
         $this->getBuilder()
-            ->table($this->getTableName() . '_fail')
+            ->collectionName(new MySQLTableName($this->getTableName() . '_fail'))
             ->buildMapper()
             ->delete($this->makeIdentityById());
     }

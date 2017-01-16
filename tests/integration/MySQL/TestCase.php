@@ -6,6 +6,7 @@ use G4\DataMapper\Builder;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Common\Identity;
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -74,7 +75,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     public function makeMapper()
     {
         return $this->getBuilder()
-            ->table($this->getTableName())
+            ->collectionName(new MySQLTableName($this->getTableName()))
             ->buildMapper();
     }
 

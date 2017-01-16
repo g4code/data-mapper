@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Test\Integration\MySQL;
 
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
 class InsertTest extends TestCase
 {
@@ -23,7 +24,7 @@ class InsertTest extends TestCase
         $this->expectExceptionMessageRegExp('~^42\:\sSQLSTATE\[.*$~xius');
 
         $this->getBuilder()
-            ->table($this->getTableName() . '_fail')
+            ->collectionName(new MySQLTableName($this->getTableName() . '_fail'))
             ->buildMapper()
             ->insert($this->makeMapping());
     }
