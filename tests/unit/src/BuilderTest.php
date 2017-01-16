@@ -1,6 +1,7 @@
 <?php
 
 use G4\DataMapper\Builder;
+use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
 class BuilderTest extends PHPUnit_Framework_TestCase
 {
@@ -43,7 +44,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     {
         $mapper = $this->builder
             ->engineMySQL($this->params)
-            ->table('profiles')
+            ->collectionName(new MySQLTableName('profiles'))
             ->buildMapper();
         $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLMapper', $mapper);
     }
@@ -51,7 +52,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     public function testBuildMapper()
     {
         $this->builder
-            ->table('profiles')
+            ->collectionName(new MySQLTableName('profiles'))
             ->adapter($this->getMockForMySQLAdapter());
         $this->builder->buildMapper();
     }
@@ -59,14 +60,14 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     public function testBuildBulk()
     {
         $this->builder
-            ->table('profiles')
+            ->collectionName(new MySQLTableName('profiles'))
             ->adapter($this->getMockForMySQLAdapter());
         $this->assertInstanceOf('\G4\DataMapper\Common\Bulk', $this->builder->buildBulk());
     }
 
     public function testBuildWithNoAdapter()
     {
-        $this->builder->table('profiles');
+        $this->builder->collectionName(new MySQLTableName('profiles'));
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('Adapter instance must implement AdapterInterface');
@@ -86,7 +87,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->builder
             ->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'))
-            ->table('profiles');
+            ->collectionName(new MySQLTableName('profiles'));
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('Unknown engine');

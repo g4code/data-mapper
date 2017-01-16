@@ -3,6 +3,7 @@
 namespace G4\DataMapper;
 
 use G4\DataMapper\Common\Bulk;
+use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
@@ -80,7 +81,7 @@ class Builder
     public function buildBulk()
     {
         $this->validateDependencies();
-        return new Bulk($this->adapter, new MySQLTableName($this->collectionName));
+        return new Bulk($this->adapter, $this->collectionName);
     }
 
     //TODO: Drasko - change this!!!
@@ -91,12 +92,12 @@ class Builder
     }
 
     /**
-     * @param string $table
+     * @param CollectionNameInterface $collectinName
      * @return Builder
      */
-    public function table($table)
+    public function collectionName(CollectionNameInterface $collectinName)
     {
-        $this->collectionName = $table;
+        $this->collectionName = $collectinName;
         return $this;
     }
 
@@ -108,7 +109,7 @@ class Builder
     {
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
-                $mapper = new MySQLMapper($this->adapter, new MySQLTableName($this->collectionName));
+                $mapper = new MySQLMapper($this->adapter, $this->collectionName);
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);
@@ -122,7 +123,7 @@ class Builder
             throw new \Exception('Adapter instance must implement AdapterInterface', 601);
         }
 
-        if ($this->collectionName === null) {
+        if (!$this->collectionName instanceof CollectionNameInterface) {
             throw new \Exception('DataSet cannot be emty', 601);
         }
     }
