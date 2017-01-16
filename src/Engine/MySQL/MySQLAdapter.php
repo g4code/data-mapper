@@ -38,7 +38,7 @@ class MySQLAdapter implements AdapterInterface
 
     public function delete(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
-        $this->client->delete($table, $selectionFactory->where());
+        $this->client->delete((string) $table, $selectionFactory->where());
     }
 
     public function insert(CollectionNameInterface $table, MappingInterface $mappings)
@@ -49,7 +49,7 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty data for insert', 101);
         }
 
-        $this->client->insert($table, $data);
+        $this->client->insert((string) $table, $data);
     }
 
     public function insertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
@@ -71,7 +71,9 @@ class MySQLAdapter implements AdapterInterface
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
 
-        $query = "INSERT INTO {$table} ({$fields}) VALUES " . implode(',', $values);
+        $tableName = (string) $table;
+
+        $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values);
 
         $this->client->query($query);
     }
@@ -85,7 +87,7 @@ class MySQLAdapter implements AdapterInterface
     {
         $selectForData = $this->client
             ->select()
-            ->from($table, $selectionFactory->fieldNames())
+            ->from((string) $table, $selectionFactory->fieldNames())
             ->where($selectionFactory->where())
             ->order($selectionFactory->sort())
             ->limit($selectionFactory->limit(), $selectionFactory->offset())
@@ -95,7 +97,7 @@ class MySQLAdapter implements AdapterInterface
 
         $selectForTotal = $this->client
             ->select()
-            ->from($table, 'COUNT(*) AS cnt')
+            ->from((string) $table, 'COUNT(*) AS cnt')
             ->where($selectionFactory->where())
             ->group($selectionFactory->group());
 
@@ -112,7 +114,7 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty data for update', 101);
         }
 
-        $this->client->update($table, $data, $selectionFactory->where());
+        $this->client->update((string) $table, $data, $selectionFactory->where());
     }
 
     public function upsert(CollectionNameInterface $table, MappingInterface $mapping)
@@ -127,7 +129,9 @@ class MySQLAdapter implements AdapterInterface
         $values = implode(", ", array_fill(1, count($data), "?"));
         $update = implode(" = ?, ", array_keys($data)) . " = ?";
 
-        $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
+        $tableName = (string) $table;
+
+        $query = "INSERT INTO {$tableName} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
         $this->client->query($query, array_merge(array_values($data), array_values($data)));
     }
