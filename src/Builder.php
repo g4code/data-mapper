@@ -21,7 +21,7 @@ class Builder
     private $adapter;
 
     /**
-     * @var string
+     * @var CollectionNameInterface
      */
     private $collectionName;
 
@@ -51,17 +51,6 @@ class Builder
     {
         $this->adapter = new MySQLAdapter(new MySQLClientFactory($params));
         return $this;
-    }
-
-    /**
-     * @deprecated use buildMapper() instead
-     * @throws \Exception
-     * @return MapperInterface
-     */
-    public function build()
-    {
-        trigger_error("Method build() is deprecated, use buildMapper() instead.", E_USER_DEPRECATED);
-        return $this->buildMapper();
     }
 
     /**
@@ -95,9 +84,9 @@ class Builder
      * @param CollectionNameInterface $collectinName
      * @return Builder
      */
-    public function collectionName(CollectionNameInterface $collectinName)
+    public function collectionName(CollectionNameInterface $collectionName)
     {
-        $this->collectionName = $collectinName;
+        $this->collectionName = $collectionName;
         return $this;
     }
 
