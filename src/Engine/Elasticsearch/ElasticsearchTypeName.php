@@ -6,13 +6,8 @@ use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Exception\IndexNameException;
 use G4\DataMapper\Exception\TypeNameException;
 
-class ElasticsearchIndexAndType implements CollectionNameInterface
+class ElasticsearchTypeName implements CollectionNameInterface
 {
-
-    /**
-     * @var string
-     */
-    private $indexName;
 
     /**
      * @var string
@@ -21,16 +16,10 @@ class ElasticsearchIndexAndType implements CollectionNameInterface
 
     /**
      * ElasticsearchIndexAndType constructor.
-     * @param $indexName
      * @param $typeName
      */
-    public function __construct($indexName, $typeName)
+    public function __construct($typeName)
     {
-        if (!is_string($indexName) || strlen($indexName) === 0) {
-            throw new IndexNameException();
-        }
-        $this->indexName = $indexName;
-
         if (!is_string($typeName) || strlen($typeName) === 0) {
             throw new TypeNameException();
         }
@@ -41,22 +30,6 @@ class ElasticsearchIndexAndType implements CollectionNameInterface
      * @return string
      */
     public function __toString()
-    {
-        return $this->indexName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIndexName()
-    {
-        return $this->indexName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTypeName()
     {
         return $this->typeName;
     }

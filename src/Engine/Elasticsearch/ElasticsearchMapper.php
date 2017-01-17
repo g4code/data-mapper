@@ -17,23 +17,18 @@ class ElasticsearchMapper implements MapperInterface
     private $adapter;
 
     /**
-     * @var string
+     * @var ElasticsearchIndexName
      */
     private $index;
 
     /**
-     * @var string
+     * @var ElasticsearchTypeName
      */
     private $type;
 
 
-    /**
-     * ElasticsearchMapper constructor.
-     * @param AdapterInterface $adapter
-     * @param $index
-     * @param $type
-     */
-    public function __construct(AdapterInterface $adapter, $index, $type)
+
+    public function __construct(AdapterInterface $adapter, ElasticsearchIndexName $index, ElasticsearchTypeName $type)
     {
         $this->adapter  = $adapter;
         $this->index    = $index;
