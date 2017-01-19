@@ -27,7 +27,12 @@ class ElasticsearchMapper implements MapperInterface
     private $type;
 
 
-
+    /**
+     * ElasticsearchMapper constructor.
+     * @param AdapterInterface $adapter
+     * @param ElasticsearchIndexName $index
+     * @param ElasticsearchTypeName $type
+     */
     public function __construct(AdapterInterface $adapter, ElasticsearchIndexName $index, ElasticsearchTypeName $type)
     {
         $this->adapter  = $adapter;
@@ -35,10 +40,14 @@ class ElasticsearchMapper implements MapperInterface
         $this->type     = $type;
     }
 
-
+    /**
+     * @param IdentityInterface $identity
+     */
     public function delete(IdentityInterface $identity)
     {
-        // TODO: Implement delete() method.
+        try {
+        } catch (\Exception $exception) {
+        }
     }
 
 
@@ -71,5 +80,26 @@ class ElasticsearchMapper implements MapperInterface
         // TODO: Implement upsert() method.
     }
 
+    /**
+     * @return ElasticsearchCollectionName
+     */
+    private function makeCollectionName()
+    {
+        return new ElasticsearchCollectionName($this->index, $this->type);
+    }
+
+    private function makeSelectionFactory(IdentityInterface $identity)
+    {
+        
+    }
+
+    /**
+     * @param \Exception $exception
+     * @throws \Exception
+     */
+    private function handleException(\Exception $exception)
+    {
+        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+    }
 
 }

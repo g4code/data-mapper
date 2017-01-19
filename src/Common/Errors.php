@@ -14,5 +14,6 @@ class Errors
     const CODE_TYPE_NAME_NOT_STRING     = 4003;
     const MESSAGE_TYPE_NAME_NOT_STRING  = 'Index name is not a string';
 
-
+    const CODE_NOT_IMPLEMENTED          = 4004;
+    const MESSAGE_NOT_IMPLEMENTED       = 'Method not implemented';
 }
