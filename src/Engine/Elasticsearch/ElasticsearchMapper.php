@@ -46,6 +46,7 @@ class ElasticsearchMapper implements MapperInterface
     public function delete(IdentityInterface $identity)
     {
         try {
+            $this->adapter->delete($this->makeCollectionName(), $this->makeSelectionFactory($identity));
         } catch (\Exception $exception) {
         }
     }
@@ -88,18 +89,13 @@ class ElasticsearchMapper implements MapperInterface
         return new ElasticsearchCollectionName($this->index, $this->type);
     }
 
+    /**
+     * @param IdentityInterface $identity
+     * @return ElasticsearchSelectionFactory
+     */
     private function makeSelectionFactory(IdentityInterface $identity)
     {
-        
-    }
-
-    /**
-     * @param \Exception $exception
-     * @throws \Exception
-     */
-    private function handleException(\Exception $exception)
-    {
-        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+        return new ElasticsearchSelectionFactory($identity);
     }
 
 }
