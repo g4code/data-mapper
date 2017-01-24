@@ -50,7 +50,7 @@ class MySQLClientFactory implements CreateInterface
         if (empty($params['username'])) {
             throw new \Exception('No username param', 101);
         }
-        if(isset($params['password']) && is_null($params['password'])){
+        if(!array_key_exists('password', $params) || $params['password'] === null){
             throw new \Exception('No password param', 101);
         }
         if (empty($params['dbname'])) {
