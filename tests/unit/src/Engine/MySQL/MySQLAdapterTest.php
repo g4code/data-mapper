@@ -174,6 +174,43 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([]));
     }
 
+    public function testUpsertBulk()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->equalTo("INSERT INTO data (`id`,`ts`) VALUES (123,456),(789,321) ON DUPLICATE KEY UPDATE id=VALUES(id),ts=VALUES(ts)"));
+
+        $mappingStubFirst = $this->getMockForMappings();
+        $mappingStubFirst
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => 123,
+                'ts' => 456
+            ]);
+
+        $mappingStubSecond = $this->getMockForMappings();
+        $mappingStubSecond
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => 789,
+                'ts' => 321
+            ]);
+
+        $this->adapter->upsertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
+    }
+
+    public function testUpsertBulkException()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionCode(101);
+        $this->expectExceptionMessage('Collection in upsertBulk() must not be empty.');
+
+        $this->adapter->upsertBulk($this->tableNameMock, new \ArrayIterator([]));
+    }
+
     public function testRollBack()
     {
         $this->clientMock

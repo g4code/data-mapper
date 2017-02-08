@@ -49,6 +49,15 @@ class Bulk implements \Countable
         }
     }
 
+    public function upsert()
+    {
+        try {
+            $this->adapter->upsertBulk($this->collectionName, $this->getData());
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+        }
+    }
+
     /**
      * @return \ArrayIterator
      */

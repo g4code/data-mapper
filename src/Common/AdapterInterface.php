@@ -29,6 +29,12 @@ interface AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param \ArrayIterator $mappingsCollection
+     */
+    public function upsertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection);
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param SelectionFactoryInterface $selectionFactory
      * @return RawData
      */
