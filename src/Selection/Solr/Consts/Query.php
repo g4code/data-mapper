@@ -10,6 +10,9 @@ class Query
     const BRACKET_CLOSE = ']';
     const BRACKET_OPEN  = '[';
 
+    const CURLY_BRACKET_CLOSE = '}';
+    const CURLY_BRACKET_OPEN  = '{';
+
     const CONNECTOR_AND = 'AND';
     const CONNECTOR_OR  = 'OR';
 
