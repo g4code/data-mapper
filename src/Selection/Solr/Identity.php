@@ -85,6 +85,14 @@ class Identity extends \G4\DataMapper\Selection\Identity
         return $this->groupBy;
     }
 
+    public function gt($value = null)
+    {
+        return $this->_operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\GreaterThan($value))
+        );
+    }
+
     public function hasFieldList()
     {
         return !empty($this->fieldList);
