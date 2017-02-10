@@ -78,6 +78,37 @@ class MySQLAdapter implements AdapterInterface
         $this->client->query($query);
     }
 
+    public function upsertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
+    {
+        if (count($mappingsCollection) === 0) {
+            throw new \Exception('Collection in upsertBulk() must not be empty.', 101);
+        }
+
+        $mappingsCollection->rewind();
+        $currentMapping = $mappingsCollection->current();
+        $fields = "`" . implode("`,`", array_keys($currentMapping->map())) . "`";
+        $values = [];
+
+        foreach ($mappingsCollection as $mapping) {
+            $quotedValues = array();
+            foreach ($mapping->map() as $value){
+                $quotedValues[] = (string) new Quote($value);
+            }
+            $values[] = "(" .implode(",", $quotedValues) . ")";
+        }
+
+        $tableName = (string) $table;
+        $updatePartOfQuery = "";
+        foreach($currentMapping->map() as $key=>$value){
+            $updatePartOfQuery .= "{$key}=VALUES({$key}),";
+        }
+        $updatePartOfQueryFormatted = rtrim($updatePartOfQuery, ",") ;
+
+        $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values) .
+            " ON DUPLICATE KEY UPDATE ".$updatePartOfQueryFormatted;
+        $this->client->query($query);
+    }
+
     public function rollBackTransaction()
     {
         $this->client->rollBack();

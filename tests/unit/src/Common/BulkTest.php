@@ -85,6 +85,28 @@ class BulkTest extends PHPUnit_Framework_TestCase
         $this->bulk->insert();
     }
 
+    public function testUpsert()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsertBulk')
+            ->with($this->equalTo($this->tableNameMock), $this->equalTo(new \ArrayIterator([])));
+
+        $this->bulk->upsert();
+    }
+
+    public function testUpsertException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsertBulk')
+            ->willThrowException(new \Exception());
+
+        $this->expectException('\Exception');
+
+        $this->bulk->upsert();
+    }
+
     private function getMappingMock()
     {
         $stub = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
