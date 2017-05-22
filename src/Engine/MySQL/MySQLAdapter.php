@@ -20,25 +20,74 @@ class MySQLAdapter implements AdapterInterface
      */
     private $client;
 
+    private $useInnerTransactions = false;
+
+    private $innerTransactionStarted = false;
+
+    private $transactionActive = false;
+
 
     public function __construct(MySQLClientFactory $clientFactory)
     {
         $this->client = $clientFactory->create();
     }
 
+    public function setWrapInTransaction($value)
+    {
+        $this->useInnerTransactions = $value;
+        return $this;
+    }
+
     public function beginTransaction()
     {
+        $this->transactionActive = true;
         $this->client->beginTransaction();
     }
 
     public function commitTransaction()
     {
         $this->client->commit();
+        $this->transactionActive = false;
     }
+
+    public function rollBackTransaction()
+    {
+        $this->client->rollBack();
+        $this->transactionActive = false;
+    }
+
+    private function innerTransactionBegin()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        $this->innerTransactionStarted = false;
+
+        if (!$this->transactionActive) {
+            $this->client->beginTransaction();
+            $this->innerTransactionStarted = true;
+        }
+    }
+
+    private function innerTransactionEnd()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        if (!$this->transactionActive && $this->innerTransactionStarted) {
+            $this->client->commit();
+            $this->innerTransactionStarted = false;
+        }
+    }
+
 
     public function delete(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
+        $this->innerTransactionBegin();
         $this->client->delete((string) $table, $selectionFactory->where());
+        $this->innerTransactionEnd();
     }
 
     public function insert(CollectionNameInterface $table, MappingInterface $mappings)
@@ -49,7 +98,9 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty data for insert', 101);
         }
 
+        $this->innerTransactionBegin();
         $this->client->insert((string) $table, $data);
+        $this->innerTransactionEnd();
     }
 
     public function insertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
@@ -75,7 +126,9 @@ class MySQLAdapter implements AdapterInterface
 
         $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values);
 
+        $this->innerTransactionBegin();
         $this->client->query($query);
+        $this->innerTransactionEnd();
     }
 
     public function upsertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
@@ -106,12 +159,10 @@ class MySQLAdapter implements AdapterInterface
 
         $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values) .
             " ON DUPLICATE KEY UPDATE ".$updatePartOfQueryFormatted;
-        $this->client->query($query);
-    }
 
-    public function rollBackTransaction()
-    {
-        $this->client->rollBack();
+        $this->innerTransactionBegin();
+        $this->client->query($query);
+        $this->innerTransactionEnd();
     }
 
     public function select(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
@@ -145,7 +196,9 @@ class MySQLAdapter implements AdapterInterface
             throw new \Exception('Empty data for update', 101);
         }
 
+        $this->innerTransactionBegin();
         $this->client->update((string) $table, $data, $selectionFactory->where());
+        $this->innerTransactionEnd();
     }
 
     public function upsert(CollectionNameInterface $table, MappingInterface $mapping)
@@ -164,7 +217,9 @@ class MySQLAdapter implements AdapterInterface
 
         $query = "INSERT INTO {$tableName} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
+        $this->innerTransactionBegin();
         $this->client->query($query, array_merge(array_values($data), array_values($data)));
+        $this->innerTransactionEnd();
     }
 
     public function query($query)

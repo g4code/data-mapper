@@ -6,7 +6,7 @@ class Db
 {
     private $db;
 
-    private $wrapInTransaction;
+    private $wrapInTransaction = false;
 
     public function __construct($config)
     {
