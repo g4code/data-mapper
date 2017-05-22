@@ -13,6 +13,10 @@ abstract class MysqlAbstract implements MapperInterface
 
     protected static $_transactionActive = false;
 
+    private $innerTransactionStarted;
+
+    private $useInnerTransactions;
+
     /**
      * @var \Zend_Db_Adapter_Abstract
      */
@@ -38,6 +42,7 @@ abstract class MysqlAbstract implements MapperInterface
     public function __construct(\G4\DataMapper\Adapter\Mysql\Db $adapter)
     {
         $this->_db = $adapter->get();
+        $this->useInnerTransactions = $adapter->getWrapInTransaction();
     }
 
     public function closeConnection()
@@ -53,7 +58,10 @@ abstract class MysqlAbstract implements MapperInterface
         $sql .= $identity->hasOrderBy() ? (" ORDER BY " . join(',', $this->_getSelectionFactory()->orderBy($identity))) : '';
         $sql .= $identity->getLimit() ? (" LIMIT " . $identity->getLimit()) : '';
 
+        $this->innerTransactionBegin();
         $stmt = $this->_db->query($sql);
+        $this->innerTransactionEnd();
+
         return $stmt->rowCount();
     }
 
@@ -128,13 +136,42 @@ abstract class MysqlAbstract implements MapperInterface
         return !empty($this->_rawData);
     }
 
+    private function innerTransactionBegin()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        $this->innerTransactionStarted = false;
+
+        if (!self::$_transactionActive) {
+            $this->_db->beginTransaction();
+            $this->innerTransactionStarted = true;
+        }
+    }
+
+    private function innerTransactionEnd()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        if (!self::$_transactionActive && $this->innerTransactionStarted) {
+            $this->_db->commit();
+            $this->innerTransactionStarted = false;
+        }
+    }
+
     public function insert(DomainAbstract $domain)
     {
         $this->setRawDataFromDomain($domain);
 
+        $this->innerTransactionBegin();
         $this->_db->insert($this->_getTablaName(), $this->_rawData);
 
         $lastId = $this->_db->lastInsertId();
+        $this->innerTransactionEnd();
+
         $domain->setId($lastId);
 
         return isset($lastId) ? $lastId : false;
@@ -167,7 +204,11 @@ abstract class MysqlAbstract implements MapperInterface
 
         $query    = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
         $queryId  = $this->_db->getProfiler()->queryStart($query, \G4\DataMapper\Db\Db::getProfilerConstInsert());
+
+        $this->innerTransactionBegin();
         $response = $this->_db->getConnection()->exec($query);
+        $this->innerTransactionEnd();
+
         $this->_db->getProfiler()->queryEnd($queryId);
 
         return $response;
@@ -185,7 +226,10 @@ abstract class MysqlAbstract implements MapperInterface
 
         $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
+        $this->innerTransactionBegin();
         $stmt = $this->_db->query($query, array_merge(array_values($this->_rawData), array_values($this->_rawData)));
+        $this->innerTransactionEnd();
+
 
         return $stmt->rowCount();
     }
@@ -245,7 +289,11 @@ abstract class MysqlAbstract implements MapperInterface
             $sql .= " LIMIT " . $sf->limit($identity);
         }
 
-        return $this->_db->query($sql, array_values($rawData));
+        $this->innerTransactionBegin();
+        $response = $this->_db->query($sql, array_values($rawData));
+        $this->innerTransactionEnd();
+
+        return $response;
     }
 
     /**
@@ -370,6 +418,10 @@ abstract class MysqlAbstract implements MapperInterface
 
     private function _update($where)
     {
-        return $this->_db->update($this->_getTablaName(), $this->_rawData, $where);
+        $this->innerTransactionBegin();
+        $res = $this->_db->update($this->_getTablaName(), $this->_rawData, $where);
+        $this->innerTransactionEnd();
+
+        return $res;
     }
 }
