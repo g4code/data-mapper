@@ -230,6 +230,24 @@ class Identity
     /**
      * @return Identity
      */
+    public function isNotNull()
+    {
+        $this->_operator('IS', 'NOT NULL');
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function isNull()
+    {
+        $this->_operator('IS', 'NULL');
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
     public function setLimit($value)
     {
         $this->_limit = $value;
@@ -277,6 +295,8 @@ class Identity
         if ($this->isVoid()) {
             throw new \Exception("No object field defined");
         }
+
+
 
         $this->_currentField->add($symbol, $value);
 
