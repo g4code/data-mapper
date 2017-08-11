@@ -21,6 +21,12 @@ class Quote
         if (is_float($this->value)) {
             return sprintf('%F', $this->value);
         }
+        if (is_array($this->value)) {
+            foreach($this->value as $key => $value) {
+                $this->value[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
+            }
+            return "(" . join(", ", $this->value) . ")";
+        }
         return "'" . addcslashes($this->value, "\000\n\r\\'\"\032") . "'";
     }
 }
