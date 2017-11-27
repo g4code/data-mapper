@@ -20,3 +20,5 @@ tests/integration/coverage/*
 .bash_history
 .cache/motd.legal-displayed
 .sudo_as_admin_successful
+
+*.DS_Store
