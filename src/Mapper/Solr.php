@@ -120,6 +120,11 @@ class Solr
         return $this->bulkUpdate($this->getBulk()->markForSet($domain));
     }
 
+    public function updateSetAtomic(\G4\DataMapper\Domain\DomainAbstract $domain)
+    {
+        return $this->bulkUpdate($this->getBulk()->markForSetAtomic($domain));
+    }
+
     /**
      * @return \G4\DataMapper\Mapper\Solr
      */
