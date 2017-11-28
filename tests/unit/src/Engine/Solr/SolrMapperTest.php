@@ -93,4 +93,27 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity'));
     }
+
+    public function testInsert()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('insert')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
+
+        $this->mapper->insert($this->mappingMock);
+    }
+
+    public function testInsertException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('insert')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock))
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->insert($this->mappingMock);
+    }
 }
