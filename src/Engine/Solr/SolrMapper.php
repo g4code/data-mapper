@@ -37,7 +37,15 @@ class SolrMapper implements MapperInterface
     /**
      * @param IdentityInterface $identity
      */
-    public function find(IdentityInterface $identity){}
+    public function find(IdentityInterface $identity)
+    {
+        try {
+            $rawData = $this->adapter->select($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param MappingInterface $mapping
