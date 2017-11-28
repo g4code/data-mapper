@@ -30,7 +30,8 @@ make unit-tests
 
 Requirements:
 * Vagrant - [Download](https://www.vagrantup.com/downloads.html)
-
+* VirtualBox - [Download](https://www.virtualbox.org/wiki/Downloads)
+* Ansible - [Installation](http://docs.ansible.com/ansible/latest/intro_installation.html)
 
 ```sh
 make integration-tests

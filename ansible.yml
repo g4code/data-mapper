@@ -4,5 +4,5 @@
   become: true
 
   roles:
-    - { role: 01.os,                            tags: ['os'] }
-
+    - { role: 01.os,    tags: ['os'] }
+    - { role: 02.php,   tags: ['php'] }
