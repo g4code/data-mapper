@@ -1,0 +1,8 @@
+---
+- name: Data Mapper
+  hosts: all
+  become: true
+
+  roles:
+    - { role: 01.os,                            tags: ['os'] }
+
