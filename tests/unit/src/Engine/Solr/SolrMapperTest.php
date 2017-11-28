@@ -67,4 +67,30 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->mapper->delete($identityStub);
     }
+
+    public function testFind()
+    {
+        $rawDataStub = $this->getMockBuilder('\G4\DataMapper\Common\RawData')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('select')
+            ->willReturn($rawDataStub);
+
+        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity')));
+    }
+
+    public function testFindException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('select')
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity'));
+    }
 }
