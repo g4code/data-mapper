@@ -22,19 +22,43 @@ class SolrMapper implements MapperInterface
 
     /**
      * @param IdentityInterface $identity
+     * @return RawData
      */
-    public function delete(IdentityInterface $identity){}
+    public function delete(IdentityInterface $identity)
+    {
+        try {
+            $rawData = $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param IdentityInterface $identity
-     * @return RawData
      */
-    public function find(IdentityInterface $identity){}
+    public function find(IdentityInterface $identity)
+    {
+        try {
+            $rawData = $this->adapter->select($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param MappingInterface $mapping
      */
-    public function insert(MappingInterface $mapping){}
+    public function insert(MappingInterface $mapping)
+    {
+        try {
+            $rawData = $this->adapter->insert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param MappingInterface $mapping
@@ -52,4 +76,18 @@ class SolrMapper implements MapperInterface
      * @return mixed
      */
     public function query($query){}
+
+    private function handleException(\Exception $exception)
+    {
+        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @return SolrSelectionFactory
+     */
+    private function makeSelectionFactory(IdentityInterface $identity)
+    {
+        return new SolrSelectionFactory($identity);
+    }
 }
