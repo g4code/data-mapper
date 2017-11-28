@@ -1,0 +1,7 @@
+---
+- name: Update packages
+  shell: apt-get {{ item }}
+  items:
+    - update
+    - upgrade -y
+    - autoremove -y

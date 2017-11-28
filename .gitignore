@@ -22,3 +22,4 @@ tests/integration/coverage/*
 .sudo_as_admin_successful
 
 *.DS_Store
+ansible.retry

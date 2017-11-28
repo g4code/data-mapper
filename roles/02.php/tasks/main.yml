@@ -1,0 +1,13 @@
+---
+- name: Install software-properties-common
+  package:
+    name: software-properties-common
+
+- name: Add php repository
+  shell: add-apt-repository ppa:ondrej/php
+
+- name: Install php 5.6
+  shell: apt-get {{ item }}
+  items:
+    - update
+    - install php5.6 -y

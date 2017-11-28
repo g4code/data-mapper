@@ -3,7 +3,7 @@
 
 Vagrant.configure(2) do |config|
 
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/xenial64"
 
     config.vm.hostname = "data-mapper"
 
@@ -16,21 +16,9 @@ Vagrant.configure(2) do |config|
         vb.cpus = 2
     end
 
-    config.berkshelf.enabled = true
+    config.vm.provision "shell", inline: "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
 
-    config.berkshelf.berksfile_path = './cookbooks/engine/Berksfile'
-
-    config.vm.provision "infra", type: "chef_solo" do |chef|
-        chef.channel = "stable"
-        chef.version = "12.10.24"
-        chef.add_recipe 'apt'
-        chef.add_recipe 'engine'
-        chef.add_recipe 'engine::php5'
-    end
-
-    config.vm.provision "test", type: "chef_solo" do |chef|
-        chef.channel = "stable"
-        chef.version = "12.10.24"
-        chef.add_recipe 'engine::test'
+    config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "ansible.yml"
     end
 end
