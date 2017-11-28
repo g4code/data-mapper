@@ -94,6 +94,14 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->builder->buildMapper();
     }
 
+    public function testBuildTransaction()
+    {
+        $this->builder
+            ->collectionName(new MySQLTableName('profiles'))
+            ->adapter($this->getMockForMySQLAdapter());
+        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLTransaction', $this->builder->buildTransaction());
+    }
+
     private function getMockForMySQLAdapter()
     {
         return $this->getMock(
