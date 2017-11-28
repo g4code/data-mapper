@@ -50,7 +50,15 @@ class SolrMapper implements MapperInterface
     /**
      * @param MappingInterface $mapping
      */
-    public function insert(MappingInterface $mapping){}
+    public function insert(MappingInterface $mapping)
+    {
+        try {
+            $rawData = $this->adapter->insert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param MappingInterface $mapping
