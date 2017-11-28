@@ -16,17 +16,35 @@ class Quote
     public function __toString()
     {
         if (is_int($this->value)) {
-            return (string) $this->value;
+            $value = $this->formatInteger();
         }
-        if (is_float($this->value)) {
-            return sprintf('%F', $this->value);
+        elseif(is_float($this->value)) {
+            $value = $this->formatFloat();
         }
-        if (is_array($this->value)) {
-            foreach($this->value as $key => $value) {
-                $this->value[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
-            }
-            return "(" . join(", ", $this->value) . ")";
+        elseif (is_array($this->value)) {
+            $value = $this->formatArray();
+        } else {
+            $value = "'" . addcslashes($this->value, "\000\n\r\\'\"\032") . "'";
         }
-        return "'" . addcslashes($this->value, "\000\n\r\\'\"\032") . "'";
+
+        return $value;
+    }
+
+    private function formatInteger()
+    {
+        return (string) $this->value;
+    }
+
+    private function formatFloat()
+    {
+        return sprintf('%F', $this->value);
+    }
+
+    private function formatArray()
+    {
+        foreach($this->value as $key => $value) {
+            $this->value[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
+        }
+        return "(" . join(", ", $this->value) . ")";
     }
 }

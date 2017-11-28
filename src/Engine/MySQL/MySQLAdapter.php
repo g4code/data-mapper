@@ -38,6 +38,11 @@ class MySQLAdapter implements AdapterInterface
         return $this;
     }
 
+    public function getWrapInTransaction()
+    {
+        return $this->useInnerTransactions;
+    }
+
     public function beginTransaction()
     {
         $this->transactionActive = true;

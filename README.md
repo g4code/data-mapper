@@ -16,11 +16,26 @@ composer require g4/data-mapper
 
 ### Install dependencies
 
-    $ make install
+```sh
+composer install
+```
 
-### Run tests
+### Run unit tests
 
-    $ make test
+```sh
+make unit-tests
+```
+
+### Run integration tests
+
+Requirements:
+* Vagrant - [Download](https://www.vagrantup.com/downloads.html)
+* Chef Development Kit - [Download](https://downloads.chef.io/chefdk)
+* Berkshelf - run in terminal: vagrant plugin install vagrant-berkshelf
+
+```sh
+make integration-tests
+```
 
 ## License
 
