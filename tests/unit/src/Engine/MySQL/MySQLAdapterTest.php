@@ -124,6 +124,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
+        $this->adapter->setWrapInTransaction(true);
+
         $this->clientMock
             ->expects($this->once())
             ->method('insert');
@@ -362,6 +364,13 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Query does not match a known pattern (insert, delete, update, select)');
 
         $this->adapter->query('tralala');
+    }
+
+    public function testSetWrapInTransaction()
+    {
+        $this->adapter->setWrapInTransaction(true);
+
+        $this->assertTrue($this->adapter->getWrapInTransaction(), true);
     }
 
     private function getMockForMySQLClientFactory()
