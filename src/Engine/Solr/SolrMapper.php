@@ -22,12 +22,20 @@ class SolrMapper implements MapperInterface
 
     /**
      * @param IdentityInterface $identity
+     * @return RawData
      */
-    public function delete(IdentityInterface $identity){}
+    public function delete(IdentityInterface $identity)
+    {
+        try {
+            $rawData = $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
 
     /**
      * @param IdentityInterface $identity
-     * @return RawData
      */
     public function find(IdentityInterface $identity){}
 
@@ -52,4 +60,18 @@ class SolrMapper implements MapperInterface
      * @return mixed
      */
     public function query($query){}
+
+    private function handleException(\Exception $exception)
+    {
+        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @return SolrSelectionFactory
+     */
+    private function makeSelectionFactory(IdentityInterface $identity)
+    {
+        return new SolrSelectionFactory($identity);
+    }
 }
