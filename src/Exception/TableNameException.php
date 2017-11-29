@@ -2,16 +2,15 @@
 
 namespace G4\DataMapper\Exception;
 
-use G4\DataMapper\Common\Errors;
+use G4\DataMapper\ErrorCodes as ErrorCode;
 
 class TableNameException extends \Exception
 {
+    const MESSAGE = 'Table name is not a string';
 
-    protected $code = Errors::CODE_TABLE_NAME_NOT_STRING;
-
-    protected $message = Errors::MESSAGE_TABLE_NAME_NOT_STRING;
-
-
-    public function __construct(){}
+    public function __construct()
+    {
+        parent::__construct(self::MESSAGE, ErrorCode::TABLE_NAME_NOT_STRING);
+    }
 
 }
