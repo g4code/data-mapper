@@ -63,13 +63,27 @@ class SolrMapper implements MapperInterface
     /**
      * @param MappingInterface $mapping
      */
-    public function upsert(MappingInterface $mapping){}
+    public function upsert(MappingInterface $mapping)
+    {
+        try {
+            $this->adapter->upsert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
 
     /**
      * @param MappingInterface $mapping
      * @param IdentityInterface $identity
      */
-    public function update(MappingInterface $mapping, IdentityInterface $identity){}
+    public function update(MappingInterface $mapping, IdentityInterface $identity)
+    {
+        try {
+            $this->adapter->update($this->collectionName, $mapping, $this->makeSelectionFactory($identity));
+        } catch(\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
 
     /**
      * @param mixed $query
