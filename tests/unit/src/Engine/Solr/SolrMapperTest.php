@@ -161,4 +161,26 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->mapper->upsert($this->mappingMock);
     }
+
+    public function testQuery()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('query')
+            ->willReturn(true);
+
+        $this->assertTrue($this->mapper->query('query solr'));
+    }
+
+    public function testQueryException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $this->expectException('\Exception');
+
+        $this->mapper->query('solr');
+    }
 }
