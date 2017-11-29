@@ -39,8 +39,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $params = [
             'host'     => '192.168.32.11',
             'port'     => 3306,
-            'username' => 'root',
-            'password' => 'root',
+            'username' => 'test_user',
+            'password' => 'test_pass',
             'dbname'   => 'data_mapper',
         ];
 
