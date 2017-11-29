@@ -4,9 +4,12 @@ use G4\DataMapper\Engine\MySQL\MySQLMapper;
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Engine\MySQL\MySQLTableName;
+use G4\DataMapper\Exception\MySQLMapperException;
 
 class MySQLMapperTest extends PHPUnit_Framework_TestCase
 {
+    const MYSQL_DATA_MAPPER_ERROR_MESSAGE = 'MySQL Mapper error';
+
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -66,9 +69,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('delete')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->delete($identityStub);
     }
@@ -92,9 +95,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('select')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->find($this->getMock('\G4\DataMapper\Common\Identity'));
     }
@@ -115,9 +118,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('insert')
             ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock))
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->insert($this->mappingMock);
     }
@@ -147,9 +150,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('upsert')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->upsert($this->mappingMock);
     }
@@ -160,9 +163,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('update')
             ->with($this->equalTo($this->tableNameMock), $this->equalTo($this->mappingMock))
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
     }
@@ -182,9 +185,9 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('query')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE));
 
-        $this->expectException('\Exception');
+        $this->expectException('\G4\DataMapper\Exception\MySQLMapperException');
 
         $this->mapper->query('sql');
     }

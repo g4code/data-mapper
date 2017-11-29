@@ -7,6 +7,7 @@ use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\RawData;
+use G4\DataMapper\Exception\MySQLMapperException;
 
 class MySQLMapper implements MapperInterface
 {
@@ -115,7 +116,7 @@ class MySQLMapper implements MapperInterface
      */
     private function handleException(\Exception $exception)
     {
-        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+        throw new MySQLMapperException($exception->getCode() . ': ' . $exception->getMessage());
     }
 
     /**
