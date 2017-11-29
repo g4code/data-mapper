@@ -6,3 +6,4 @@
   roles:
     - { role: 01.os,    tags: ['os'] }
     - { role: 02.php,   tags: ['php'] }
+    - { role: 03.mysql, tags: ['mysql'] }
