@@ -1,59 +1,33 @@
 <?php
 
-namespace G4\DataMapper\Engine\MySQL;
+namespace G4\DataMapper\Engine\Solr;
 
 use G4\DataMapper\Common\AdapterInterface;
+use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
-use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\RawData;
-use G4\DataMapper\Exception\MySQLMapperException;
 
-class MySQLMapper implements MapperInterface
+class SolrMapper implements MapperInterface
 {
-
-    /**
-     * @var MySQLAdapter
-     */
     private $adapter;
 
-    /**
-     * @var MySQLTableName
-     */
-    private $table;
+    private $collectionName;
 
-    /**
-     * MySQLMapper constructor.
-     * @param AdapterInterface $adapter
-     * @param $table
-     */
-    public function __construct(AdapterInterface $adapter, MySQLTableName $table)
+    public function __construct(SolrCollectionName $collectionName, AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
-        $this->table   = $table;
-    }
-
-    /**
-     * @param IdentityInterface $identity
-     * @throws \Exception
-     */
-    public function delete(IdentityInterface $identity)
-    {
-        try {
-            $this->adapter->delete($this->table, $this->makeSelectionFactory($identity));
-        } catch (\Exception $exception) {
-            $this->handleException($exception);
-        }
+        $this->collectionName = $collectionName;
     }
 
     /**
      * @param IdentityInterface $identity
      * @return RawData
      */
-    public function find(IdentityInterface $identity)
+    public function delete(IdentityInterface $identity)
     {
         try {
-            $rawData = $this->adapter->select($this->table, $this->makeSelectionFactory($identity));
+            $rawData = $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
@@ -61,13 +35,38 @@ class MySQLMapper implements MapperInterface
     }
 
     /**
-     * @param MappingInterface $mappings
-     * @throws \Exception
+     * @param IdentityInterface $identity
      */
-    public function insert(MappingInterface $mappings)
+    public function find(IdentityInterface $identity)
     {
         try {
-            $this->adapter->insert($this->table, $mappings);
+            $rawData = $this->adapter->select($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
+
+    /**
+     * @param MappingInterface $mapping
+     */
+    public function insert(MappingInterface $mapping)
+    {
+        try {
+            $rawData = $this->adapter->insert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
+    }
+
+    /**
+     * @param MappingInterface $mapping
+     */
+    public function upsert(MappingInterface $mapping)
+    {
+        try {
+            $this->adapter->upsert($this->collectionName, $mapping);
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
@@ -76,30 +75,20 @@ class MySQLMapper implements MapperInterface
     /**
      * @param MappingInterface $mapping
      * @param IdentityInterface $identity
-     * @throws \Exception
      */
     public function update(MappingInterface $mapping, IdentityInterface $identity)
     {
         try {
-            $this->adapter->update($this->table, $mapping, $this->makeSelectionFactory($identity));
+            $this->adapter->update($this->collectionName, $mapping, $this->makeSelectionFactory($identity));
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
     }
 
     /**
-     * @param MappingInterface $mapping
-     * @throws \Exception
+     * @param mixed $query
+     * @return mixed
      */
-    public function upsert(MappingInterface $mapping)
-    {
-        try {
-            $this->adapter->upsert($this->table, $mapping);
-        } catch (\Exception $exception) {
-            $this->handleException($exception);
-        }
-    }
-
     public function query($query)
     {
         try {
@@ -110,21 +99,17 @@ class MySQLMapper implements MapperInterface
         return $queryResult;
     }
 
-    /**
-     * @param \Exception $exception
-     * @throws \Exception
-     */
     private function handleException(\Exception $exception)
     {
-        throw new MySQLMapperException($exception->getCode() . ': ' . $exception->getMessage());
+        throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
     }
 
     /**
      * @param IdentityInterface $identity
-     * @return MySQLSelectionFactory
+     * @return SolrSelectionFactory
      */
     private function makeSelectionFactory(IdentityInterface $identity)
     {
-        return new MySQLSelectionFactory($identity);
+        return new SolrSelectionFactory($identity);
     }
 }
