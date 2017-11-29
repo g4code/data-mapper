@@ -3,7 +3,7 @@
 namespace G4\DataMapper\Engine\Solr;
 
 use G4\DataMapper\Common\CollectionNameInterface;
-use G4\DataMapper\Exception\TableNameException;
+use G4\DataMapper\Exception\CollectionNameException;
 
 class SolrCollectionName implements CollectionNameInterface
 {
@@ -15,12 +15,12 @@ class SolrCollectionName implements CollectionNameInterface
     /**
      * SolrCollectionName constructor.
      * @param $collectionName
-     * @throws TableNameException
+     * @throws CollectionNameException
      */
     public function __construct($collectionName)
     {
         if(!is_string($collectionName) || strlen($collectionName) === 0) {
-            throw new TableNameException();
+            throw new CollectionNameException();
         }
         $this->collectionName = $collectionName;
     }
