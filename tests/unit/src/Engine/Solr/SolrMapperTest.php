@@ -116,4 +116,49 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->mapper->insert($this->mappingMock);
     }
+
+    public function testUpdate()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
+
+        $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
+    }
+
+    public function testUpdateException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock))
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->update($this->mappingMock, $this->getMock('\G4\DataMapper\Common\Identity'));
+    }
+
+    public function testUpsert()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsert')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
+
+        $this->mapper->upsert($this->mappingMock);
+    }
+
+    public function testUpsertException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('upsert')
+            ->will($this->throwException(new \Exception()));
+
+        $this->expectException('\Exception');
+
+        $this->mapper->upsert($this->mappingMock);
+    }
 }
