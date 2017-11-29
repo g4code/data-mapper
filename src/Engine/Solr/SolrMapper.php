@@ -80,7 +80,7 @@ class SolrMapper implements MapperInterface
     {
         try {
             $this->adapter->update($this->collectionName, $mapping, $this->makeSelectionFactory($identity));
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->handleException($exception);
         }
     }
@@ -89,7 +89,15 @@ class SolrMapper implements MapperInterface
      * @param mixed $query
      * @return mixed
      */
-    public function query($query){}
+    public function query($query)
+    {
+        try {
+            $queryResult = $this->adapter->query($query);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $queryResult;
+    }
 
     private function handleException(\Exception $exception)
     {
