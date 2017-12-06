@@ -17,11 +17,9 @@ class Quote
     {
         if (is_int($this->value)) {
             $value = $this->formatInteger();
-        }
-        elseif(is_float($this->value)) {
+        } elseif (is_float($this->value)) {
             $value = $this->formatFloat();
-        }
-        elseif (is_array($this->value)) {
+        } elseif (is_array($this->value)) {
             $value = $this->formatArray();
         } else {
             $value = "'" . addcslashes($this->value, "\000\n\r\\'\"\032") . "'";
@@ -42,7 +40,7 @@ class Quote
 
     private function formatArray()
     {
-        foreach($this->value as $key => $value) {
+        foreach ($this->value as $key => $value) {
             $this->value[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
         }
         return "(" . join(", ", $this->value) . ")";

@@ -41,5 +41,4 @@ interface MapperInterface
      * @return mixed
      */
     public function query($query);
-
 }

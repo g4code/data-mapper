@@ -7,9 +7,13 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 
     private static $instance;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
 
     final public static function getInstance()

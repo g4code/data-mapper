@@ -55,7 +55,8 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
                 Consts::LESS_THAN_OR_EQUAL    => ($diff <= 0 ? $max : $min),
             ];
         }
-        return $this->operator(Consts::MUST, $value);;
+        return $this->operator(Consts::MUST, $value);
+        ;
     }
 
     public function equal($value = null)
@@ -154,7 +155,7 @@ class Identity extends \G4\DataMapper\Selection\IdentityAbstract
         if (empty($values)) {
             $values = null;
         }
-        return $this->operator(Consts::MUST_NOT,$values);
+        return $this->operator(Consts::MUST_NOT, $values);
     }
 
     public function notTimeFromInMinutes($value)

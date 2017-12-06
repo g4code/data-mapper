@@ -278,10 +278,10 @@ class Identity
         preg_match('~([a-z]+)(.*)~', $name, $method);
 
         switch ($method[1]) {
-            case 'set' :
+            case 'set':
                 $this->_customContainer[$method[2]] = $args[0];
                 break;
-            case 'get' :
+            case 'get':
                 return isset($this->_customContainer[$method[2]]) ? $this->_customContainer[$method[2]] : null;
                 break;
         }

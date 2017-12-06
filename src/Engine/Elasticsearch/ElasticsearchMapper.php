@@ -7,7 +7,6 @@ use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
 
-
 class ElasticsearchMapper implements MapperInterface
 {
 
@@ -97,5 +96,4 @@ class ElasticsearchMapper implements MapperInterface
     {
         return new ElasticsearchSelectionFactory($identity);
     }
-
 }

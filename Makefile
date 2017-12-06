@@ -1,17 +1,17 @@
 TITLE = [data-mapper]
 
 unit-tests:
-	@/bin/echo -e "${TITLE} unit test suite started..." \
+	@/bin/echo "${TITLE} unit test suite started..." \
 	&& ./vendor/bin/phpunit -c tests/unit/phpunit.xml --coverage-html tests/unit/coverage
 
 integration-tests:
-	@/bin/echo -e "${TITLE} starting virtual machine ..." \
+	@/bin/echo "${TITLE} starting virtual machine ..." \
 	&& vagrant up \
-	&& /bin/echo -e "${TITLE} importing clear database ..." \
+	&& /bin/echo "${TITLE} importing clear database ..." \
 	&& ansible-playbook ansible.yml --tags database \
-	&& /bin/echo -e "${TITLE} starting integration test suite ..." \
+	&& /bin/echo "${TITLE} starting integration test suite ..." \
 	&& ./vendor/bin/phpunit -c tests/integration/phpunit.xml --coverage-html tests/integration/coverage \
-	&& /bin/echo -e "${TITLE} stopping virtual machine ..." \
+	&& /bin/echo "${TITLE} stopping virtual machine ..." \
 	&& vagrant halt
 
 .PHONY: unit-tests integration-tests

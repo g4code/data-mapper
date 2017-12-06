@@ -17,15 +17,27 @@ class SolrSelectionFactory implements SelectionFactoryInterface
         $this->identity = $identity;
     }
 
-    public function fieldNames(){}
+    public function fieldNames()
+    {
+    }
 
-    public function group(){}
+    public function group()
+    {
+    }
 
-    public function limit(){}
+    public function limit()
+    {
+    }
 
-    public function offset(){}
+    public function offset()
+    {
+    }
 
-    public function sort(){}
+    public function sort()
+    {
+    }
 
-    public function where(){}
+    public function where()
+    {
+    }
 }

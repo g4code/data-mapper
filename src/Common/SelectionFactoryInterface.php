@@ -20,5 +20,4 @@ interface SelectionFactoryInterface
     public function sort();
 
     public function where();
-
 }

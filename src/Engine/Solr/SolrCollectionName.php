@@ -19,7 +19,7 @@ class SolrCollectionName implements CollectionNameInterface
      */
     public function __construct($collectionName)
     {
-        if(!is_string($collectionName) || strlen($collectionName) === 0) {
+        if (!is_string($collectionName) || strlen($collectionName) === 0) {
             throw new CollectionNameException();
         }
         $this->collectionName = $collectionName;

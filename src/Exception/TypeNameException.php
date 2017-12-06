@@ -12,6 +12,7 @@ class TypeNameException extends \Exception
     protected $message = Errors::MESSAGE_TYPE_NAME_NOT_STRING;
 
 
-    public function __construct(){}
-
+    public function __construct()
+    {
+    }
 }

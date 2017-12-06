@@ -97,7 +97,7 @@ class Solr
 
     private function addMethodToData($method, array $data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             if ($key != self::IDENTIFIER_KEY) {
                 $data[$key] = [$method => $value];
             }

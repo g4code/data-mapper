@@ -6,5 +6,4 @@ interface CollectionNameInterface
 {
 
     public function __toString();
-
 }

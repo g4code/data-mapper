@@ -45,15 +45,15 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function geodist($latitude, $longitude, $distance = null)
     {
-        if ($latitude !== null || $longitude !== null ) {
+        if ($latitude !== null || $longitude !== null) {
              $this->geodist = [
                 'latitude'     => $latitude,
                 'longitude'    => $longitude,
                 'distance'     => $distance,
                 'spatialField' => 'location',
                 'filterQuery'  => '{!geofilt}'
-            ];
-            $this
+             ];
+             $this
                 ->addToFieldList(['_dist_' => 'geodist()'])
                 ->setOrderBy('geodist()', 'asc');
         }

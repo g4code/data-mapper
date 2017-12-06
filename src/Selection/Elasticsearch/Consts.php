@@ -36,7 +36,7 @@ class Consts
     const GEO_DISTANCE_SORT       = '_geo_distance';
 
 
-    static public function geoParams()
+    public static function geoParams()
     {
         return [
             static::LATITUDE,
@@ -45,7 +45,7 @@ class Consts
         ];
     }
 
-    static public function rangeParams()
+    public static function rangeParams()
     {
         return [
             static::GREATER_THAN,

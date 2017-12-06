@@ -53,7 +53,7 @@ abstract class CollectionAbstract implements \Iterator, \Countable
 
     public function valid()
     {
-        return !is_null( $this->current() );
+        return !is_null($this->current());
     }
 
     abstract protected function _factory();
@@ -88,7 +88,6 @@ abstract class CollectionAbstract implements \Iterator, \Countable
         }
 
         if ($this->_hasCurrentRawData()) {
-
             $object = $this->_factory();
 
             if ($object === null) {

@@ -132,7 +132,7 @@ class Elasticsearch
         }
         if (!empty($this->response['aggregations'])) {
             $hits = array_map(
-                function($value){
+                function ($value) {
                     return $value['group_by_hits']['hits']['hits'][0];
                 },
                 $this->response['aggregations']['group_by']['buckets']

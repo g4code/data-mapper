@@ -51,5 +51,4 @@ abstract class DomainAbstract
         $this->_id = $id;
         return $this;
     }
-
 }

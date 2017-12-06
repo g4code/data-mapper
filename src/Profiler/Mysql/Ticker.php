@@ -9,11 +9,14 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 
     private $db;
 
-    public function __construct(\G4\DataMapper\Adapter\Mysql\Db $dbAdapter) {
+    public function __construct(\G4\DataMapper\Adapter\Mysql\Db $dbAdapter)
+    {
         $this->db = $dbAdapter->get();
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * @return string

@@ -12,6 +12,7 @@ class NotImplementedException extends \Exception
     protected $message = Errors::MESSAGE_NOT_IMPLEMENTED;
 
 
-    public function __construct(){}
-
+    public function __construct()
+    {
+    }
 }

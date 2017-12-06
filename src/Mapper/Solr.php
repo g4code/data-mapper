@@ -184,7 +184,8 @@ class Solr
     {
         return empty($this->response['response']['numFound'])
             ? 0
-            : $this->response['response']['numFound'];;
+            : $this->response['response']['numFound'];
+        ;
     }
 
     /**
