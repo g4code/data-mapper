@@ -20,5 +20,4 @@ class Query
     const MAX_DISTANCE  = 100000;
     const TO            = 'TO';
     const WILDCARD      = '*';
-
 }

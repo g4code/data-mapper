@@ -12,5 +12,4 @@ class TableNameException extends \Exception
     {
         parent::__construct(self::MESSAGE, ErrorCode::TABLE_NAME_NOT_STRING);
     }
-
 }

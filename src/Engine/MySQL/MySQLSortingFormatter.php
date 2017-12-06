@@ -15,7 +15,8 @@ class MySQLSortingFormatter implements SortingFormatterInterface
 
     public function format($name, $order)
     {
-        return sprintf("%s %s",
+        return sprintf(
+            "%s %s",
             $name,
             $this->sortMap($order)
         );

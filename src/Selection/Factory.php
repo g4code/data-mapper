@@ -26,7 +26,7 @@ class Factory
             return '1';
         }
 
-        if($this->db === null){
+        if ($this->db === null) {
             throw new \Exception("Missing Mysql db adapter", 500);
         }
 

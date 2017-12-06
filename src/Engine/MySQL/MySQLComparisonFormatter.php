@@ -23,10 +23,11 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
 
     public function format($name, Operator $operator, $value)
     {
-        return sprintf("%s %s %s",
-                $name,
-                $this->operatorMap($operator),
-                $this->quote($value)
+        return sprintf(
+            "%s %s %s",
+            $name,
+            $this->operatorMap($operator),
+            $this->quote($value)
         );
     }
 

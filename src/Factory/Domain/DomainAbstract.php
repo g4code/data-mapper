@@ -108,5 +108,4 @@ abstract class DomainAbstract implements DomainInterface
     {
         $this->_objectFactory();
     }
-
 }

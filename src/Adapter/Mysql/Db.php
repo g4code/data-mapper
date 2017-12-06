@@ -29,5 +29,4 @@ class Db
     {
         return $this->wrapInTransaction;
     }
-
 }

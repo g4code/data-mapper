@@ -12,5 +12,4 @@ class CollectionNameException extends \Exception
     {
         parent::__construct(self::MESSAGE, ErrorCode::COLLECTION_NAME_NOT_STRING);
     }
-
 }

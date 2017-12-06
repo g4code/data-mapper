@@ -121,7 +121,7 @@ class MySQLAdapter implements AdapterInterface
 
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
-            foreach ($mapping->map() as $value){
+            foreach ($mapping->map() as $value) {
                 $quotedValues[] = (string) new Quote($value);
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
@@ -149,7 +149,7 @@ class MySQLAdapter implements AdapterInterface
 
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
-            foreach ($mapping->map() as $value){
+            foreach ($mapping->map() as $value) {
                 $quotedValues[] = (string) new Quote($value);
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
@@ -157,7 +157,7 @@ class MySQLAdapter implements AdapterInterface
 
         $tableName = (string) $table;
         $updatePartOfQuery = "";
-        foreach($currentMapping->map() as $key=>$value){
+        foreach ($currentMapping->map() as $key => $value) {
             $updatePartOfQuery .= "{$key}=VALUES({$key}),";
         }
         $updatePartOfQueryFormatted = rtrim($updatePartOfQuery, ",") ;

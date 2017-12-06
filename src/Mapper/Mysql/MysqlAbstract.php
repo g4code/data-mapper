@@ -72,7 +72,7 @@ abstract class MysqlAbstract implements MapperInterface
 
     public function transactionBegin()
     {
-        if(self::$_throwExceptionOnNewTrancationBegin === true && self::$_transactionActive === true) {
+        if (self::$_throwExceptionOnNewTrancationBegin === true && self::$_transactionActive === true) {
             throw new \Exception('Database transaction is already started');
         }
 
@@ -196,7 +196,7 @@ abstract class MysqlAbstract implements MapperInterface
 
         foreach ($collection as $domain) {
             $quotedValues = array();
-            foreach ($domain->getRawData() as $value){
+            foreach ($domain->getRawData() as $value) {
                 $quotedValues[] = $this->_db->quote($value);
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
@@ -266,8 +266,8 @@ abstract class MysqlAbstract implements MapperInterface
 
     public function updateAll(Identity $identity, array $rawData)
     {
-        foreach($rawData as $key => $value) {
-            if(empty($key) || is_numeric($key)) {
+        foreach ($rawData as $key => $value) {
+            if (empty($key) || is_numeric($key)) {
                 throw new \Exception('Raw data values are not valid');
             }
             $fields[] = "{$key} = ?";
@@ -285,7 +285,7 @@ abstract class MysqlAbstract implements MapperInterface
 
         $sql = "UPDATE {$table} SET {$fields} WHERE {$where}";
 
-        if($identity->getLimit()) {
+        if ($identity->getLimit()) {
             $sql .= " LIMIT " . $sf->limit($identity);
         }
 
