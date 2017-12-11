@@ -27,10 +27,19 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
 
     public function testEqual()
     {
-        $this->operatorMock->expects($this->once())
+        $this->operatorMock->expects($this->any())
             ->method('getSymbol')
             ->willReturn(Operator::EQUAL);
 
         $this->assertEquals('name:test', $this->comparisonFormatter->format('name', $this->operatorMock, 'test'));
+    }
+
+    public function testGreaterThan()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::GRATER_THAN);
+
+        $this->assertEquals('age:{18 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
     }
 }
