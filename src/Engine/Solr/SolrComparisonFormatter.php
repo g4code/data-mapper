@@ -10,6 +10,6 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
 
     public function format($name, Operator $operator, $value)
     {
-        
+
     }
 }
