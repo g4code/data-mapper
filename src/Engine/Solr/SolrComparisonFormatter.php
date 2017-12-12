@@ -26,6 +26,8 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
             return $name . self::COLON . $value;
         } elseif ($operator->getSymbol() === Operator::GRATER_THAN) {
             return $name . self::COLON . self::CURLY_BRACKET_OPEN . $value . self::EMPTY_SPACE . self::TO . self::EMPTY_SPACE . self::WILDCARD . self::CURLY_BRACKET_CLOSE;
+        } elseif ($operator->getSymbol() === Operator::LESS_THAN) {
+            return $name . self::COLON . self::CURLY_BRACKET_OPEN . self::WILDCARD . self::EMPTY_SPACE . self::TO . self::EMPTY_SPACE . $value . self::CURLY_BRACKET_CLOSE;
         }
     }
 }
