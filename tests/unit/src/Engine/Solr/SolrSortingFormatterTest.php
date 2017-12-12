@@ -29,6 +29,12 @@ class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('name desc', $this->sortingFormatter->format('name', Sort::DESCENDING));
     }
+
+    public function testOrderNotInMap()
+    {
+        $this->setExpectedException('\Exception', 'Order is not in map');
+        $this->sortingFormatter->format('name', 'test');
+    }
 }
 
 
