@@ -69,4 +69,13 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('age:[* TO 18]', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
     }
+
+    public function testIn()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::IN);
+
+        $this->assertEquals('age:(18 OR 19 OR 20)', $this->comparisonFormatter->format('age', $this->operatorMock, '18, 19, 20'));
+    }
 }
