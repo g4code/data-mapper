@@ -24,6 +24,11 @@ class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('name asc', $this->sortingFormatter->format('name', Sort::ASCENDING));
     }
+
+    public function testDescendingFormat()
+    {
+        $this->assertEquals('name desc', $this->sortingFormatter->format('name', Sort::DESCENDING));
+    }
 }
 
 
