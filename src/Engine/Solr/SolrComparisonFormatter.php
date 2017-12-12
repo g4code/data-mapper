@@ -7,6 +7,16 @@ use G4\DataMapper\Common\Selection\Operator;
 
 class SolrComparisonFormatter implements ComparisonFormatterInterface
 {
+    const BRACKET_CLOSE = ']';
+    const BRACKET_OPEN  = '[';
+
+    const CURLY_BRACKET_CLOSE = '}';
+    const CURLY_BRACKET_OPEN  = '{';
+
+    const COLON         = ':';
+    const TO            = 'TO';
+    const WILDCARD      = '*';
+
 
     public function format($name, Operator $operator, $value)
     {
