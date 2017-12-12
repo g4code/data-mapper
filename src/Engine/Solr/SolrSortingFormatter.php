@@ -8,7 +8,7 @@ use G4\DataMapper\Common\Selection\Sort;
 class SolrSortingFormatter implements SortingFormatterInterface
 {
     private $map = [
-        Sort::ASCENDING => 'asc',
+        Sort::ASCENDING  => 'asc',
         Sort::DESCENDING => 'desc',
     ];
     
