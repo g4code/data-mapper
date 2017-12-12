@@ -7,23 +7,25 @@ use G4\DataMapper\Common\Selection\Operator;
 
 class SolrComparisonFormatter implements ComparisonFormatterInterface
 {
-    const BRACKET_CLOSE = ']';
-    const BRACKET_OPEN  = '[';
+    const BRACKET_CLOSE       = ']';
+    const BRACKET_OPEN        = '[';
 
     const CURLY_BRACKET_CLOSE = '}';
     const CURLY_BRACKET_OPEN  = '{';
 
-    const COLON         = ':';
-    const TO            = 'TO';
-    const WILDCARD      = '*';
+    const COLON               = ':';
+    const TO                  = 'TO';
+    const WILDCARD            = '*';
+
+    const EMPTY_SPACE         = ' ';
 
 
     public function format($name, Operator $operator, $value)
     {
         if($operator->getSymbol() === Operator::EQUAL) {
-            return $name . ':' . $value;
+            return $name . self::COLON . $value;
         } elseif ($operator->getSymbol() === Operator::GRATER_THAN) {
-            return $name . ':' . '{' . $value . ' TO ' . '*' . '}';
+            return $name . self::COLON . self::CURLY_BRACKET_OPEN . $value . self::EMPTY_SPACE . self::TO . self::EMPTY_SPACE . self::WILDCARD . self::CURLY_BRACKET_CLOSE;
         }
     }
 }
