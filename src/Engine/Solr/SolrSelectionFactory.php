@@ -38,6 +38,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function offset()
     {
+        return (int) $this->identity->getOffset();
     }
 
     public function sort()
