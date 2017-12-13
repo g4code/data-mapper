@@ -73,5 +73,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->expects($this->once)
             ->method('getOffset')
             ->willReturn(8);
+
+        $this->assertEquals(8, $this->selectionFactory->offset());
     }
 }
