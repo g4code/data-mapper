@@ -70,7 +70,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
     public function testOffset()
     {
         $this->identityMock
-            ->expects($this->once)
+            ->expects($this->once())
             ->method('getOffset')
             ->willReturn(8);
 
