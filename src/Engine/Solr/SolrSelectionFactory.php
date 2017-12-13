@@ -19,18 +19,26 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function fieldNames()
     {
+        $fieldNames = $this->identity->getFieldNames();
+
+        return count($fieldNames) === 0
+            ? '*'
+            : $fieldNames;
     }
 
     public function group()
     {
+        return $this->identity->getGrouping();
     }
 
     public function limit()
     {
+        return (int) $this->identity->getLimit();
     }
 
     public function offset()
     {
+        return (int) $this->identity->getOffset();
     }
 
     public function sort()

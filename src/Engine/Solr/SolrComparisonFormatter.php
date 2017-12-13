@@ -28,19 +28,29 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
 
     public function format($name, Operator $operator, $value)
     {
-        if($operator->getSymbol() === Operator::EQUAL) {
-            return $this->formatEqualQuery($name, $value);
-        } elseif ($operator->getSymbol() === Operator::GRATER_THAN) {
-            return $this->formatGreaterThanQuery($name, $value);
-        } elseif ($operator->getSymbol() === Operator::LESS_THAN) {
-            return $this->formatLessThanQuery($name, $value);
-        } elseif ($operator->getSymbol() === Operator::GRATER_THAN_OR_EQUAL) {
-            return $this->formatGreaterThanOrEqualQuery($name, $value);
-        } elseif ($operator->getSymbol() === Operator::LESS_THAN_OR_EQUAL) {
-            return $this->formatLessThanOrEqualQuery($name, $value);
-        } elseif ($operator->getSymbol() === Operator::IN) {
-            return $this->formatInQuery($name, $value);
+
+        switch($operator->getSymbol()) {
+            case Operator::EQUAL:
+                $query = $this->formatEqualQuery($name, $value);
+                break;
+            case Operator::GRATER_THAN:
+                $query = $this->formatGreaterThanQuery($name, $value);
+                break;
+            case Operator::LESS_THAN:
+                $query = $this->formatLessThanQuery($name, $value);
+                break;
+            case Operator::GRATER_THAN_OR_EQUAL:
+                $query = $this->formatGreaterThanOrEqualQuery($name, $value);
+                break;
+            case Operator::LESS_THAN_OR_EQUAL:
+                $query = $this->formatLessThanOrEqualQuery($name, $value);
+                break;
+            case Operator::IN:
+                $query = $this->formatInQuery($name, $value);
+                break;
         }
+
+        return $query;
     }
 
     private function formatEqualQuery($name, $value)
