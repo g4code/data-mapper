@@ -76,4 +76,88 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(8, $this->selectionFactory->offset());
     }
+
+    public function testSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->assertEquals([
+            ['id'   => 'desc'],
+            ['name' => 'asc'],
+        ], $this->selectionFactory->sort());
+    }
+
+    public function testEmptySort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->sort());
+    }
+
+    public function testWhere()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(false);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([
+                $this->getMockForComparison('id', 1),
+                $this->getMockForComparison('age', 18)
+            ]);
+
+        $this->assertEquals('id:1 AND age:18', $this->selectionFactory->where());
+    }
+
+    public function testWhereIfIdentityIsVoid()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(true);
+
+        $this->assertEquals('1', $this->selectionFactory->where());
+    }
+
+    private function getMockForComparison($column, $value)
+    {
+        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Comparison')
+            ->disableOriginalConstructor()
+            ->setMethods(['getComparison'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getComparison')
+            ->willReturn($column . ':' . $value);
+
+        return $mock;
+    }
+
+    private function getMockForSort($column, $sortDirection)
+    {
+        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Sort')
+            ->disableOriginalConstructor()
+            ->setMethods(['getSort'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getSort')
+            ->willReturn([$column => $sortDirection]);
+
+        return $mock;
+    }
 }
