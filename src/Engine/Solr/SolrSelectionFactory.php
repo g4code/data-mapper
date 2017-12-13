@@ -5,7 +5,7 @@ namespace G4\DataMapper\Engine\Solr;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
-use G4\DataMapper\Engine\Solr\SolrSortingFormatter;
+use G4\DataMapper\Common\Selection\Comparison;
 
 class SolrSelectionFactory implements SelectionFactoryInterface
 {
@@ -65,10 +65,29 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function where()
     {
+        if ($this->identity->isVoid()) {
+            return '1';
+        }
+
+        $comparisons = [];
+
+        foreach ($this->identity->getComparisons() as $oneComparison) {
+            if ($oneComparison instanceof Comparison) {
+                $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
+            }
+        }
+        return join(' AND ', $comparisons);
+    }
+
+    private function makeComparisonFormatter()
+    {
+        return new SolrComparisonFormatter();
     }
 
     private function makeSortingFormatter()
     {
         return new SolrSortingFormatter();
     }
+
+
 }
