@@ -33,6 +33,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function limit()
     {
+        return (int) $this->identity->getLimit();
     }
 
     public function offset()
