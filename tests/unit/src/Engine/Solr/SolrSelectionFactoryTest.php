@@ -76,4 +76,45 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(8, $this->selectionFactory->offset());
     }
+
+    public function testSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->assertEquals([
+            ['id'   => 'desc'],
+            ['name' => 'asc'],
+        ], $this->selectionFactory->sort());
+    }
+
+    public function testEmptySort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->sort());
+    }
+
+    private function getMockForSort($column, $sortDirection)
+    {
+        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Sort')
+            ->disableOriginalConstructor()
+            ->setMethods(['getSort'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getSort')
+            ->willReturn([$column => $sortDirection]);
+
+        return $mock;
+    }
 }
