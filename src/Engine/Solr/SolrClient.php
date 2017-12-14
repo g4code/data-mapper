@@ -31,18 +31,22 @@ class SolrClient
 
     public function select()
     {
-        $this->url = $this->url->path($this->collection, self::SERVICE_NAME, $this->method)->query(new Dictionary($this->query));
+        $this->url = $this->url->path(self::SERVICE_NAME, $this->collection, $this->method)->query(new Dictionary($this->query));
 
-        $this->execute()->getResponse();
+        $this->execute();
+
+        return $this->getResponse();
     }
 
     public function update()
     {
         $this->method = self::METHOD_UPDATE;
 
-        $this->url = $this->url->path($this->collection, self::SERVICE_NAME, $this->method);
+        $this->url = $this->url->path(self::SERVICE_NAME, $this->collection, $this->method);
 
-        $this->execute()->getResponse();
+        $this->execute();
+
+        return $this->getResponse();
     }
 
     public function getResponse()
@@ -73,14 +77,14 @@ class SolrClient
 
     private function execute()
     {
-        $handle = curl_init($this->url);
+        $handle = curl_init((string) $this->url);
 
         curl_setopt_array($handle, [
             CURLOPT_POST           => 1,
             CURLOPT_POSTFIELDS     => $this->getPostfields(),
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
-            CURLOPT_URL            => $this->url,
+            CURLOPT_URL            => (string) $this->url,
         ]);
 
         if ($this->method === self::METHOD_UPDATE) {
@@ -96,6 +100,6 @@ class SolrClient
 
     private function getPostfields()
     {
-        return $this->method === self::METHOD_SELECT ? ['q' => $this->query] : json_encode($this->document);
+        return $this->method === self::METHOD_SELECT ? http_build_query($this->query) : json_encode($this->document);
     }
 }

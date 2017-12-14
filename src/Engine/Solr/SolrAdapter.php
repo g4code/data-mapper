@@ -57,6 +57,19 @@ class SolrAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $data = $this->client
+            ->setCollection($collectionName)
+            ->setQuery([
+                'q'     => $selectionFactory->where(),
+                'fl'    => $selectionFactory->fieldNames(),
+                'rows'  => $selectionFactory->limit(),
+                'sort'  => $selectionFactory->sort(),
+                'start' => $selectionFactory->offset(),
+                'wt'    => 'json',
+            ])
+            ->select();
+
+        return new RawData($data, 5);
     }
 
     /**
