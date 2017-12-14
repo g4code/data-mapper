@@ -96,6 +96,6 @@ class SolrClient
 
     private function getPostfields()
     {
-        return $this->method === self::METHOD_SELECT ? ['q' => $this->query] : json_encode($this->document);
+        return $this->method === self::METHOD_SELECT ? http_build_query($this->query) : json_encode($this->document);
     }
 }
