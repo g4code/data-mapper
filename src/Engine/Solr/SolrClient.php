@@ -73,14 +73,14 @@ class SolrClient
 
     private function execute()
     {
-        $handle = curl_init($this->url);
+        $handle = curl_init((string) $this->url);
 
         curl_setopt_array($handle, [
             CURLOPT_POST           => 1,
             CURLOPT_POSTFIELDS     => $this->getPostfields(),
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
-            CURLOPT_URL            => $this->url,
+            CURLOPT_URL            => (string) $this->url,
         ]);
 
         if ($this->method === self::METHOD_UPDATE) {
