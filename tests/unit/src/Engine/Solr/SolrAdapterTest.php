@@ -1,21 +1,57 @@
 <?php
 
+use G4\DataMapper\Engine\Solr\SolrAdapter;
+
 class SolrAdapterTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @var SolrAdapter
+     */
+    private $adapter;
 
-    public function testSelect()
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $clientMock;
+
+    private $collectionNameMock;
+
+    protected function setUp()
     {
-        $clientFactory = new \G4\DataMapper\Engine\Solr\SolrClientFactory(['host' => 'localhost', 'port' => '8983']);
+        $this->clientMock = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrClient')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $identity = new \G4\DataMapper\Common\Identity();
+        $this->collectionNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrCollectionName')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $identity->setLimit(10)->setOffset(1)->field('id')->equal('15500')->sortAscending('name');
+        $this->collectionNameMock
+            ->expects($this->any())
+            ->method('__toString')
+            ->willReturn('nd_api');
 
-        $selectionFactory = new \G4\DataMapper\Engine\Solr\SolrSelectionFactory($identity);
 
-        $solrAdapter = new \G4\DataMapper\Engine\Solr\SolrAdapter($clientFactory);
+        $this->adapter = new SolrAdapter($this->getMockForSolrClientFactory());
+    }
 
-        $solrAdapter->select(new \G4\DataMapper\Engine\Solr\SolrCollectionName('nd_api'), $selectionFactory);
+    protected function tearDown()
+    {
+        $this->adapter = null;
+        $this->clientMock = null;
+        $this->collectionNameMock = null;
+    }
+
+    private function getMockForSolrClientFactory()
+    {
+        $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrClientFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $clientFactoryStub->method('create')
+            ->willReturn($this->clientMock);
+
+        return $clientFactoryStub;
     }
 }
