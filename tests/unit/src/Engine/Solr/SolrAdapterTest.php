@@ -16,9 +16,6 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
         $solrAdapter = new \G4\DataMapper\Engine\Solr\SolrAdapter($clientFactory);
 
-        $select = $solrAdapter->select(new \G4\DataMapper\Engine\Solr\SolrCollectionName('nd_api'), $selectionFactory);
-
-//        var_dump($select);
-        die('ovde');
+        $solrAdapter->select(new \G4\DataMapper\Engine\Solr\SolrCollectionName('nd_api'), $selectionFactory);
     }
 }
