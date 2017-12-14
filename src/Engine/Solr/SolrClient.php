@@ -31,7 +31,7 @@ class SolrClient
 
     public function select()
     {
-        $this->url = $this->url->path($this->collection, self::SERVICE_NAME, $this->method)->query(new Dictionary($this->query));
+        $this->url = $this->url->path(self::SERVICE_NAME, $this->collection, $this->method)->query(new Dictionary($this->query));
 
         $this->execute()->getResponse();
     }
@@ -40,7 +40,7 @@ class SolrClient
     {
         $this->method = self::METHOD_UPDATE;
 
-        $this->url = $this->url->path($this->collection, self::SERVICE_NAME, $this->method);
+        $this->url = $this->url->path(self::SERVICE_NAME, $this->collection, $this->method);
 
         $this->execute()->getResponse();
     }
