@@ -54,4 +54,29 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
         return $clientFactoryStub;
     }
+
+    public function testSelect()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setQuery')
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('select')
+            ->willReturnSelf();
+
+        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrSelectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->collectionNameMock, $selectionFactoryStub));
+    }
 }

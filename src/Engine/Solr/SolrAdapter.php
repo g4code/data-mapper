@@ -69,7 +69,7 @@ class SolrAdapter implements AdapterInterface
             ])
             ->select();
 
-        return new RawData($data, 5);
+        return new RawData($data, $this->client->getTotalItemsCount());
     }
 
     /**

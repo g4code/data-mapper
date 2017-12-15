@@ -54,6 +54,13 @@ class SolrClient
         return is_array($this->response) ? $this->response : json_decode($this->response, true);
     }
 
+    public function getTotalItemsCount()
+    {
+        return empty($this->response['response']['numFound'])
+            ? 0
+            : $this->response['response']['numFound'];
+    }
+
     public function setCollection($value)
     {
         $this->collection = $value;
