@@ -57,6 +57,36 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
+        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrSelectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn('city_name:Belgrade');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('fieldNames')
+            ->willReturn('*');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('limit')
+            ->willReturn('10');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('sort')
+            ->willReturn('id desc');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('offset')
+            ->willReturn('0');
+
+
         $this->clientMock
             ->expects($this->once())
             ->method('setCollection')
@@ -71,11 +101,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('select')
-            ->willReturnSelf();
-
-        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrSelectionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn([]);
 
         $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->collectionNameMock, $selectionFactoryStub));
     }
