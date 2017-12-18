@@ -43,16 +43,23 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->collectionNameMock = null;
     }
 
-    private function getMockForSolrClientFactory()
+    public function testInsertWithEmptyData()
     {
-        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientMock->expects($this->never())
+            ->method('update');
 
-        $clientFactoryStub->method('create')
-            ->willReturn($this->clientMock);
+        $mappingMock = $this->getMappingMock();
 
-        return $clientFactoryStub;
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Empty data for insert');
+        $this->expectExceptionCode(101);
+
+        $this->adapter->insert($this->collectionNameMock, $mappingMock);
     }
 
     public function testSelect()
@@ -156,12 +163,27 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException('\Exception', 'Empty data for update');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Empty data for update');
+        $this->expectExceptionCode(101);
+
         $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
+    }
+
+    private function getMockForSolrClientFactory()
+    {
+        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClientFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $clientFactoryStub->method('create')
+            ->willReturn($this->clientMock);
+
+        return $clientFactoryStub;
     }
 }

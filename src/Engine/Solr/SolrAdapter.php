@@ -32,6 +32,11 @@ class SolrAdapter implements AdapterInterface
      */
     public function insert(CollectionNameInterface $collectionName, MappingInterface $mapping)
     {
+        $data = $mapping->map();
+
+        if (empty($data)) {
+            throw new \Exception('Empty data for insert', 101);
+        }
     }
 
     /**
