@@ -43,18 +43,6 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->collectionNameMock = null;
     }
 
-    private function getMockForSolrClientFactory()
-    {
-        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $clientFactoryStub->method('create')
-            ->willReturn($this->clientMock);
-
-        return $clientFactoryStub;
-    }
-
     public function testSelect()
     {
         $data = ['documents' =>
@@ -163,5 +151,17 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
+    }
+
+    private function getMockForSolrClientFactory()
+    {
+        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClientFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $clientFactoryStub->method('create')
+            ->willReturn($this->clientMock);
+
+        return $clientFactoryStub;
     }
 }
