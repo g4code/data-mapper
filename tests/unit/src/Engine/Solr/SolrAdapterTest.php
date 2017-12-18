@@ -43,6 +43,25 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->collectionNameMock = null;
     }
 
+    public function testInsertWithEmptyData()
+    {
+        $this->clientMock->expects($this->never())
+            ->method('update');
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Empty data for insert');
+        $this->expectExceptionCode(101);
+
+        $this->adapter->insert($this->collectionNameMock, $mappingMock);
+    }
+
     public function testSelect()
     {
         $data = ['documents' =>
