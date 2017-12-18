@@ -116,4 +116,32 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($rawData->count(), $select->count());
         $this->assertEquals($rawData->getAll(), $select->getAll());
     }
+
+    public function testUpdate()
+    {
+        $mappingMock = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
+            ->getMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setDocument')
+            ->with($this->equalTo(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']))
+            ->willReturnSelf();
+
+        $this->clientMock->expects($this->once())
+            ->method('update');
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
+    }
 }
