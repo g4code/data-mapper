@@ -119,8 +119,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        $mappingMock = $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)
-            ->getMock();
+        $mappingMock = $this->getMappingMock();
 
         $mappingMock
             ->expects($this->once())
@@ -143,5 +142,26 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('update');
 
         $this->adapter->update($this->collectionNameMock, $mappingMock);
+    }
+
+    public function testUpdateWithEmptyData()
+    {
+        $this->clientMock->expects($this->never())
+            ->method('update');
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException('\Exception', 'Empty data for update');
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
+    }
+
+    private function getMappingMock()
+    {
+        return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
     }
 }
