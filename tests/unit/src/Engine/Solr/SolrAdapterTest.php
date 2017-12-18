@@ -57,6 +57,11 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
+        $data = ['documents' =>
+                    ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
+                    ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
+                ];
+
         $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrSelectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,7 +79,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $selectionFactoryStub
             ->expects($this->once())
             ->method('limit')
-            ->willReturn('10');
+            ->willReturn('2');
 
         $selectionFactoryStub
             ->expects($this->once())
@@ -101,8 +106,14 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('select')
-            ->willReturn([]);
+            ->willReturn($data);
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->collectionNameMock, $selectionFactoryStub));
+        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
+
+        $rawData = new \G4\DataMapper\Common\RawData($data, 2);
+
+        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $select);
+        $this->assertEquals($rawData->count(), $select->count());
+        $this->assertEquals($rawData->getAll(), $select->getAll());
     }
 }
