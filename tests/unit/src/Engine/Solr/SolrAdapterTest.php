@@ -19,11 +19,11 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->clientMock = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrClient')
+        $this->clientMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrCollectionName')
+        $this->collectionNameMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrCollectionName::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,7 +45,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     private function getMockForSolrClientFactory()
     {
-        $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrClientFactory')
+        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -57,7 +57,12 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
-        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\Solr\SolrSelectionFactory')
+        $data = ['documents' =>
+                    ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
+                    ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
+                ];
+
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -74,7 +79,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $selectionFactoryStub
             ->expects($this->once())
             ->method('limit')
-            ->willReturn('10');
+            ->willReturn('2');
 
         $selectionFactoryStub
             ->expects($this->once())
@@ -101,8 +106,42 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('select')
-            ->willReturn([]);
+            ->willReturn($data);
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->collectionNameMock, $selectionFactoryStub));
+        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
+
+        $rawData = new \G4\DataMapper\Common\RawData($data, 2);
+
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $select);
+        $this->assertEquals($rawData->count(), $select->count());
+        $this->assertEquals($rawData->getAll(), $select->getAll());
+    }
+
+    public function testUpdate()
+    {
+        $mappingMock = $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)
+            ->getMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setDocument')
+            ->with($this->equalTo(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']))
+            ->willReturnSelf();
+
+        $this->clientMock->expects($this->once())
+            ->method('update');
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 }
