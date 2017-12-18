@@ -163,7 +163,10 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException('\Exception', 'Empty data for update');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Empty data for update');
+        $this->expectExceptionCode(101);
+
         $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 
