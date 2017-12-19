@@ -41,7 +41,7 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
         $symbol = $operator->getSymbol();
 
         if (!isset($this->map[$symbol])) {
-            throw new \Exception('Operator not im map', 101);
+            throw new \Exception('Operator not in map', 101);
         }
 
         return $this->map[$symbol];
