@@ -20,7 +20,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->clientMock = $this->getMockBuilder('\Zend_Db_Adapter_Mysqli')
+        $this->clientMock = $this->getMockBuilder(\Zend_Db_Adapter_Mysqli::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'insert',
@@ -36,7 +36,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->tableNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLTableName')
+        $this->tableNameMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLTableName::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,7 +79,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('delete');
 
-        $selectionFactoryMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory')
+        $selectionFactoryMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,7 +101,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->setExpectedException('\Exception', 'Empty data for insert');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Empty data for insert');
         $this->adapter->insert($this->tableNameMock, $mappingStub);
     }
 
@@ -116,9 +117,10 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $selectionFactoryStub = $this->getMock('G4\DataMapper\Common\SelectionFactoryInterface');
+        $selectionFactoryStub = $this->getMock(G4\DataMapper\Common\SelectionFactoryInterface::class);
 
-        $this->setExpectedException('\Exception', 'Empty data for update');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Empty data for update');
         $this->adapter->update($this->tableNameMock, $mappingStub, $selectionFactoryStub);
     }
 
@@ -169,7 +171,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsertBulkException()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Collection in insertBulk() must not be empty.');
 
@@ -206,7 +208,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testUpsertBulkException()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Collection in upsertBulk() must not be empty.');
 
@@ -224,7 +226,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
-        $zendDbSelectMock = $this->getMockBuilder('\Zend_Db_Select')
+        $zendDbSelectMock = $this->getMockBuilder(\Zend_Db_Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $zendDbSelectMock
@@ -261,11 +263,11 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('fetchOne')
             ->willReturn(1);
 
-        $selectionFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory')
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->select($this->tableNameMock, $selectionFactoryStub));
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $this->adapter->select($this->tableNameMock, $selectionFactoryStub));
     }
 
     public function testUpdate()
@@ -279,7 +281,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn(['id' => 1]);
 
-        $selectionFactoryMock = $this->getMockBuilder('G4\DataMapper\Common\SelectionFactoryInterface')
+        $selectionFactoryMock = $this->getMockBuilder(\G4\DataMapper\Common\SelectionFactoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectionFactoryMock
@@ -321,7 +323,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Empty data for upsert');
         $this->expectExceptionCode(101);
 
@@ -345,12 +347,12 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('fetchAll')
             ->willReturn([['data' => 1]]);
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $this->adapter->query('select * from table_name where 1'));
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $this->adapter->query('select * from table_name where 1'));
     }
 
     public function testQueryWithEmptyQuery()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Query cannot be empty');
 
@@ -359,7 +361,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testQueryWithUnknown()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Query does not match a known pattern (insert, delete, update, select)');
 
@@ -375,7 +377,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     private function getMockForMySQLClientFactory()
     {
-        $clientFactoryStub = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLClientFactory')
+        $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -387,7 +389,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     private function getMockForMappings()
     {
-        $mappingStub = $this->getMockBuilder('\G4\DataMapper\Common\MappingInterface')
+        $mappingStub = $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)
             ->getMock();
         return $mappingStub;
     }

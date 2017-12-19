@@ -23,14 +23,14 @@ class MySQLTableNameTest extends PHPUnit_Framework_TestCase
 
     public function testTableNameException()
     {
-        $this->expectException('\G4\DataMapper\Exception\TableNameException');
+        $this->expectException(\G4\DataMapper\Exception\TableNameException::class);
 
         new MySQLTableName(null);
 
-        $this->expectException('\G4\DataMapper\Exception\TableNameException');
+        $this->expectException(\G4\DataMapper\Exception\TableNameException::class);
         new MySQLTableName('');
 
-        $this->expectException('\G4\DataMapper\Exception\TableNameException');
+        $this->expectException(\G4\DataMapper\Exception\TableNameException::class);
         new MySQLTableName(123);
     }
 
