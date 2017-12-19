@@ -46,7 +46,7 @@ class SolrAdapter implements AdapterInterface
             }
         }
 
-        $this->client->setCollection($collectionName)->setDocument($data);
+        $this->client->setCollection($collectionName)->setDocument($data)->update();
     }
 
     /**
