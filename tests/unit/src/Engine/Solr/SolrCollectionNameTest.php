@@ -28,14 +28,14 @@ class SolrCollectionNameTest extends PHPUnit_Framework_TestCase
 
     public function testCollectionNameException()
     {
-        $this->expectException('\G4\DataMapper\Exception\CollectionNameException');
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
 
         new SolrCollectionName(null);
 
-        $this->expectException('\G4\DataMapper\Exception\CollectionNameException');
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
         new SolrCollectionName('');
 
-        $this->expectException('\G4\DataMapper\Exception\CollectionNameException');
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
         new SolrCollectionName(123);
     }
 

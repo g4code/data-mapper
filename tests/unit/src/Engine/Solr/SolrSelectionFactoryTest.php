@@ -13,7 +13,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identityMock = $this->getMockBuilder('\G4\DataMapper\Common\Identity')
+        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Common\Identity::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -133,7 +133,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     private function getMockForComparison($column, $value)
     {
-        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Comparison')
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
             ->disableOriginalConstructor()
             ->setMethods(['getComparison'])
             ->getMock();
@@ -148,7 +148,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     private function getMockForSort($column, $sortDirection)
     {
-        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Sort')
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Sort::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSort'])
             ->getMock();

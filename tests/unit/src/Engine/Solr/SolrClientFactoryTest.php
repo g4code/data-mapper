@@ -34,7 +34,7 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf('\G4\DataMapper\Engine\Solr\SolrClient', $this->clientFactory->create());
+        $this->assertInstanceOf(\G4\DataMapper\Engine\Solr\SolrClient::class, $this->clientFactory->create());
     }
 
     public function testParamsWithNoHost()

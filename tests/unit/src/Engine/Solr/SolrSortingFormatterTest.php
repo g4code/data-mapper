@@ -32,7 +32,9 @@ class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
 
     public function testOrderNotInMap()
     {
-        $this->setExpectedException('\Exception', 'Order is not in map');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Order is not in map');
+        
         $this->sortingFormatter->format('name', 'test');
     }
 }
