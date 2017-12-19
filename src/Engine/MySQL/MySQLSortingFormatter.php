@@ -25,7 +25,7 @@ class MySQLSortingFormatter implements SortingFormatterInterface
     private function sortMap($order)
     {
         if (!isset($this->map[$order])) {
-            throw new \Exception('Order not im map', 101);
+            throw new \Exception('Order not in map', 101);
         }
 
         return $this->map[$order];

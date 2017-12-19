@@ -38,7 +38,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf('Zend_Db_Adapter_Abstract', $this->clientFactory->create());
+        $this->assertInstanceOf(\Zend_Db_Adapter_Abstract::class, $this->clientFactory->create());
     }
 
     public function testParamsWithNoDbname()
@@ -59,7 +59,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     public function testParamsWithNullPassword()
     {
         $this->params['password'] = null;
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No password param');
         new MySQLClientFactory($this->params);
     }
@@ -68,7 +68,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->params['password'] = '';
         $clientFactory = new MySQLClientFactory($this->params);
-        $this->assertInstanceOf('Zend_Db_Adapter_Abstract', $clientFactory->create());
+        $this->assertInstanceOf(\Zend_Db_Adapter_Abstract::class, $clientFactory->create());
     }
 
     public function testParamsWithNoPort()
@@ -84,7 +84,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     private function paramsTest($key, $message)
     {
         unset($this->params[$key]);
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage($message);
         new MySQLClientFactory($this->params);
     }

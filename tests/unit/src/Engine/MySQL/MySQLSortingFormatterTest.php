@@ -30,7 +30,8 @@ class MySQLSortingFormatterTest extends PHPUnit_Framework_TestCase
 
     public function testOrderNotInMap()
     {
-        $this->setExpectedException('\Exception', 'Order not im map');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Order not in map');
         $this->sortingFormatter->format('name', 'test');
     }
 }

@@ -17,7 +17,7 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identityMock = $this->getMockBuilder('\G4\DataMapper\Common\Identity')
+        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Common\Identity::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -136,13 +136,13 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testMakeFactoryMethods()
     {
-        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter', $this->selectionFactory->makeComparisonFormatter());
-        $this->assertInstanceOf('\G4\DataMapper\Engine\MySQL\MySQLSortingFormatter', $this->selectionFactory->makeSortingFormatter());
+        $this->assertInstanceOf(\G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter::class, $this->selectionFactory->makeComparisonFormatter());
+        $this->assertInstanceOf(\G4\DataMapper\Engine\MySQL\MySQLSortingFormatter::class, $this->selectionFactory->makeSortingFormatter());
     }
 
     private function getMockForComparison()
     {
-        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Comparison')
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
             ->disableOriginalConstructor()
             ->setMethods(['getComparison'])
             ->getMock();
@@ -157,7 +157,7 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     private function getMockForSort()
     {
-        $mock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Sort')
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Sort::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSort'])
             ->getMock();

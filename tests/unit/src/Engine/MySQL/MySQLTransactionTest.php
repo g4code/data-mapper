@@ -17,7 +17,7 @@ class MySQLTransactionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapterMock = $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLAdapter')
+        $this->adapterMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,7 +48,7 @@ class MySQLTransactionTest extends PHPUnit_Framework_TestCase
 
         $this->transaction->begin();
 
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionCode(101);
         $this->expectExceptionMessage('Database transaction is already started');
 

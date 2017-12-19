@@ -15,7 +15,7 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
     {
         $this->comparisonFormatter = new MySQLComparisonFormatter();
 
-        $this->operatorMock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Operator')
+        $this->operatorMock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Operator::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -42,7 +42,8 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn('not_in_map');
 
-        $this->setExpectedException('\Exception', 'Operator not im map');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Operator not in map');
         $this->comparisonFormatter->format('name', $this->operatorMock, 'test');
     }
 }
