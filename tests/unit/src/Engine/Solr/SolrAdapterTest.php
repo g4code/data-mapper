@@ -43,6 +43,32 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->collectionNameMock = null;
     }
 
+    public function testDelete()
+    {
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn('id:15500');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setDocument')
+            ->with($this->equalTo(['delete' => ['query' => 'id:15500']]))
+            ->willReturnSelf();
+
+        $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
+    }
+
     public function insert()
     {
         $mappingMock = $this->getMappingMock();
