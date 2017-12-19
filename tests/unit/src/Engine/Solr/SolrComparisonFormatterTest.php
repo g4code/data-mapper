@@ -14,7 +14,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
     {
         $this->comparisonFormatter = new SolrComparisonFormatter();
 
-        $this->operatorMock = $this->getMockBuilder('\G4\DataMapper\Common\Selection\Operator')
+        $this->operatorMock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Operator::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
