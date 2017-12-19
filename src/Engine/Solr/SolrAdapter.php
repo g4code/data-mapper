@@ -10,6 +10,8 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 
 class SolrAdapter implements AdapterInterface
 {
+    const METHOD_ADD     = 'add';
+    const IDENTIFIER_KEY = 'id';
 
     private $client;
 
@@ -37,6 +39,8 @@ class SolrAdapter implements AdapterInterface
         if (empty($data)) {
             throw new \Exception('Empty data for insert', 101);
         }
+
+        $this->client->setCollection($collectionName)->setDocument($this->formatData($data))->update();
     }
 
     /**
@@ -107,5 +111,20 @@ class SolrAdapter implements AdapterInterface
      */
     public function query($query)
     {
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    private function formatData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if ($key != self::IDENTIFIER_KEY) {
+                $data[$key] = [self::METHOD_ADD => $value];
+            }
+        }
+
+        return $data;
     }
 }

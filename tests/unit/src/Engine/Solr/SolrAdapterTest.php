@@ -43,6 +43,40 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->collectionNameMock = null;
     }
 
+    public function insert()
+    {
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn(['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm']);
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('setDocument')
+            ->with($this->equalTo(
+                [
+                    ['first_name' => ['add' => 'Uncle']],
+                    ['last_name'  => ['add' => 'Bob']],
+                    ['gender'     => ['add' => 'm']]
+                ])
+            )
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('update');
+
+        $this->adapter->insert($this->collectionNameMock, $mappingMock);
+    }
+
     public function testInsertWithEmptyData()
     {
         $this->clientMock->expects($this->never())
