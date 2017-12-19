@@ -10,6 +10,8 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 
 class SolrAdapter implements AdapterInterface
 {
+    const METHOD_ADD     = 'add';
+    const IDENTIFIER_KEY = 'id';
 
     private $client;
 
