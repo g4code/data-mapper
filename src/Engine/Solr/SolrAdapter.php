@@ -11,6 +11,7 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 class SolrAdapter implements AdapterInterface
 {
     const METHOD_ADD     = 'add';
+    const METHOD_DELETE  = 'delete';
     const IDENTIFIER_KEY = 'id';
 
     private $client;
@@ -26,6 +27,9 @@ class SolrAdapter implements AdapterInterface
      */
     public function delete(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $this->client->setCollection($collectionName)->setDocument([
+            self::METHOD_DELETE => ['query' => $selectionFactory->where()],
+        ])->update();
     }
 
     /**
