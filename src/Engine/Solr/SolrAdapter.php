@@ -39,6 +39,14 @@ class SolrAdapter implements AdapterInterface
         if (empty($data)) {
             throw new \Exception('Empty data for insert', 101);
         }
+
+        foreach ($data as $key => $value) {
+            if ($key != self::IDENTIFIER_KEY) {
+                $data[$key] = [self::METHOD_ADD => $value];
+            }
+        }
+
+        $this->client->setCollection($collectionName)->setDocument($data);
     }
 
     /**
