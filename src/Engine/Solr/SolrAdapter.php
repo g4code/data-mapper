@@ -7,6 +7,7 @@ use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
+use G4\DataMapper\Exception\EmptyDataException;
 
 class SolrAdapter implements AdapterInterface
 {
@@ -41,7 +42,7 @@ class SolrAdapter implements AdapterInterface
         $data = $mapping->map();
 
         if (empty($data)) {
-            throw new \Exception('Empty data for insert', 101);
+            throw new EmptyDataException('Empty data for insert.');
         }
 
         $this->client->setCollection($collectionName)->setDocument($this->formatData($data))->update();
@@ -95,7 +96,7 @@ class SolrAdapter implements AdapterInterface
         $data = $mapping->map();
 
         if (empty($data)) {
-            throw new \Exception('Empty data for update', 101);
+            throw new EmptyDataException('Empty data for update.');
         }
 
         $this->client->setCollection($collectionName)->setDocument($data)->update();
