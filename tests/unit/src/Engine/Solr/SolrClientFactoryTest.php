@@ -4,6 +4,7 @@ use G4\DataMapper\Engine\Solr\SolrClientFactory;
 use G4\DataMapper\Exception\NoHostParameterException;
 use G4\DataMapper\Exception\NoPortParameterException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
+use G4\DataMapper\ErrorMessages as ErrorMessage;
 
 class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -44,7 +45,7 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
     {
         unset($this->params['host']);
         $this->expectException(NoHostParameterException::class);
-        $this->expectExceptionMessage('No host parameter.');
+        $this->expectExceptionMessage(ErrorMessage::NO_HOST_PARAMETER);
         $this->expectExceptionCode(ErrorCode::NO_HOST_PARAMETER);
         new SolrClientFactory($this->params);
     }
@@ -53,7 +54,7 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
     {
         unset($this->params['port']);
         $this->expectException(NoPortParameterException::class);
-        $this->expectExceptionMessage('No port parameter');
+        $this->expectExceptionMessage(ErrorMessage::NO_PORT_PARAMETER);
         $this->expectExceptionCode(ErrorCode::NO_PORT_PARAMETER);
         new SolrClientFactory($this->params);
     }
