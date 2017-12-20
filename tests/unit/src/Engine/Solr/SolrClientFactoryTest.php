@@ -1,6 +1,7 @@
 <?php
 
 use G4\DataMapper\Engine\Solr\SolrClientFactory;
+use G4\DataMapper\Exception\NoHostParameterException;
 
 class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -40,8 +41,9 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
     public function testParamsWithNoHost()
     {
         unset($this->params['host']);
-        $this->expectException('\Exception');
-        $this->expectExceptionMessage('No host param');
+        $this->expectException(NoHostParameterException::class);
+        $this->expectExceptionMessage('No host parameter.');
+        $this->expectExceptionCode(103);
         new SolrClientFactory($this->params);
     }
 
