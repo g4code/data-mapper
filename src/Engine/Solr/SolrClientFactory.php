@@ -6,6 +6,7 @@ use G4\ValueObject\Url;
 use G4\ValueObject\PortNumber;
 use G4\Factory\CreateInterface;
 use G4\DataMapper\Exception\NoHostParameterException;
+use G4\DataMapper\Exception\NoPortParameterException;
 
 class SolrClientFactory implements CreateInterface
 {
@@ -39,7 +40,7 @@ class SolrClientFactory implements CreateInterface
         }
 
         if (empty($params['port'])) {
-            throw new \Exception('No port param', 101);
+            throw new NoPortParameterException();
         }
 
         $this->params = [
