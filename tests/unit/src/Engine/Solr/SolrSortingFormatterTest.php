@@ -4,6 +4,7 @@ use G4\DataMapper\Engine\Solr\SolrSortingFormatter;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Exception\OrderNotInMapException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
+use G4\DataMapper\ErrorMessages as ErrorMessage;
 
 class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -35,7 +36,7 @@ class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
     public function testOrderNotInMap()
     {
         $this->expectException(OrderNotInMapException::class);
-        $this->expectExceptionMessage('Order is not in map.');
+        $this->expectExceptionMessage(ErrorMessage::ORDER_NOT_IN_MAP);
         $this->expectExceptionCode(ErrorCode::ORDER_NOT_IN_MAP);
         
         $this->sortingFormatter->format('name', 'test');
