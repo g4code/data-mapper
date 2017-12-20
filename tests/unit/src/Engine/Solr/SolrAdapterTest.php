@@ -1,6 +1,8 @@
 <?php
 
 use G4\DataMapper\Engine\Solr\SolrAdapter;
+use G4\DataMapper\Exception\EmptyDataException;
+use G4\DataMapper\ErrorCodes as ErrorCode;
 
 class SolrAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -115,9 +117,9 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException('\Exception');
-        $this->expectExceptionMessage('Empty data for insert');
-        $this->expectExceptionCode(101);
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for insert.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $this->adapter->insert($this->collectionNameMock, $mappingMock);
     }
@@ -223,9 +225,9 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException('\Exception');
+        $this->expectException(EmptyDataException::class);
         $this->expectExceptionMessage('Empty data for update');
-        $this->expectExceptionCode(101);
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
