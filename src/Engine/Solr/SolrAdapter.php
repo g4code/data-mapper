@@ -15,6 +15,13 @@ class SolrAdapter implements AdapterInterface
     const METHOD_DELETE  = 'delete';
     const IDENTIFIER_KEY = 'id';
 
+    const FIELDS        = 'fields';
+    const QUERY         = 'q';
+    const LIMIT         = 'rows';
+    const SORT          = 'sort';
+    const OFFSET        = 'start';
+    const RESPONSE_TYPE = 'wt';
+
     private $client;
 
     public function __construct(SolrClientFactory $clientFactory)
