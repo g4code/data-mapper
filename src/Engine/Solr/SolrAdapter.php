@@ -15,6 +15,15 @@ class SolrAdapter implements AdapterInterface
     const METHOD_DELETE  = 'delete';
     const IDENTIFIER_KEY = 'id';
 
+    const FIELDS        = 'fields';
+    const QUERY         = 'q';
+    const LIMIT         = 'rows';
+    const SORT          = 'sort';
+    const OFFSET        = 'start';
+    const RESPONSE_TYPE = 'wt';
+
+    const JSON_RESPONSE_TYPE = 'json';
+
     private $client;
 
     public function __construct(SolrClientFactory $clientFactory)
@@ -74,12 +83,12 @@ class SolrAdapter implements AdapterInterface
         $data = $this->client
             ->setCollection($collectionName)
             ->setQuery([
-                'q'     => $selectionFactory->where(),
-                'fl'    => $selectionFactory->fieldNames(),
-                'rows'  => $selectionFactory->limit(),
-                'sort'  => $selectionFactory->sort(),
-                'start' => $selectionFactory->offset(),
-                'wt'    => 'json',
+                self::QUERY         => $selectionFactory->where(),
+                self::FIELDS        => $selectionFactory->fieldNames(),
+                self::LIMIT         => $selectionFactory->limit(),
+                self::SORT          => $selectionFactory->sort(),
+                self::OFFSET        => $selectionFactory->offset(),
+                self::RESPONSE_TYPE => self::JSON_RESPONSE_TYPE
             ])
             ->select();
 
