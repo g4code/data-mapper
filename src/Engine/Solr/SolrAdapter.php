@@ -54,7 +54,7 @@ class SolrAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for insert.');
         }
 
-        $this->client->setCollection($collectionName)->setDocument($this->formatData($data))->update();
+        $this->client->setCollection($collectionName)->setDocument([$data])->update();
     }
 
     /**
@@ -92,7 +92,7 @@ class SolrAdapter implements AdapterInterface
             ])
             ->select();
 
-        return new RawData($data, $this->client->getTotalItemsCount());
+        return new RawData($data['response']['docs'], $this->client->getTotalItemsCount());
     }
 
     /**
@@ -125,20 +125,5 @@ class SolrAdapter implements AdapterInterface
      */
     public function query($query)
     {
-    }
-
-    /**
-     * @param $data
-     * @return array
-     */
-    private function formatData(array $data)
-    {
-        foreach ($data as $key => $value) {
-            if ($key != self::IDENTIFIER_KEY) {
-                $data[$key] = [self::METHOD_ADD => $value];
-            }
-        }
-
-        return $data;
     }
 }
