@@ -9,7 +9,7 @@ class EmptyDataException extends \Exception
 {
     public function __construct($message = '')
     {
-        if(!$message) {
+        if (!$message) {
             $message = ErrorMessage::EMPTY_DATA;
         }
 

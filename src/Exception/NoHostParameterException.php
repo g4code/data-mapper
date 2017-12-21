@@ -9,7 +9,7 @@ class NoHostParameterException extends \Exception
 {
     public function __construct($message = '')
     {
-        if(!$message) {
+        if (!$message) {
             $message = ErrorMessage::NO_HOST_PARAMETER;
         }
 

@@ -9,7 +9,7 @@ class OrderNotInMapException extends \Exception
 {
     public function __construct($message = '')
     {
-        if(!$message) {
+        if (!$message) {
             $message = ErrorMessage::ORDER_NOT_IN_MAP;
         }
 

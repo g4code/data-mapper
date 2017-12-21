@@ -20,7 +20,7 @@ class SolrSortingFormatter implements SortingFormatterInterface
 
     private function sortMap($order)
     {
-        if(!isset($this->map[$order])) {
+        if (!isset($this->map[$order])) {
             throw new OrderNotInMapException();
         }
 

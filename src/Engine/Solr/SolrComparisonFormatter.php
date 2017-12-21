@@ -29,7 +29,7 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
     public function format($name, Operator $operator, $value)
     {
 
-        switch($operator->getSymbol()) {
+        switch ($operator->getSymbol()) {
             case Operator::EQUAL:
                 $query = $this->formatEqualQuery($name, $value);
                 break;

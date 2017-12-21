@@ -9,7 +9,7 @@ class NoPortParameterException extends \Exception
 {
     public function __construct($message = '')
     {
-        if(!$message) {
+        if (!$message) {
             $message = ErrorMessage::NO_PORT_PARAMETER;
         }
 
