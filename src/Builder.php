@@ -11,6 +11,9 @@ use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Engine\MySQL\MySQLMapper;
 use G4\DataMapper\Engine\MySQL\MySQLTableName;
 use G4\DataMapper\Engine\MySQL\MySQLTransaction;
+use G4\DataMapper\Engine\Solr\SolrAdapter;
+use G4\DataMapper\Engine\Solr\SolrClientFactory;
+use G4\DataMapper\Engine\Solr\SolrMapper;
 
 class Builder
 {
@@ -50,6 +53,16 @@ class Builder
     public function engineMySQL(array $params)
     {
         $this->adapter = new MySQLAdapter(new MySQLClientFactory($params));
+        return $this;
+    }
+
+    /**
+     * @param array $params
+     * @return Builder
+     */
+    public function engineSolr(array $params)
+    {
+        $this->adapter = new SolrAdapter(new SolrClientFactory($params));
         return $this;
     }
 
@@ -99,6 +112,9 @@ class Builder
         switch (true) {
             case $this->adapter instanceof MySQLAdapter:
                 $mapper = new MySQLMapper($this->adapter, $this->collectionName);
+                break;
+            case $this->adapter instanceof SolrAdapter:
+                $mapper = new SolrMapper($this->collectionName, $this->adapter);
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);

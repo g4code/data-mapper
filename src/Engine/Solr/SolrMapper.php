@@ -28,11 +28,10 @@ class SolrMapper implements MapperInterface
     public function delete(IdentityInterface $identity)
     {
         try {
-            $rawData = $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
+            $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
-        return $rawData;
     }
 
     /**
@@ -54,11 +53,10 @@ class SolrMapper implements MapperInterface
     public function insert(MappingInterface $mapping)
     {
         try {
-            $rawData = $this->adapter->insert($this->collectionName, $mapping);
+            $this->adapter->insert($this->collectionName, $mapping);
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
-        return $rawData;
     }
 
     /**

@@ -60,7 +60,6 @@ class SolrSelectionFactory implements SelectionFactoryInterface
             }
         }
         return $sorting;
-
     }
 
     public function where()
@@ -88,6 +87,4 @@ class SolrSelectionFactory implements SelectionFactoryInterface
     {
         return new SolrSortingFormatter();
     }
-
-
 }
