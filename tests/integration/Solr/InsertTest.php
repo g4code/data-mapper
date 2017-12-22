@@ -14,6 +14,8 @@ class InsertTest extends TestCase
 
         $this->assertEquals(1, $rawData->count());
         $this->assertArraySubset($this->getData(), $rawData->getOne());
+
+        $this->makeMapper()->delete($this->makeIdentityById());
     }
 
     public function getCollectionName()
