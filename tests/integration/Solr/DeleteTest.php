@@ -6,8 +6,7 @@ class DeleteTest extends TestCase
 {
     public function testDelete()
     {
-        $rawData = $this->makeMapper()->find($this->makeIdentityById());
-        $this->assertEquals(1, $rawData->count());
+        $this->makeMapper()->insert($this->makeMapping());
 
         $this->makeMapper()->delete($this->makeIdentityById());
 

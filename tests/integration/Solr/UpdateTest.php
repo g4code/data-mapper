@@ -2,11 +2,13 @@
 
 namespace G4\DataMapper\Test\Integration\Solr;
 
-class InsertTest extends TestCase
+class UpdateTest extends TestCase
 {
-    public function testInsert()
+    public function testUpdate()
     {
         $this->makeMapper()->insert($this->makeMapping());
+
+        $this->makeMapper()->update($this->makeMapping(), $this->makeIdentityById());
 
         sleep(2);
 
@@ -21,5 +23,14 @@ class InsertTest extends TestCase
     public function getCollectionName()
     {
         return 'nd_api_messages';
+    }
+
+    public function getData()
+    {
+        $data = parent::getData();
+        $data['message'] = 'This is updated message';
+        $data['type']    = 5;
+
+        return $data;
     }
 }

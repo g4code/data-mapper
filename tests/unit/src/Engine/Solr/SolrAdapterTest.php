@@ -126,7 +126,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
-        $data = ['documents' =>
+        $data = [
                     ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
                     ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
                 ];
@@ -175,7 +175,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('select')
-            ->willReturn($data);
+            ->willReturn(['response' => [ 'docs' => $data ]]);
 
         $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
 
