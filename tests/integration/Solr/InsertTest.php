@@ -8,6 +8,8 @@ class InsertTest extends TestCase
     {
         $this->makeMapper()->insert($this->makeMapping());
 
+        sleep(2);
+
         $rawData = $this->makeMapper()->find($this->makeIdentityById());
 
         $this->assertEquals(1, $rawData->count());
