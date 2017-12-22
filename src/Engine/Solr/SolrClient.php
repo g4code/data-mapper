@@ -14,7 +14,7 @@ class SolrClient
 
     private $url;
 
-    private $method = self::METHOD_SELECT;
+    private $method;
 
     private $collection = '';
 
@@ -31,6 +31,8 @@ class SolrClient
 
     public function select()
     {
+        $this->method = self::METHOD_SELECT;
+
         $this->url = $this->url->path(self::SERVICE_NAME, $this->collection, $this->method)->query(new Dictionary($this->query));
 
         $this->execute();
