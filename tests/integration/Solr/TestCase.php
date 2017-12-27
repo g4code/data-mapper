@@ -27,37 +27,19 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->id = 5555;
+        $this->id = 1;
 
         $this->data = [
-            'id'=> '5555',
-            'message_id'=>22,
-            'type'=>1,
-            'message'=>'Lorem Ipsum Dolor Amet Sit 333',
-            'media_uuid'=>'',
-            'direction'=>2,
-            'read'=>0,
-            'deleted'=>0,
-            'ts_created'=>1507712599,
-            'user_id'=>16454,
-            'user_status'=>1,
-            'user_level'=>1,
-            'user_type'=>2,
-            'user_country_id'=>228,
-            'user_site_id'=>1,
-            'related_user_id'=>15506,
-            'related_user_status'=>1,
-            'related_user_level'=>0,
-            'related_user_type'=>2,
-            'related_user_country_id'=>228,
-            'related_user_site_id'=>1,
-            'group_user_and_related'=>'16454|15506'
+            'id'         => $this->id,
+            'first_name' => 'Test',
+            'last_name'  => 'User',
+            'status'     => 5,
         ];
 
 
         $params = [
-            'host'     => '192.168.99.99',
-            'port'     => '8983',
+            'host' => '192.168.32.11',
+            'port' => '8983',
         ];
 
         $clientFactory = new SolrClientFactory($params);
