@@ -22,14 +22,15 @@ class UpdateTest extends TestCase
 
     public function getCollectionName()
     {
-        return 'nd_api_messages';
+        return 'integration_test';
     }
 
     public function getData()
     {
         $data = parent::getData();
-        $data['message'] = 'This is updated message';
-        $data['type']    = 5;
+        $data['first_name'] = 'Test Updated';
+        $data['last_name']  = 'User Updated';
+        $data['status']    = 2;
 
         return $data;
     }

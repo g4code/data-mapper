@@ -1,0 +1,72 @@
+---
+- name: add repo for java 8
+  apt_repository: repo='ppa:webupd8team/java' state=present
+
+- name: set licence selected
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
+- name: set licence seen
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+
+- name: install java 8
+  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+
+- name: Download Solr
+  become: yes
+  get_url:
+    url: "{{ solr.url }}"
+    dest: "{{ solr.tmp_path }}"
+    force: no
+
+- name: Create Solr destination folder
+  file: dest={{ solr.path }} state=directory mode=755 owner=ubuntu group=ubuntu
+
+- name: Unarchive Solr to guest machine
+  unarchive: src={{ solr.tmp_path }} dest={{ solr.path }} copy=no owner=ubuntu group=ubuntu
+
+- name: Fix file permissions for Solr
+  file: >
+    path={{ solr.path }}
+    owner=ubuntu group=ubuntu
+    recurse=yes
+
+- name: Copy Solr service configuration file
+  template: src=solr.service.j2 dest=/etc/systemd/system/solr.service owner=root group=root mode="u+rwx,g+rwx,o+rwx"
+
+- name: Create Solr new collection
+  shell: cp -R {{ solr.path }}/solr-{{ solr.version }}/example/solr/collection1 {{ solr.path }}/solr-{{ solr.version }}/example/solr/integration_test
+
+- name: Fix file permissions for new collection
+  file: >
+    path={{ solr.path }}/solr-{{ solr.version }}/example/solr/integration_test
+    owner=ubuntu group=ubuntu
+    recurse=yes
+
+- name: Copy schema for collection to proper paths
+  copy: >
+    src=schema.integration_test.xml
+    dest={{ solr.path }}/solr-{{ solr.version }}/example/solr/integration_test/conf/schema.xml
+    owner=ubuntu group=ubuntu
+
+- name: Copy solrconfig.xml with updated values for collections to proper path
+  copy: >
+    src=solrconfig.xml
+    dest={{ solr.path }}/solr-{{ solr.version }}/example/solr/integration_test/conf/solrconfig.xml
+    owner=ubuntu group=ubuntu
+
+- name: Update collections path
+  template: src=solr.xml.j2 dest={{ solr.path }}/solr-{{ solr.version }}/example/solr/solr.xml owner=ubuntu group=ubuntu
+
+- name: Enable solr service
+  systemd:
+    name: solr
+    enabled: yes
+    masked: no
+
+- name: Reload systemd
+  systemd: daemon_reload=yes
+
+- name: Start solr service
+  systemd:
+    name: solr
+    state: started
