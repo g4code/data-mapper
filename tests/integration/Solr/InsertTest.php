@@ -20,6 +20,6 @@ class InsertTest extends TestCase
 
     public function getCollectionName()
     {
-        return 'nd_api_messages';
+        return 'integration_test';
     }
 }
