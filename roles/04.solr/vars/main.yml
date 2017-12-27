@@ -1,0 +1,7 @@
+solr:
+  path: /opt/solr
+  tmp_path: /tmp/solr.tgz
+  version: 4.2.1
+  service_name: solrd
+  url: "https://codeplicity.com/assets/solr-4.2.1.tgz"
+  filename: "solr-4.2.1.tgz"
