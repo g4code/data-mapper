@@ -4,49 +4,37 @@ use G4\DataMapper\Engine\Elasticsearch\ElasticsearchCollectionName;
 
 class ElasticsearchCollectionNameTest extends \PHPUnit_Framework_TestCase
 {
+    private $elasticsearchCollectionName;
 
-    /**
-     * @var ElasticsearchCollectionName
-     */
     private $collectionName;
-
-    private $indexNameMock;
-
-    private $typeNameMock;
-
 
     protected function setUp()
     {
-        $this->indexNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIndexName')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->typeNameMock = $this->getMockBuilder('\G4\DataMapper\Engine\Elasticsearch\ElasticsearchTypeName')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->collectionName = new ElasticsearchCollectionName($this->indexNameMock, $this->typeNameMock);
+        $this->collectionName     = 'profiles';
+        $this->elasticsearchCollectionName = new ElasticsearchCollectionName($this->collectionName);
     }
 
     protected function tearDown()
     {
-        $this->indexNameMock    = null;
-        $this->typeNameMock     = null;
-        $this->collectionName   = null;
+        $this->elasticsearchCollectionName = null;
+        $this->collectionName     = null;
     }
 
     public function testToString()
     {
-        $this->assertEquals('', (string) $this->collectionName);
+        $this->assertEquals($this->collectionName, (string) $this->elasticsearchCollectionName);
     }
 
-    public function testGetIndexName()
+    public function testCollectionNameException()
     {
-        $this->assertEquals($this->indexNameMock, $this->collectionName->getIndexName());
-    }
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
 
-    public function testGetTypeName()
-    {
-        $this->assertEquals($this->typeNameMock, $this->collectionName->getTypeName());
+        new ElasticsearchCollectionName(null);
+
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
+        new ElasticsearchCollectionName('');
+
+        $this->expectException(\G4\DataMapper\Exception\CollectionNameException::class);
+        new ElasticsearchCollectionName(123);
     }
 }

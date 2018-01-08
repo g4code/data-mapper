@@ -13,13 +13,19 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
     private $adapterMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionNameMock;
+
+    /**
      * @var SolrMapper
      */
     private $mapper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $mappingMock;
-
-    private $collectionNameMock;
 
     protected function setUp()
     {
@@ -92,7 +98,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->throwException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException(\G4\DataMapper\Exception\SolrMapperException::class);
+        $this->expectException(SolrMapperException::class);
 
         $this->mapper->find($this->getMock(\G4\DataMapper\Common\Identity::class));
     }
@@ -115,7 +121,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock))
             ->will($this->throwException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException(\G4\DataMapper\Exception\SolrMapperException::class);
+        $this->expectException(SolrMapperException::class);
 
         $this->mapper->insert($this->mappingMock);
     }
@@ -138,7 +144,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock))
             ->will($this->throwException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException(\G4\DataMapper\Exception\SolrMapperException::class);
+        $this->expectException(SolrMapperException::class);
 
         $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Common\Identity::class));
     }
@@ -160,7 +166,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('upsert')
             ->will($this->throwException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE)));
 
-        $this->expectException(\G4\DataMapper\Exception\SolrMapperException::class);
+        $this->expectException(SolrMapperException::class);
 
         $this->mapper->upsert($this->mappingMock);
     }
@@ -182,7 +188,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('query')
             ->willThrowException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE));
 
-        $this->expectException(\G4\DataMapper\Exception\SolrMapperException::class);
+        $this->expectException(SolrMapperException::class);
 
         $this->mapper->query('solr');
     }
