@@ -12,6 +12,9 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
      */
     private $adapterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $collectionNameMock;
 
     /**
@@ -19,6 +22,9 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
      */
     private $mapper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $mappingMock;
 
     protected function setUp()
