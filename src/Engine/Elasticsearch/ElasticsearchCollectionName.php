@@ -3,40 +3,34 @@
 namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\CollectionNameInterface;
-use G4\DataMapper\Exception\NotImplementedException;
+use G4\DataMapper\Exception\CollectionNameException;
 
 class ElasticsearchCollectionName implements CollectionNameInterface
 {
 
     /**
-     * @var ElasticsearchIndexName
+     * @var string
      */
-    private $indexName;
+    private $collectionName;
 
     /**
-     * @var ElasticsearchTypeName
+     * SolrCollectionName constructor.
+     * @param $collectionName
+     * @throws CollectionNameException
      */
-    private $typeName;
-
-
-    public function __construct(ElasticsearchIndexName $indexName, ElasticsearchTypeName $typeName)
+    public function __construct($collectionName)
     {
-        $this->indexName = $indexName;
-        $this->typeName  = $typeName;
+        if (!is_string($collectionName) || strlen($collectionName) === 0) {
+            throw new CollectionNameException();
+        }
+        $this->collectionName = $collectionName;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return '';
-    }
-
-    public function getIndexName()
-    {
-        return $this->indexName;
-    }
-
-    public function getTypeName()
-    {
-        return $this->typeName;
+        return $this->collectionName;
     }
 }
