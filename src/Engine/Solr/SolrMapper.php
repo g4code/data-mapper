@@ -11,8 +11,14 @@ use G4\DataMapper\Exception\SolrMapperException;
 
 class SolrMapper implements MapperInterface
 {
+    /**
+     * @var AdapterInterface
+     */
     private $adapter;
 
+    /**
+     * @var SolrCollectionName
+     */
     private $collectionName;
 
     public function __construct(SolrCollectionName $collectionName, AdapterInterface $adapter)
@@ -23,7 +29,6 @@ class SolrMapper implements MapperInterface
 
     /**
      * @param IdentityInterface $identity
-     * @return RawData
      */
     public function delete(IdentityInterface $identity)
     {
@@ -36,6 +41,7 @@ class SolrMapper implements MapperInterface
 
     /**
      * @param IdentityInterface $identity
+     * @return RawData
      */
     public function find(IdentityInterface $identity)
     {
