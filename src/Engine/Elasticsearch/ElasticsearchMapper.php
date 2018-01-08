@@ -6,6 +6,7 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Exception\ElasticSearchMapperException;
 
 class ElasticsearchMapper implements MapperInterface
 {
@@ -16,27 +17,20 @@ class ElasticsearchMapper implements MapperInterface
     private $adapter;
 
     /**
-     * @var ElasticsearchIndexName
+     * @var ElasticsearchCollectionName
      */
-    private $index;
-
-    /**
-     * @var ElasticsearchTypeName
-     */
-    private $type;
+    private $collectionName;
 
 
     /**
      * ElasticsearchMapper constructor.
+     * @param ElasticsearchCollectionName $collectionName
      * @param AdapterInterface $adapter
-     * @param ElasticsearchIndexName $index
-     * @param ElasticsearchTypeName $type
      */
-    public function __construct(AdapterInterface $adapter, ElasticsearchIndexName $index, ElasticsearchTypeName $type)
+    public function __construct(ElasticsearchCollectionName $collectionName, AdapterInterface $adapter)
     {
-        $this->adapter  = $adapter;
-        $this->index    = $index;
-        $this->type     = $type;
+        $this->collectionName = $collectionName;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -45,47 +39,80 @@ class ElasticsearchMapper implements MapperInterface
     public function delete(IdentityInterface $identity)
     {
         try {
-            $this->adapter->delete($this->makeCollectionName(), $this->makeSelectionFactory($identity));
+            $this->adapter->delete($this->collectionName, $this->makeSelectionFactory($identity));
         } catch (\Exception $exception) {
+            $this->handleException($exception);
         }
     }
 
 
+    /**
+     * @param IdentityInterface $identity
+     */
     public function find(IdentityInterface $identity)
     {
-        // TODO: Implement find() method.
-    }
-
-
-    public function insert(MappingInterface $mapping)
-    {
-        // TODO: Implement insert() method.
-    }
-
-
-    public function query($query)
-    {
-        // TODO: Implement query() method.
-    }
-
-
-    public function update(MappingInterface $mapping, IdentityInterface $identity)
-    {
-        // TODO: Implement update() method.
-    }
-
-
-    public function upsert(MappingInterface $mapping)
-    {
-        // TODO: Implement upsert() method.
+        try {
+            $rawData = $this->adapter->select($this->collectionName, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $rawData;
     }
 
     /**
-     * @return ElasticsearchCollectionName
+     * @param MappingInterface $mapping
      */
-    private function makeCollectionName()
+    public function insert(MappingInterface $mapping)
     {
-        return new ElasticsearchCollectionName($this->index, $this->type);
+        try {
+            $this->adapter->insert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * @param MappingInterface $mapping
+     */
+    public function upsert(MappingInterface $mapping)
+    {
+        try {
+            $this->adapter->upsert($this->collectionName, $mapping);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * @param MappingInterface $mapping
+     * @param IdentityInterface $identity
+     */
+    public function update(MappingInterface $mapping, IdentityInterface $identity)
+    {
+        try {
+            $this->adapter->update($this->collectionName, $mapping, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * @param mixed $query
+     * @return mixed
+     */
+    public function query($query)
+    {
+        try {
+            $queryResult = $this->adapter->query($query);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $queryResult;
+    }
+
+    private function handleException(\Exception $exception)
+    {
+        throw new ElasticSearchMapperException($exception->getCode() . ': ' . $exception->getMessage());
     }
 
     /**
