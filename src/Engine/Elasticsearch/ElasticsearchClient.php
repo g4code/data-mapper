@@ -16,9 +16,11 @@ class ElasticsearchClient
      */
     private $url;
 
-    private $query;
+    private $body;
 
     private $method;
+
+    private $id;
 
     public function __construct(Url $url)
     {
@@ -27,7 +29,7 @@ class ElasticsearchClient
 
     public function execute()
     {
-        $this->url = $this->url->path($this->index, self::DOCUMENT);
+        $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id);
 
         $this->executeCurlRequest();
     }
@@ -44,9 +46,15 @@ class ElasticsearchClient
         return $this;
     }
 
-    public function setQuery($value)
+    public function setBody($value)
     {
-        $this->query = $value;
+        $this->body = $value;
+        return $this;
+    }
+
+    public function setId($value)
+    {
+        $this->id = $value;
         return $this;
     }
 
@@ -55,7 +63,7 @@ class ElasticsearchClient
         $handle = curl_init((string) $this->url);
 
         curl_setopt_array($handle, [
-            CURLOPT_POSTFIELDS     => json_encode($this->query),
+            CURLOPT_POSTFIELDS     => json_encode($this->body),
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
             CURLOPT_URL            => (string) $this->url,
