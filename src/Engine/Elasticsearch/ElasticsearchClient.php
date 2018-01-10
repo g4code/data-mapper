@@ -19,17 +19,17 @@ class ElasticsearchClient
     private $query;
 
     private $method;
-
-
+    
     public function __construct(Url $url)
     {
         $this->url = $url;
     }
 
-    public function setQuery($value)
+    public function execute()
     {
-        $this->query = $value;
-        return $this;
+        $this->url = $this->url->path($this->index, self::DOCUMENT);
+
+        $this->executeCurlRequest();
     }
 
     public function setIndex($value)
@@ -44,11 +44,10 @@ class ElasticsearchClient
         return $this;
     }
 
-    public function execute()
+    public function setQuery($value)
     {
-        $this->url = $this->url->path($this->index, self::DOCUMENT);
-
-        $this->executeCurlRequest();
+        $this->query = $value;
+        return $this;
     }
 
     private function executeCurlRequest()
