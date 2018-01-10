@@ -13,6 +13,8 @@ class ElasticsearchClient
     const METHOD_GET    = 'GET';
     const METHOD_DELETE = 'DELETE';
 
+    private $index;
+
     /**
      * @var Url
      */
@@ -20,30 +22,34 @@ class ElasticsearchClient
 
     private $query;
 
+    private $method;
 
-    public function __construct(Url $url, $index)
+
+    public function __construct(Url $url)
     {
-        $this->url = $url->path($index, self::DOCUMENT);
+        $this->url = $url;
     }
 
     public function insert()
     {
-        $this->execute(self::METHOD_POST);
+        $this->url = $this->url->path($this->index, self::DOCUMENT);
+
+        $this->executeCurlRequest();
     }
 
     public function update()
     {
-        $this->execute(self::METHOD_PUT);
+        $this->executeCurlRequest();
     }
 
     public function get()
     {
-        $this->execute(self::METHOD_GET);
+        $this->executeCurlRequest();
     }
 
     public function delete()
     {
-        $this->execute(self::METHOD_DELETE);
+        $this->executeCurlRequest();
     }
 
     public function setQuery($value)
@@ -52,7 +58,26 @@ class ElasticsearchClient
         return $this;
     }
 
-    private function execute($method)
+    public function setIndex($value)
+    {
+        $this->index = $value;
+        return $this;
+    }
+
+    public function setMethod($value)
+    {
+        $this->method = $value;
+        return $this;
+    }
+
+    public function execute()
+    {
+        $this->url = $this->url->path($this->index, self::DOCUMENT);
+
+        $this->executeCurlRequest();
+    }
+
+    private function executeCurlRequest()
     {
         $handle = curl_init((string) $this->url);
 
@@ -62,7 +87,7 @@ class ElasticsearchClient
             CURLOPT_TIMEOUT        => self::TIMEOUT,
             CURLOPT_URL            => (string) $this->url,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-            CURLOPT_CUSTOMREQUEST  => $method,
+            CURLOPT_CUSTOMREQUEST  => $this->method,
         ]);
 
         $this->response = curl_exec($handle);
