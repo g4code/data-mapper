@@ -19,7 +19,7 @@ class ElasticsearchClient
     private $query;
 
     private $method;
-    
+
     public function __construct(Url $url)
     {
         $this->url = $url;
