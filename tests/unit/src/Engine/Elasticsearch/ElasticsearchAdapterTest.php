@@ -51,14 +51,14 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
-        $data = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
+        $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
 
         $mappingMock = $this->getMappingMock();
 
         $mappingMock
             ->expects($this->once())
             ->method('map')
-            ->willReturn($data);
+            ->willReturn($body);
 
         $this->clientMock
             ->expects($this->once())
@@ -74,8 +74,14 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
         $this->clientMock
             ->expects($this->once())
-            ->method('setQuery')
-            ->with($this->equalTo([$data]))
+            ->method('setId')
+            ->with($this->equalTo($body['id']))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->with($this->equalTo([$body]))
             ->willReturnSelf();
 
         $this->adapter->insert($this->collectionNameMock, $mappingMock);
