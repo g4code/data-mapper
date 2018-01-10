@@ -8,10 +8,6 @@ class ElasticsearchClient
 {
     const DOCUMENT      = 'doc';
     const TIMEOUT       = 5;
-    const METHOD_POST   = 'POST';
-    const METHOD_PUT    = 'PUT';
-    const METHOD_GET    = 'GET';
-    const METHOD_DELETE = 'DELETE';
 
     private $index;
 
@@ -28,28 +24,6 @@ class ElasticsearchClient
     public function __construct(Url $url)
     {
         $this->url = $url;
-    }
-
-    public function insert()
-    {
-        $this->url = $this->url->path($this->index, self::DOCUMENT);
-
-        $this->executeCurlRequest();
-    }
-
-    public function update()
-    {
-        $this->executeCurlRequest();
-    }
-
-    public function get()
-    {
-        $this->executeCurlRequest();
-    }
-
-    public function delete()
-    {
-        $this->executeCurlRequest();
     }
 
     public function setQuery($value)
