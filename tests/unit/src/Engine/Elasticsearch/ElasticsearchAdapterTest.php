@@ -81,6 +81,22 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insert($this->collectionNameMock, $mappingMock);
     }
 
+    public function testInsertWithEmptyData()
+    {
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for insert.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->insert($this->collectionNameMock, $mappingMock);
+    }
+
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
