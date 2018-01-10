@@ -11,6 +11,8 @@ use G4\DataMapper\Exception\EmptyDataException;
 
 class ElasticsearchAdapter implements AdapterInterface
 {
+    const METHOD_POST = 'POST';
+
     private $client;
 
     public function __construct(ElasticsearchClientFactory $clientFactory)
@@ -28,9 +30,18 @@ class ElasticsearchAdapter implements AdapterInterface
     /**
      * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
+     * @throws EmptyDataException
      */
     public function insert(CollectionNameInterface $collectionName, MappingInterface $mapping)
-    {}
+    {
+        $data = $mapping->map();
+
+        if (empty($data)) {
+            throw new EmptyDataException('Empty data for insert.');
+        }
+
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_POST)->setQuery([$data])->execute();
+    }
 
     /**
      * @param CollectionNameInterface $collectionName
