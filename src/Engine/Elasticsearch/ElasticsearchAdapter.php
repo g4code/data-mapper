@@ -40,7 +40,7 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for insert.');
         }
 
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_POST)->setQuery([$data])->execute();
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_POST)->setId($data['id'])->setBody([$data])->execute();
     }
 
     /**
