@@ -7,6 +7,8 @@ use G4\DataMapper\ErrorCodes as ErrorCode;
 class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 {
 
+    const METHOD_POST = 'POST';
+
     /**
      * @var ElasticsearchAdapter
      */
@@ -24,11 +26,11 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->clientMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchMapper::class)
+        $this->clientMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionNameMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrCollectionName::class)
+        $this->collectionNameMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchCollectionName::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,6 +47,43 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = null;
         $this->clientMock = null;
         $this->collectionNameMock = null;
+    }
+
+    public function testInsert()
+    {
+        $data = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn($data);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setQuery')
+            ->with($this->equalTo([$data]))
+            ->willReturnSelf();
+
+        $this->adapter->insert($this->collectionNameMock, $mappingMock);
+    }
+
+    private function getMappingMock()
+    {
+        return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
     }
 
     private function getMockForElasticsearchClientFactory()
