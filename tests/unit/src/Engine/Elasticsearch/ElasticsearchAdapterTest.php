@@ -8,6 +8,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 {
 
     const METHOD_POST = 'POST';
+    const METHOD_PUT  = 'PUT';
 
     /**
      * @var ElasticsearchAdapter
@@ -106,6 +107,60 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
+    }
+
+    public function testUpdate()
+    {
+        $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn($body);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_PUT))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setId')
+            ->with($this->equalTo($body['id']))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->with($this->equalTo([$body]))
+            ->willReturnSelf();
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
+    }
+
+    public function testUpdateWithEmptyData()
+    {
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for update.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 
     private function getMockForElasticsearchClientFactory()
