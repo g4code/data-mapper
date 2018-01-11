@@ -7,7 +7,9 @@ use G4\DataMapper\ErrorCodes as ErrorCode;
 class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 {
 
-    const METHOD_POST = 'POST';
+    const METHOD_POST   = 'POST';
+    const METHOD_PUT    = 'PUT';
+    const METHOD_DELETE = 'DELETE';
 
     /**
      * @var ElasticsearchAdapter
@@ -47,6 +49,38 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = null;
         $this->clientMock = null;
         $this->collectionNameMock = null;
+    }
+
+    public function testDelete()
+    {
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn('id:1');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_DELETE))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setId')
+            ->with($this->equalTo('id:1'))
+            ->willReturnSelf();
+
+        $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
     }
 
     public function testInsert()
@@ -106,6 +140,60 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
+    }
+
+    public function testUpdate()
+    {
+        $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn($body);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_PUT))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setId')
+            ->with($this->equalTo($body['id']))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->with($this->equalTo([$body]))
+            ->willReturnSelf();
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
+    }
+
+    public function testUpdateWithEmptyData()
+    {
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for update.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 
     private function getMockForElasticsearchClientFactory()
