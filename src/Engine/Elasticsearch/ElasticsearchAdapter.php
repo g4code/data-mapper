@@ -11,8 +11,9 @@ use G4\DataMapper\Exception\EmptyDataException;
 
 class ElasticsearchAdapter implements AdapterInterface
 {
-    const METHOD_POST = 'POST';
-    const METHOD_PUT  = 'PUT';
+    const METHOD_POST   = 'POST';
+    const METHOD_PUT    = 'PUT';
+    const METHOD_DELETE = 'DELETE';
 
     private $client;
 
@@ -27,6 +28,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function delete(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_DELETE)->setId($selectionFactory->where())->execute();
     }
 
     /**
