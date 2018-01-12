@@ -8,8 +8,14 @@ use G4\DataMapper\Common\IdentityInterface;
 class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 {
 
+    /**
+     * @var IdentityInterface
+     */
+    private $identity;
+
     public function __construct(IdentityInterface $identity)
     {
+        $this->identity = $identity;
     }
 
     public function fieldNames()
