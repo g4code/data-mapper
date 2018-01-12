@@ -29,10 +29,12 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
     public function limit()
     {
+        return (int) $this->identity->getLimit();
     }
 
     public function offset()
     {
+        return (int) $this->identity->getOffset();
     }
 
     public function sort()
