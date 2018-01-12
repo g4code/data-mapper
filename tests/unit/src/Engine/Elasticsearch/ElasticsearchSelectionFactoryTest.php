@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory;
 
-class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ElasticsearchSelectionFactory
