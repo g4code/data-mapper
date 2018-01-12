@@ -53,6 +53,16 @@ class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ], $this->selectionFactory->where());
     }
 
+    public function testWhereIfIdentityIsVoid()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(true);
+
+        $this->assertEquals(['must' => ['match_all' => []]], $this->selectionFactory->where());
+    }
+
     private function getMockForEqualComparison($column, $value)
     {
         $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
