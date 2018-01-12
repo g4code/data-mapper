@@ -27,6 +27,26 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testLimit()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getLimit')
+            ->willReturn(5);
+
+        $this->assertEquals(5, $this->selectionFactory->limit());
+    }
+
+    public function testOffset()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getOffset')
+            ->willReturn(8);
+
+        $this->assertEquals(8, $this->selectionFactory->offset());
+    }
+
     public function testSort()
     {
         $this->identityMock
