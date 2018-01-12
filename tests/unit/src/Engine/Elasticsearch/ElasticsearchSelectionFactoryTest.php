@@ -27,6 +27,26 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testFieldNames()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getFieldNames')
+            ->willReturn(['first_name', 'last_name', 'age']);
+
+        $this->assertEquals(['first_name', 'last_name', 'age'], $this->selectionFactory->fieldNames());
+    }
+
+    public function testEmptyFieldNames()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getFieldNames')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->fieldNames());
+    }
+
     public function testGroup()
     {
         $this->identityMock
