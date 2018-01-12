@@ -27,6 +27,16 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->selectionFactory = null;
     }
 
+    public function testGroup()
+    {
+        $this->identityMock
+            ->expects($this->any())
+            ->method('getGrouping')
+            ->willReturn('name');
+
+        $this->assertEquals(['group_by_name' => [ 'terms' => ['field' => 'name']]], $this->selectionFactory->group());
+    }
+
     public function testLimit()
     {
         $this->identityMock
