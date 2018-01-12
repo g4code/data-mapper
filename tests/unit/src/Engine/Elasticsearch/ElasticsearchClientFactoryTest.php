@@ -6,7 +6,7 @@ use G4\DataMapper\Exception\NoPortParameterException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\ErrorMessages as ErrorMessage;
 
-class ElasticSearchClientFactoryTest extends PHPUnit_Framework_TestCase
+class ElasticsearchClientFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array
