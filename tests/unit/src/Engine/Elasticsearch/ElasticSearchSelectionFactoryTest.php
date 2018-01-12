@@ -43,6 +43,16 @@ class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         ], $this->selectionFactory->sort());
     }
 
+    public function testEmptySort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->sort());
+    }
+
     public function testWhere()
     {
         $this->identityMock
