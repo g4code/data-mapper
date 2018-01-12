@@ -37,6 +37,20 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
     public function sort()
     {
+        $rawSorting = $this->identity->getSorting();
+
+        if (empty($rawSorting)) {
+            return [];
+        }
+
+        $sorting = [];
+
+        foreach ($rawSorting as $oneSort) {
+            if ($oneSort instanceof Sort) {
+                $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
+            }
+        }
+        return $sorting;
     }
 
     public function where()
@@ -60,5 +74,10 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     private function makeComparisonFormatter()
     {
         return new ElasticsearchComparisonFormatter();
+    }
+
+    private function makeSortingFormatter()
+    {
+        return new ElasticsearchSortingFormatter();
     }
 }

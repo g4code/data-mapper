@@ -25,12 +25,12 @@ class ElasticsearchSortingFormatterTest extends \PHPUnit_Framework_TestCase
 
     public function testAscendingFormat()
     {
-        $this->assertEquals('name:asc', $this->sortingFormatter->format('name', Sort::ASCENDING));
+        $this->assertEquals(['name' => ['order' => 'asc']], $this->sortingFormatter->format('name', Sort::ASCENDING));
     }
 
     public function testDescendingFormat()
     {
-        $this->assertEquals('name:desc', $this->sortingFormatter->format('name', Sort::DESCENDING));
+        $this->assertEquals(['name' => ['order' => 'desc']], $this->sortingFormatter->format('name', Sort::DESCENDING));
     }
 
     public function testOrderNotInMap()

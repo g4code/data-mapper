@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory;
 
-class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ElasticsearchSelectionFactory
@@ -25,6 +25,32 @@ class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->identityMock = null;
 
         $this->selectionFactory = null;
+    }
+
+    public function testSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->assertEquals([
+            ['id'   => ['order' => 'desc']],
+            ['name' => ['order' => 'asc']],
+        ], $this->selectionFactory->sort());
+    }
+
+    public function testEmptySort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->selectionFactory->sort());
     }
 
     public function testWhere()
@@ -89,6 +115,21 @@ class ElasticSearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getComparison')
             ->willReturn(['range' => [$column => ['gt' => $value]]]);
+
+        return $mock;
+    }
+
+    private function getMockForSort($column, $sortDirection)
+    {
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Sort::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getSort'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getSort')
+            ->willReturn([$column => ['order' => $sortDirection]]);
 
         return $mock;
     }

@@ -15,7 +15,7 @@ class ElasticsearchSortingFormatter implements SortingFormatterInterface
 
     public function format($name, $order)
     {
-        return sprintf("%s:%s", $name, $this->sortMap($order));
+        return [$name => ['order' => $this->sortMap($order)]];
     }
 
     private function sortMap($order)
