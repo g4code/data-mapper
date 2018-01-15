@@ -14,6 +14,7 @@ class Operator
     const LESS_THAN_OR_EQUAL   = 'LESS_THAN_OR_EQUAL';
     const NOT_EQUAL            = 'NOT_EQUAL';
     const NOT_IN               = 'NOT_IN';
+    const BETWEEN              = 'BETWEEN';
 
 
     /**
@@ -44,6 +45,7 @@ class Operator
             self::LESS_THAN_OR_EQUAL,
             self::NOT_EQUAL,
             self::NOT_IN,
+            self::BETWEEN,
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {
