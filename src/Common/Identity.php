@@ -174,6 +174,12 @@ class Identity implements IdentityInterface
         return $this;
     }
 
+    public function between(array $value)
+    {
+        $this->operator(Operator::BETWEEN, $value);
+        return $this;
+    }
+
     public function groupBy($fieldName)
     {
         $this->grouping[] = $fieldName;

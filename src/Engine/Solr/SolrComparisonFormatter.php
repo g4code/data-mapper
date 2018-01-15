@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Solr;
 
 use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\Selection\Operator;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\OneClassPerFileSniff;
 
 class SolrComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -47,6 +48,9 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::IN:
                 $query = $this->formatInQuery($name, $value);
+                break;
+            case Operator::LIKE:
+                $query = $this->formatLikeQuery($name, $value);
                 break;
         }
 
@@ -119,5 +123,14 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
             . self::ROUND_BRACKET_OPEN
             . str_replace(self::COMMA, self::EMPTY_SPACE . self::CONNECTOR_OR, $value)
             . self::ROUND_BRACKET_CLOSE;
+    }
+
+    private function formatLikeQuery($name, $value)
+    {
+        return $name
+            . self::COLON
+            . self::WILDCARD
+            . str_replace(' ', '*', $value)
+            . self::WILDCARD;
     }
 }

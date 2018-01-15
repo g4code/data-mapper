@@ -23,9 +23,9 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testEqual()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->equal(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->equal(1));
 
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $this->identity->getComparisons()[0]);
+        $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Comparison::class, $this->identity->getComparisons()[0]);
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->equal([1]);
@@ -40,7 +40,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testGreaterThan()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->greaterThan(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThan(1));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->greaterThan([1]);
@@ -48,7 +48,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testGreaterThanOrEqual()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->greaterThanOrEqual(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThanOrEqual(1));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->greaterThanOrEqual([1]);
@@ -56,12 +56,12 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testIn()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->in([1]));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->in([1]));
     }
 
     public function testLessThan()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->lessThan(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThan(1));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->lessThan([1]);
@@ -69,7 +69,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testLessThanOrEqual()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->lessThanOrEqual(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThanOrEqual(1));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->lessThanOrEqual([1]);
@@ -77,10 +77,15 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testLike()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->like('this'));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->like('this'));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->like([1]);
+    }
+
+    public function testBetween()
+    {
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->between([1,3]));
     }
 
     public function testLimit()
@@ -96,7 +101,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testNotEqual()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->notEqual(1));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->notEqual(1));
 
         $this->setExpectedException('\Exception', 'Value cannot be array');
         $this->identity->field('name')->notEqual([1]);
@@ -104,14 +109,14 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testNotIn()
     {
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('id')->notIn([1]));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->notIn([1]));
     }
 
     public function testField()
     {
         $this->assertTrue($this->identity->isVoid());
 
-        $this->assertInstanceOf('G4\DataMapper\Common\Identity', $this->identity->field('name'))  ;
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('name'))  ;
 
         $this->assertFalse($this->identity->isVoid());
 
@@ -144,19 +149,19 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($comparisons));
         $this->assertEquals(2, count($comparisons));
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $comparisons[0]);
+        $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Comparison::class, $comparisons[0]);
     }
 
     public function testSorting()
     {
-        $this->assertInstanceOf('\G4\DataMapper\Common\Identity', $this->identity->sortAscending('name'));
-        $this->assertInstanceOf('\G4\DataMapper\Common\Identity', $this->identity->sortDescending('ts'));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->sortAscending('name'));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->sortDescending('ts'));
 
         $sorting = $this->identity->getSorting();
 
         $this->assertEquals(2, count($sorting));
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['name']);
-        $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Sort', $sorting['ts']);
+        $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Sort::class, $sorting['name']);
+        $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Sort::class, $sorting['ts']);
     }
 
     public function testGrouping()
