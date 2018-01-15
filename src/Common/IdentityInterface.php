@@ -4,6 +4,7 @@ namespace G4\DataMapper\Common;
 
 interface IdentityInterface
 {
+    //TODO: Split interface to smaller parts
 
     public function equal($value);
 
@@ -46,4 +47,6 @@ interface IdentityInterface
     public function sortDescending($fieldName);
 
     public function setFieldNames(array $fieldNames);
+
+    public function between(array $value);
 }
