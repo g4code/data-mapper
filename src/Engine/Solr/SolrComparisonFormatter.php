@@ -52,6 +52,9 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
             case Operator::LIKE:
                 $query = $this->formatLikeQuery($name, $value);
                 break;
+            case Operator::BETWEEN:
+                $query = $this->formatBetweenQuery($name, $value);
+                break;
         }
 
         return $query;
@@ -132,5 +135,18 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
             . self::WILDCARD
             . str_replace(' ', '*', $value)
             . self::WILDCARD;
+    }
+
+    private function formatBetweenQuery($name, $value)
+    {
+        return $name
+            . self::COLON
+            . self::CURLY_BRACKET_OPEN
+            . $value[0]
+            . self::EMPTY_SPACE
+            . self::CONNECTOR_TO
+            . self::EMPTY_SPACE
+            . $value[1]
+            . self::CURLY_BRACKET_CLOSE;
     }
 }
