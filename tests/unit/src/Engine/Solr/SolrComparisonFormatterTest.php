@@ -94,6 +94,6 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{1 to 18}', $this->comparisonFormatter->format('age', $this->operatorMock, [1,18]));
+        $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, [1,18]));
     }
 }
