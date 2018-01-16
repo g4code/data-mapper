@@ -2,6 +2,7 @@
 
 use G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\ComparisonValue;
 
 class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -33,7 +34,7 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::EQUAL);
 
-        $this->assertEquals('name = \'test\'', $this->comparisonFormatter->format('name', $this->operatorMock, 'test'));
+        $this->assertEquals('name = \'test\'', $this->comparisonFormatter->format('name', $this->operatorMock, new ComparisonValue('test')));
     }
 
     public function testOperatorNotInMap()

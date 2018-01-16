@@ -1,6 +1,7 @@
 <?php
 
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
+use G4\DataMapper\Common\ComparisonValue;
 
 class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -153,8 +154,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('map')
             ->willReturn([
-                'id' => 123,
-                'ts' => 456
+                'id' => new ComparisonValue(123),
+                'ts' => new ComparisonValue(456),
             ]);
 
         $mappingStubSecond = $this->getMockForMappings();
@@ -162,8 +163,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('map')
             ->willReturn([
-                'id' => 789,
-                'ts' => 321
+                'id' => new ComparisonValue(789),
+                'ts' => new ComparisonValue(321),
             ]);
 
         $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
@@ -190,8 +191,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('map')
             ->willReturn([
-                'id' => 123,
-                'ts' => 456
+                'id' => new ComparisonValue(123),
+                'ts' => new ComparisonValue(456),
             ]);
 
         $mappingStubSecond = $this->getMockForMappings();
@@ -199,8 +200,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('map')
             ->willReturn([
-                'id' => 789,
-                'ts' => 321
+                'id' => new ComparisonValue(789),
+                'ts' => new ComparisonValue(321),
             ]);
 
         $this->adapter->upsertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));

@@ -2,27 +2,29 @@
 
 namespace G4\DataMapper\Engine\MySQL;
 
+use G4\DataMapper\Common\ComparisonValue;
+
 class Quote
 {
 
-    private $value;
+    private $comparisonValue;
 
 
-    public function __construct($value)
+    public function __construct(ComparisonValue $comparisonValue)
     {
-        $this->value = $value;
+        $this->comparisonValue = $comparisonValue;
     }
 
     public function __toString()
     {
-        if (is_int($this->value)) {
+        if ($this->comparisonValue->isInteger()) {
             $value = $this->formatInteger();
-        } elseif (is_float($this->value)) {
+        } elseif ($this->comparisonValue->isFloat()) {
             $value = $this->formatFloat();
-        } elseif (is_array($this->value)) {
+        } elseif ($this->comparisonValue->isArray()) {
             $value = $this->formatArray();
         } else {
-            $value = "'" . addcslashes($this->value, "\000\n\r\\'\"\032") . "'";
+            $value = $this->formatString();
         }
 
         return $value;
@@ -30,19 +32,24 @@ class Quote
 
     private function formatInteger()
     {
-        return (string) $this->value;
+        return (string) $this->comparisonValue;
     }
 
     private function formatFloat()
     {
-        return sprintf('%F', $this->value);
+        return sprintf('%F', $this->comparisonValue->getValue());
     }
 
     private function formatArray()
     {
-        foreach ($this->value as $key => $value) {
-            $this->value[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
+        foreach ($this->comparisonValue->getValue() as $key => $value) {
+            $formattedArray[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
         }
-        return "(" . join(", ", $this->value) . ")";
+        return "(" . join(", ", $formattedArray) . ")";
+    }
+
+    private function formatString()
+    {
+        return "'" . addcslashes($this->comparisonValue->getValue(), "\000\n\r\\'\"\032") . "'";
     }
 }
