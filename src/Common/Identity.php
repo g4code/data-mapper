@@ -6,6 +6,7 @@ use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
 use G4\DataMapper\Common\Selection\Sort;
+use G4\DataMapper\Common\ComparisonValue;
 
 class Identity implements IdentityInterface
 {
@@ -303,6 +304,6 @@ class Identity implements IdentityInterface
         if ($this->isVoid()) {
             throw new \Exception('Field is not defined', 101);
         }
-        $this->currentField->add(new Operator($symbol), $value);
+        $this->currentField->add(new Operator($symbol), new ComparisonValue($value));
     }
 }
