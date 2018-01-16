@@ -19,6 +19,7 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
         Operator::LIKE                 => 'LIKE',
         Operator::NOT_EQUAL            => '<>',
         Operator::NOT_IN               => 'NOT IN',
+        Operator::BETWEEN              => 'BETWEEN',
     ];
 
     public function format($name, Operator $operator, $value)
