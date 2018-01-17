@@ -2,31 +2,42 @@
 
 namespace G4\DataMapper\Engine\MySQL;
 
+use G4\DataMapper\Common\RangeValue;
 use G4\DataMapper\Common\SingleValue;
 
 class Quote
 {
+    const CONNECTOR_AND = ' AND ';
+
     /**
-     * @var SingleValue
+     * @var mixed
      */
-    private $singleValue;
+    private $value;
 
 
-    public function __construct(SingleValue $singleValue)
+    public function __construct($value)
     {
-        $this->singleValue = $singleValue;
+        if(!($value instanceof SingleValue) && !($value instanceof RangeValue)) {
+            throw new \Exception('Something is not right.');
+        }
+
+        $this->value = $value;
     }
 
     public function __toString()
     {
-        if ($this->singleValue->isInteger()) {
-            $value = $this->formatInteger();
-        } elseif ($this->singleValue->isFloat()) {
-            $value = $this->formatFloat();
-        } elseif ($this->singleValue->isArray()) {
-            $value = $this->formatArray();
+        if($this->value instanceof SingleValue) {
+            if (is_int($this->value->getValue())) {
+                $value = $this->formatInteger();
+            } elseif (is_float($this->value->getValue())) {
+                $value = $this->formatFloat();
+            } elseif (is_array($this->value->getValue())) {
+                $value = $this->formatArray();
+            } else {
+                $value = $this->formatString();
+            }
         } else {
-            $value = $this->formatString();
+            $value = $this->formatRangeValue();
         }
 
         return $value;
@@ -34,17 +45,17 @@ class Quote
 
     private function formatInteger()
     {
-        return (string) $this->singleValue;
+        return (string) $this->value;
     }
 
     private function formatFloat()
     {
-        return sprintf('%F', $this->singleValue->getValue());
+        return sprintf('%F', $this->value->getValue());
     }
 
     private function formatArray()
     {
-        foreach ($this->singleValue->getValue() as $key => $value) {
+        foreach ($this->value->getValue() as $key => $value) {
             $formattedArray[$key] = "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
         }
         return "(" . join(", ", $formattedArray) . ")";
@@ -52,6 +63,11 @@ class Quote
 
     private function formatString()
     {
-        return "'" . addcslashes($this->singleValue->getValue(), "\000\n\r\\'\"\032") . "'";
+        return "'" . addcslashes($this->value->getValue(), "\000\n\r\\'\"\032") . "'";
+    }
+
+    private function formatRangeValue()
+    {
+        return $this->value->getMin() . self::CONNECTOR_AND . $this->value->getMax();
     }
 }
