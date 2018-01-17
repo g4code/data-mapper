@@ -6,7 +6,7 @@ use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
 use G4\DataMapper\Common\Selection\Sort;
-use G4\DataMapper\Common\ComparisonValue;
+use G4\DataMapper\Common\SingleValue;
 
 class Identity implements IdentityInterface
 {
@@ -175,9 +175,9 @@ class Identity implements IdentityInterface
         return $this;
     }
 
-    public function between(array $value)
+    public function between($min, $max)
     {
-        $this->operator(Operator::BETWEEN, $value);
+        $this->operator(Operator::BETWEEN, new RangeValue($min, $max));
         return $this;
     }
 
@@ -304,6 +304,6 @@ class Identity implements IdentityInterface
         if ($this->isVoid()) {
             throw new \Exception('Field is not defined', 101);
         }
-        $this->currentField->add(new Operator($symbol), new ComparisonValue($value));
+        $this->currentField->add(new Operator($symbol), $value);
     }
 }
