@@ -73,6 +73,15 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('age <= 18', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue(18)));
     }
 
+    public function testLike()
+    {
+        $this->operatorMock->expects($this->once())
+            ->method('getSymbol')
+            ->willReturn(Operator::LIKE);
+
+        $this->assertEquals('name LIKE \'test\'', $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('test')));
+    }
+
     public function testOperatorNotInMap()
     {
         $this->operatorMock->expects($this->once())
