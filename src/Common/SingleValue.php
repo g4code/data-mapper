@@ -2,8 +2,11 @@
 
 namespace G4\DataMapper\Common;
 
-class ComparisonValue
+class SingleValue
 {
+    /**
+     * @var mixed
+     */
     private $value;
 
     public function __construct($value)

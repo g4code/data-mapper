@@ -48,5 +48,5 @@ interface IdentityInterface
 
     public function setFieldNames(array $fieldNames);
 
-    public function between(array $value);
+    public function between($min, $max);
 }

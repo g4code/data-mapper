@@ -85,7 +85,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
     public function testBetween()
     {
-        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->between([1,3]));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->between(1,3));
     }
 
     public function testLimit()
