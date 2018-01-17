@@ -23,24 +23,4 @@ class SingleValue
     {
         return $this->value;
     }
-
-    public function isInteger()
-    {
-        return is_int($this->value);
-    }
-
-    public function isFloat()
-    {
-        return is_float($this->value);
-    }
-
-    public function isString()
-    {
-        return is_string($this->value);
-    }
-
-    public function isArray()
-    {
-        return is_array($this->value);
-    }
 }
