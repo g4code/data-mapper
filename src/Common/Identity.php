@@ -104,7 +104,7 @@ class Identity implements IdentityInterface
     public function greaterThan($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::GRATER_THAN, $value);
+        $this->operator(Operator::GRATER_THAN, new SingleValue($value));
         return $this;
     }
 
@@ -115,7 +115,7 @@ class Identity implements IdentityInterface
     public function greaterThanOrEqual($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::GRATER_THAN_OR_EQUAL, $value);
+        $this->operator(Operator::GRATER_THAN_OR_EQUAL, new SingleValue($value));
         return $this;
     }
 
@@ -125,7 +125,7 @@ class Identity implements IdentityInterface
      */
     public function in(array $value)
     {
-        $this->operator(Operator::IN, $value);
+        $this->operator(Operator::IN, new SingleValue($value));
         return $this;
     }
 
@@ -136,7 +136,7 @@ class Identity implements IdentityInterface
     public function like($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::LIKE, $value);
+        $this->operator(Operator::LIKE, new SingleValue($value));
         return $this;
     }
 
@@ -147,7 +147,7 @@ class Identity implements IdentityInterface
     public function lessThan($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::LESS_THAN, $value);
+        $this->operator(Operator::LESS_THAN, new SingleValue($value));
         return $this;
     }
 
@@ -158,20 +158,20 @@ class Identity implements IdentityInterface
     public function lessThanOrEqual($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::LESS_THAN_OR_EQUAL, $value);
+        $this->operator(Operator::LESS_THAN_OR_EQUAL, new SingleValue($value));
         return $this;
     }
 
     public function notEqual($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::NOT_EQUAL, $value);
+        $this->operator(Operator::NOT_EQUAL, new SingleValue($value));
         return $this;
     }
 
     public function notIn(array $value)
     {
-        $this->operator(Operator::NOT_IN, $value);
+        $this->operator(Operator::NOT_IN, new SingleValue($value));
         return $this;
     }
 
