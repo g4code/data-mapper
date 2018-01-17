@@ -3,6 +3,7 @@
 use G4\DataMapper\Engine\MySQL\MySQLComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Common\RangeValue;
 
 class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -109,6 +110,13 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("age NOT IN ('1', '2', '3', '4')", $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue([1, 2, 3, 4])));
     }
 
+    public function testBetween()
+    {
+        $this->operatorMock->expects($this->once())->method('getSymbol')->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age BETWEEN 1 AND 18', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
+    }
+
     public function testOperatorNotInMap()
     {
         $this->operatorMock->expects($this->once())
@@ -117,6 +125,6 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Operator not in map');
-        $this->comparisonFormatter->format('name', $this->operatorMock, 'test');
+        $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('test'));
     }
 }
