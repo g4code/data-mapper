@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\RangeValue;
 use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Exception\NotAnInstanceException;
 
 class Quote
 {
@@ -18,7 +19,7 @@ class Quote
     public function __construct($value)
     {
         if(!($value instanceof SingleValue) && !($value instanceof RangeValue)) {
-            throw new \Exception('Something is not right.');
+            throw new NotAnInstanceException('Value should be an instance of SingleValue or RangeValue object.');
         }
 
         $this->value = $value;
