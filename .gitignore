@@ -13,3 +13,13 @@ vendor
 .project
 .settings
 .idea
+
+tests/unit/coverage/*
+tests/integration/coverage/*
+.vagrant/
+.bash_history
+.cache/motd.legal-displayed
+.sudo_as_admin_successful
+
+*.DS_Store
+ansible.retry

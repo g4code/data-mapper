@@ -1,0 +1,56 @@
+---
+- name: Install Python MySQLB module
+  package:
+    name: python-mysqldb
+
+- name: Install mysql
+  shell: "{{ item }}"
+  items:
+    - export DEBIAN_FRONTEND=noninteractive; apt-get install mysql-server -y
+    - apt-get install mysql-client -y
+
+- name: Allow remote access
+  lineinfile:
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: '#bind-address = 127.0.0.1'
+
+- name: Restart mysql service
+  service:
+    name: mysql
+    state: restarted
+
+- name: Create mysql test_user
+  mysql_user:
+    name: test_user
+    password: test_pass
+    host: "{{ item }}"
+    priv: '*.*:ALL,GRANT'
+    state: present
+  with_items:
+    - localhost
+    - ::1
+    - 127.0.0.1
+    - 192.168.32.1
+
+- name: Remove data-mapper database
+  tags:
+    - database
+  mysql_db:
+    name: data_mapper
+    state: absent
+
+- name: Copy dump file to host
+  tags:
+      - database
+  copy:
+    src: assets/dump.sql
+    dest: /tmp/dump.sql
+
+- name: Import from dump file
+  tags:
+      - database
+  mysql_db:
+    name: data_mapper
+    target: /tmp/dump.sql
+    state: import

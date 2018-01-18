@@ -77,6 +77,18 @@ class Solr
         return $this;
     }
 
+    /**
+     * Atomic update of all fields that are not null
+     *
+     * @param \G4\DataMapper\Domain\DomainAbstract $domain
+     * @return $this
+     */
+    public function markForSetAtomic(\G4\DataMapper\Domain\DomainAbstract $domain)
+    {
+        $this->data[] = $this->addMethodToData(self::METHOD_SET, array_filter($domain->getRawData()));
+        return $this;
+    }
+
     public function markForUpdate(\G4\DataMapper\Domain\DomainAbstract $domain)
     {
         $this->data[] = $domain->getRawData();
@@ -85,7 +97,7 @@ class Solr
 
     private function addMethodToData($method, array $data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             if ($key != self::IDENTIFIER_KEY) {
                 $data[$key] = [$method => $value];
             }

@@ -45,15 +45,15 @@ class Identity extends \G4\DataMapper\Selection\Identity
 
     public function geodist($latitude, $longitude, $distance = null)
     {
-        if ($latitude !== null || $longitude !== null ) {
+        if ($latitude !== null || $longitude !== null) {
              $this->geodist = [
                 'latitude'     => $latitude,
                 'longitude'    => $longitude,
                 'distance'     => $distance,
                 'spatialField' => 'location',
                 'filterQuery'  => '{!geofilt}'
-            ];
-            $this
+             ];
+             $this
                 ->addToFieldList(['_dist_' => 'geodist()'])
                 ->setOrderBy('geodist()', 'asc');
         }
@@ -83,6 +83,14 @@ class Identity extends \G4\DataMapper\Selection\Identity
     public function getGroupBy()
     {
         return $this->groupBy;
+    }
+
+    public function gt($value = null)
+    {
+        return $this->_operator(
+            \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
+            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\GreaterThan($value))
+        );
     }
 
     public function hasFieldList()

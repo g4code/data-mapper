@@ -230,6 +230,24 @@ class Identity
     /**
      * @return Identity
      */
+    public function isNotNull()
+    {
+        $this->_operator('IS', 'NOT NULL');
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function isNull()
+    {
+        $this->_operator('IS', 'NULL');
+        return $this;
+    }
+
+    /**
+     * @return Identity
+     */
     public function setLimit($value)
     {
         $this->_limit = $value;
@@ -260,10 +278,10 @@ class Identity
         preg_match('~([a-z]+)(.*)~', $name, $method);
 
         switch ($method[1]) {
-            case 'set' :
+            case 'set':
                 $this->_customContainer[$method[2]] = $args[0];
                 break;
-            case 'get' :
+            case 'get':
                 return isset($this->_customContainer[$method[2]]) ? $this->_customContainer[$method[2]] : null;
                 break;
         }
@@ -277,6 +295,8 @@ class Identity
         if ($this->isVoid()) {
             throw new \Exception("No object field defined");
         }
+
+
 
         $this->_currentField->add($symbol, $value);
 

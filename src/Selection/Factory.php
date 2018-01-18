@@ -26,7 +26,7 @@ class Factory
             return '1';
         }
 
-        if($this->db === null){
+        if ($this->db === null) {
             throw new \Exception("Missing Mysql db adapter", 500);
         }
 
@@ -35,7 +35,7 @@ class Factory
         foreach ($identity->getComps() as $comp) {
             $s = sprintf("%s %s ", $comp['name'], $comp['operator']);
 
-            $s .= ($comp['operator'] != 'NOT IN' && $comp['operator'] != 'IN' && !\G4\DataMapper\Db\Db::isExprInstance($comp['value']))
+            $s .= ($comp['operator'] != 'NOT IN' && $comp['operator'] != 'IN' && $comp['operator'] != 'IS' && !\G4\DataMapper\Db\Db::isExprInstance($comp['value']))
                 ? sprintf("%s", $this->db->quote($comp['value']))
                 : $comp['value'];
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr persistent="true">
+    <cores defaultCoreName="integration_test" adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="8983" hostContext="solr">
+        <core loadOnStartup="true" name="integration_test" instanceDir="integration_test" transient="false"/>
+    </cores>
+</solr>
