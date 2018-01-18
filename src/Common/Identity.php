@@ -69,7 +69,7 @@ class Identity implements IdentityInterface
     public function equal($value)
     {
         $this->arrayException($value);
-        $this->operator(Operator::EQUAL, $value);
+        $this->operator(Operator::EQUAL, new SingleValue($value));
         return $this;
     }
 
