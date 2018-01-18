@@ -11,4 +11,5 @@ class ErrorCodes
     const EMPTY_DATA                 = 10105;
     const TABLE_NAME_NOT_STRING      = 14001;
     const COLLECTION_NAME_NOT_STRING = 14005;
+    const NOT_AN_INSTANCE            = 14006;
 }
