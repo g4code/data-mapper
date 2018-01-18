@@ -8,4 +8,5 @@ class ErrorMessages
     const NO_HOST_PARAMETER = 'No host parameter.';
     const NO_PORT_PARAMETER = 'No port parameter.';
     const EMPTY_DATA        = 'Empty data.';
+    const NOT_AN_INSTANCE   = 'Not an instance.';
 }
