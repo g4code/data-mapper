@@ -6,6 +6,7 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
@@ -122,7 +123,7 @@ class MySQLAdapter implements AdapterInterface
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
             foreach ($mapping->map() as $value) {
-                $quotedValues[] = (string) new Quote($value);
+                $quotedValues[] = (string) new Quote(new SingleValue($value));
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
@@ -150,7 +151,7 @@ class MySQLAdapter implements AdapterInterface
         foreach ($mappingsCollection as $mapping) {
             $quotedValues = array();
             foreach ($mapping->map() as $value) {
-                $quotedValues[] = (string) new Quote($value);
+                $quotedValues[] = (string) new Quote(new SingleValue($value));
             }
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
