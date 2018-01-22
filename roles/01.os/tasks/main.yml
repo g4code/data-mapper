@@ -20,3 +20,12 @@
 
 - name: Locale gen en_US
   shell: locale-gen --purge
+
+- name: Export locale in .bashrc
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - echo "export LANGUAGE=en_US.UTF-8" >> ~/.bashrc
+    - echo "export LC_ALL=en_US.UTF-8 " >> ~/.bashrc
+    - source ~/.bashrc
