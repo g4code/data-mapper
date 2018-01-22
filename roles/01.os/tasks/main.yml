@@ -5,3 +5,18 @@
     - update
     - upgrade -y
     - autoremove -y
+
+- name: Install en language
+  package:
+    name: language-pack-en-base
+    state: latest
+
+- name: Export locale
+  shell: export {{ item }}
+  with_items:
+    - LANGUAGE=en_US.UTF-8
+    - LANG=en_US.UTF-8
+    - LC_ALL=en_US.UTF-8
+
+- name: Locale gen en_US
+  shell: locale-gen --purge
