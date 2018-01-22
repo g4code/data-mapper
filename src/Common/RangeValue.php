@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common;
 
-class RangeValue
+class RangeValue implements ValueInterface
 {
     /**
      * @var string
