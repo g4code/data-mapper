@@ -210,7 +210,13 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock->expects($this->once())
             ->method('update');
 
-        $this->adapter->update($this->collectionNameMock, $mappingMock);
+        $selectionFactory = new \G4\DataMapper\Engine\Solr\SolrSelectionFactory(
+            (new \G4\DataMapper\Common\Identity())
+                ->field('id')
+                ->equal(1)
+        );
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactory);
     }
 
     public function testUpdateWithEmptyData()
@@ -229,7 +235,13 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Empty data for update');
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
-        $this->adapter->update($this->collectionNameMock, $mappingMock);
+        $selectionFactory = new \G4\DataMapper\Engine\Solr\SolrSelectionFactory(
+            (new \G4\DataMapper\Common\Identity())
+                ->field('id')
+                ->equal(1)
+        );
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactory);
     }
 
     private function getMappingMock()
