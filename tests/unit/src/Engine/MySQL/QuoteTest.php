@@ -37,13 +37,4 @@ class QuoteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("('101', 'lorem ipsum', '1.01')", $value);
         $this->assertTrue(is_string($value));
     }
-
-    public function testNotAnInstanceException()
-    {
-        $this->expectException(\G4\DataMapper\Exception\NotAnInstanceException::class);
-        $this->expectExceptionMessage('Value should be an instance of SingleValue or RangeValue object.');
-        $this->expectExceptionCode(14006);
-
-        new Quote([1,2,3]);
-    }
 }

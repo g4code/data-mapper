@@ -2,6 +2,7 @@
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\SingleValue;
 
 class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +37,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::EQUAL);
 
-        $this->assertEquals(['match' => ['age' => '15']], $this->comparisonFormatter->format('age', $this->operatorMock, '15'));
+        $this->assertEquals(['match' => ['age' => '15']], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('15')));
     }
 
     public function testGreaterThan()
@@ -45,7 +46,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::GRATER_THAN);
 
-        $this->assertEquals(['range' => ['age' => ['gt' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals(['range' => ['age' => ['gt' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testLessThan()
@@ -54,7 +55,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LESS_THAN);
 
-        $this->assertEquals(['range' => ['age' => ['lt' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals(['range' => ['age' => ['lt' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testGreaterThanOrEqual()
@@ -63,7 +64,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::GRATER_THAN_OR_EQUAL);
 
-        $this->assertEquals(['range' => ['age' => ['gte' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals(['range' => ['age' => ['gte' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testLessThanOrEqual()
@@ -72,7 +73,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LESS_THAN_OR_EQUAL);
 
-        $this->assertEquals(['range' => ['age' => ['lte' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals(['range' => ['age' => ['lte' => '18']]], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testIn()
@@ -81,6 +82,6 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::IN);
 
-        $this->assertEquals(['terms' => ['age' => [18, 19, 20]]], $this->comparisonFormatter->format('age', $this->operatorMock, '18, 19, 20'));
+        $this->assertEquals(['terms' => ['age' => [18, 19, 20]]], $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18, 19, 20')));
     }
 }

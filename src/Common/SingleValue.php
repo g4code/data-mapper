@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Common;
 
-class SingleValue
+class SingleValue implements ValueInterface
 {
     /**
      * @var mixed

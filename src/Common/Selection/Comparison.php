@@ -4,6 +4,7 @@ namespace G4\DataMapper\Common\Selection;
 
 use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\ValueInterface;
 
 class Comparison
 {
@@ -21,7 +22,7 @@ class Comparison
     private $value;
 
 
-    public function __construct($name, Operator $operator, $value)
+    public function __construct($name, Operator $operator, ValueInterface $value)
     {
         $this->name     = $name;
         $this->operator = $operator;

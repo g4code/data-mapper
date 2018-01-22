@@ -7,5 +7,5 @@ use G4\DataMapper\Common\Selection\Operator;
 interface ComparisonFormatterInterface
 {
 
-    public function format($name, Operator $operator, $value);
+    public function format($name, Operator $operator, ValueInterface $value);
 }

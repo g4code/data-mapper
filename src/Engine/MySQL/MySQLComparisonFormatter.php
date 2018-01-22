@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\ComparisonFormatterInterface;
+use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\MySQL\Quote;
 use G4\DataMapper\Common\Selection\Operator;
 
@@ -22,7 +23,7 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
         Operator::BETWEEN              => 'BETWEEN',
     ];
 
-    public function format($name, Operator $operator, $value)
+    public function format($name, Operator $operator, ValueInterface $value)
     {
         return sprintf(
             "%s %s %s",

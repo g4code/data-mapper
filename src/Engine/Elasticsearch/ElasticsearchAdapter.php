@@ -52,14 +52,16 @@ class ElasticsearchAdapter implements AdapterInterface
      * @param \ArrayIterator $mappingsCollection
      */
     public function insertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
-    {}
+    {
+    }
 
     /**
      * @param CollectionNameInterface $collectionName
      * @param \ArrayIterator $mappingsCollection
      */
     public function upsertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
-    {}
+    {
+    }
 
     /**
      * @param CollectionNameInterface $collectionName
@@ -67,7 +69,8 @@ class ElasticsearchAdapter implements AdapterInterface
      * @return RawData
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
-    {}
+    {
+    }
 
     /**
      * @param CollectionNameInterface $collectionName
@@ -80,7 +83,7 @@ class ElasticsearchAdapter implements AdapterInterface
         $data = $mapping->map();
 
         if (empty($data)) {
-           throw new EmptyDataException('Empty data for update.');
+            throw new EmptyDataException('Empty data for update.');
         }
 
         $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($data['id'])->setBody([$data])->execute();
@@ -91,12 +94,14 @@ class ElasticsearchAdapter implements AdapterInterface
      * @param MappingInterface $mapping
      */
     public function upsert(CollectionNameInterface $collectionName, MappingInterface $mapping)
-    {}
+    {
+    }
 
     /**
      * @param string $query
      * @return mixed
      */
     public function query($query)
-    {}
+    {
+    }
 }
