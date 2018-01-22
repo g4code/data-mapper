@@ -11,7 +11,7 @@ class ComparisonTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $comparison = new Comparison('name', $operatorStub, 'test');
+        $comparison = new Comparison('name', $operatorStub, new \G4\DataMapper\Common\SingleValue('test'));
 
         $comparisonFormatterMock = $this->getMockBuilder('\G4\DataMapper\Common\ComparisonFormatterInterface')
             ->disableOriginalConstructor()
