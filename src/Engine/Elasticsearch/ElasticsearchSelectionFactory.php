@@ -63,8 +63,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
     public function where()
     {
-        if ($this->identity->isVoid())
-        {
+        if ($this->identity->isVoid()) {
             return ['must' => ['match_all' => []]];
         }
 

@@ -8,7 +8,6 @@ use G4\Factory\CreateInterface;
 use G4\DataMapper\Exception\NoHostParameterException;
 use G4\DataMapper\Exception\NoPortParameterException;
 
-
 class ElasticsearchClientFactory implements CreateInterface
 {
     const COLON         = ':';
