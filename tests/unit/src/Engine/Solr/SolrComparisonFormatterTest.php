@@ -2,6 +2,8 @@
 
 use G4\DataMapper\Engine\Solr\SolrComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Common\RangeValue;
 
 class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
 {
@@ -31,7 +33,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::EQUAL);
 
-        $this->assertEquals('name:test', $this->comparisonFormatter->format('name', $this->operatorMock, 'test'));
+        $this->assertEquals('name:test', $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('test')));
     }
 
     public function testGreaterThan()
@@ -40,7 +42,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::GRATER_THAN);
 
-        $this->assertEquals('age:{18 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals('age:{18 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testLessThan()
@@ -49,7 +51,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LESS_THAN);
 
-        $this->assertEquals('age:{* TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals('age:{* TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testGreaterThanOrEqual()
@@ -58,7 +60,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::GRATER_THAN_OR_EQUAL);
 
-        $this->assertEquals('age:[18 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals('age:[18 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testLessThanOrEqual()
@@ -67,7 +69,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LESS_THAN_OR_EQUAL);
 
-        $this->assertEquals('age:[* TO 18]', $this->comparisonFormatter->format('age', $this->operatorMock, '18'));
+        $this->assertEquals('age:[* TO 18]', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18')));
     }
 
     public function testIn()
@@ -76,7 +78,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::IN);
 
-        $this->assertEquals('age:(18 OR 19 OR 20)', $this->comparisonFormatter->format('age', $this->operatorMock, '18, 19, 20'));
+        $this->assertEquals('age:(18 OR 19 OR 20)', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18, 19, 20')));
     }
 
     public function testLike()
@@ -85,6 +87,15 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LIKE);
 
-        $this->assertEquals('name:*Test*User*', $this->comparisonFormatter->format('name', $this->operatorMock, 'Test User'));
+        $this->assertEquals('name:*Test*User*', $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('Test User')));
+    }
+
+    public function testBetween()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
 }

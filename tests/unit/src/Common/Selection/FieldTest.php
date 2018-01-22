@@ -23,7 +23,7 @@ class FieldTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->field->add($operatorStub, 123);
+        $this->field->add($operatorStub, new \G4\DataMapper\Common\SingleValue(123));
 
         $this->assertFalse($this->field->isIncomplete());
         $this->assertInstanceOf('\G4\DataMapper\Common\Selection\Comparison', $this->field->getComparisons()[0]);
