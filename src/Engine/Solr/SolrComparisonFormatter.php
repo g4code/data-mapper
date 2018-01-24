@@ -13,6 +13,7 @@ use G4\DataMapper\Engine\Solr\Operators\InOperator;
 use G4\DataMapper\Engine\Solr\Operators\LessThanOperator;
 use G4\DataMapper\Engine\Solr\Operators\LessThanOrEqualOperator;
 use G4\DataMapper\Engine\Solr\Operators\LikeOperator;
+use G4\DataMapper\Engine\Solr\Operators\TimeFromInMinutes;
 
 class SolrComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -42,6 +43,9 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::BETWEEN:
                 $query = new BetweenQueryOperator($name, $value);
+                break;
+            case Operator::TIME_FROM_IN_MINUTES:
+                $query = new TimeFromInMinutes($name, $value);
                 break;
         }
 
