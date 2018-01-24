@@ -108,6 +108,7 @@ class SolrAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update.');
         }
 
+        //TODO: Refactor id value extraction.
         $idValue = explode(':', $selectionFactory->where());
 
         $data['id'] = $idValue[1];
