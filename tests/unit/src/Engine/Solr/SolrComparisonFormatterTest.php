@@ -98,4 +98,13 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
+
+    public function timeFromInMinutes()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::TIME_FROM_IN_MINUTES);
+
+        $this->assertEquals('online:[NOW-30MINUTES TO *]', $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue('30')));
+    }
 }
