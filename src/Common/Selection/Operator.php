@@ -15,6 +15,7 @@ class Operator
     const NOT_EQUAL            = 'NOT_EQUAL';
     const NOT_IN               = 'NOT_IN';
     const BETWEEN              = 'BETWEEN';
+    const TIME_FROM_IN_MINUTES = 'TIME_FROM_IN_MINUTES';
 
 
     /**
