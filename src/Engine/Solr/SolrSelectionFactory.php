@@ -2,7 +2,6 @@
 
 namespace G4\DataMapper\Engine\Solr;
 
-use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\Selection\Comparison;
@@ -10,11 +9,11 @@ use G4\DataMapper\Common\Selection\Comparison;
 class SolrSelectionFactory implements SelectionFactoryInterface
 {
     /**
-     * @var IdentityInterface
+     * @var SolrIdentity
      */
     private $identity;
 
-    public function __construct(IdentityInterface $identity)
+    public function __construct(SolrIdentity $identity)
     {
         $this->identity = $identity;
     }
@@ -75,7 +74,10 @@ class SolrSelectionFactory implements SelectionFactoryInterface
                 $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
             }
         }
-        return join(' AND ', $comparisons);
+
+        $comparisonsString = join(' AND ', $comparisons);
+
+        return $this->identity->hasRawQuery() ? sprintf('%s AND %s', $this->identity->getRawQuery(), $comparisonsString) : $comparisonsString;
     }
 
     private function makeComparisonFormatter()
