@@ -7,6 +7,7 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\Solr\Operators\BetweenQueryOperator;
 use G4\DataMapper\Engine\Solr\Operators\EqualQueryOperator;
+use G4\DataMapper\Engine\Solr\Operators\GeodistOperator;
 use G4\DataMapper\Engine\Solr\Operators\GreaterThanOperator;
 use G4\DataMapper\Engine\Solr\Operators\GreaterThanOrEqualOperator;
 use G4\DataMapper\Engine\Solr\Operators\InOperator;
@@ -46,6 +47,9 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::TIME_FROM_IN_MINUTES:
                 $query = new TimeFromInMinutes($name, $value);
+                break;
+            case Operator::GEODIST:
+                $query = new GeodistOperator($name, $value);
                 break;
         }
 
