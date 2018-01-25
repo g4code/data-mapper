@@ -22,7 +22,7 @@ class TimeFromInMinutes implements QueryOperatorInterface
         return $this->name
             . QueryConnector::COLON
             . QueryConnector::SQUARE_BRACKET_OPEN
-            . "NOW-#{$this->value}MINUTES"
+            . "NOW-{$this->value}MINUTES"
             . QueryConnector::EMPTY_SPACE
             . QueryConnector::CONNECTOR_TO
             . QueryConnector::EMPTY_SPACE
