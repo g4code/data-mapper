@@ -56,7 +56,7 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
      * @param $distance
      * @return SolrIdentity
      */
-    public function geodist($latitude, $longitude, $distance)
+    public function geodist($latitude, $longitude, $distance = null)
     {
         $coordinates = new CoordinatesValue($latitude, $longitude);
 
