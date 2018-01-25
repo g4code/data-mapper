@@ -28,4 +28,16 @@ class SolrIdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(SolrIdentity::class, $this->solrIdentity->field('location')->geodist(10, 15));
     }
+
+    public function testHasRawQueryTrueValue()
+    {
+        $this->solrIdentity->setRawQuery('gender:M');
+
+        $this->assertEquals(true, $this->solrIdentity->hasRawQuery());
+    }
+
+    public function testHasRawQueryFalseValue()
+    {
+        $this->assertEquals(false, $this->solrIdentity->hasRawQuery());
+    }
 }
