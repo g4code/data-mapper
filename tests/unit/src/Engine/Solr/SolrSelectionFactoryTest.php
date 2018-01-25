@@ -13,7 +13,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Common\Identity::class)
+        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrIdentity::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -119,6 +119,33 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ]);
 
         $this->assertEquals('id:1 AND age:18', $this->selectionFactory->where());
+    }
+
+    public function testWhereWithRawQuery()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(false);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([
+                $this->getMockForComparison('age', 18)
+            ]);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('hasRawQuery')
+            ->willReturn(true);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getRawQuery')
+            ->willReturn("((gender:'F' AND sexual_orientation:'STRAIGHT') OR (gender:'M' AND sexual_orientation:'STRAIGHT'))");
+
+        $this->assertEquals("((gender:'F' AND sexual_orientation:'STRAIGHT') OR (gender:'M' AND sexual_orientation:'STRAIGHT')) AND age:18", $this->selectionFactory->where());
     }
 
     public function testWhereIfIdentityIsVoid()
