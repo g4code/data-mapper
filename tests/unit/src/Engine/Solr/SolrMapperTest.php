@@ -54,7 +54,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Common\IdentityInterface::class);
+        $identityStub = $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -65,7 +65,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteException()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Common\IdentityInterface::class);
+        $identityStub = $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -88,7 +88,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($rawDataStub);
 
-        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Common\Identity::class)));
+        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class)));
     }
 
     public function testFindException()
@@ -100,7 +100,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(SolrMapperException::class);
 
-        $this->mapper->find($this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testInsert()
@@ -133,7 +133,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('update')
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testUpdateException()
@@ -146,7 +146,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(SolrMapperException::class);
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testUpsert()

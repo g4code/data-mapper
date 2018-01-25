@@ -6,7 +6,7 @@ use G4\DataMapper\Builder;
 use G4\DataMapper\Engine\Solr\SolrAdapter;
 use G4\DataMapper\Engine\Solr\SolrClientFactory;
 use G4\DataMapper\Engine\Solr\SolrCollectionName;
-use G4\DataMapper\Common\Identity;
+use G4\DataMapper\Engine\Solr\SolrIdentity;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function makeIdentityById()
     {
-        $identity = new Identity();
+        $identity = new SolrIdentity();
         $identity
             ->field('id')
             ->equal($this->getId());

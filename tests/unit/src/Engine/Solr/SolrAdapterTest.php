@@ -211,7 +211,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('update');
 
         $selectionFactory = new \G4\DataMapper\Engine\Solr\SolrSelectionFactory(
-            (new \G4\DataMapper\Common\Identity())
+            (new \G4\DataMapper\Engine\Solr\SolrIdentity())
                 ->field('id')
                 ->equal(1)
         );
@@ -236,7 +236,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $selectionFactory = new \G4\DataMapper\Engine\Solr\SolrSelectionFactory(
-            (new \G4\DataMapper\Common\Identity())
+            (new \G4\DataMapper\Engine\Solr\SolrIdentity())
                 ->field('id')
                 ->equal(1)
         );
