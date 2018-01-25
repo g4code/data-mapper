@@ -6,9 +6,6 @@ use G4\DataMapper\Common\IdentityInterface;
 
 interface SelectionFactoryInterface
 {
-
-    public function __construct(IdentityInterface $identity);
-
     public function fieldNames();
 
     public function group();
