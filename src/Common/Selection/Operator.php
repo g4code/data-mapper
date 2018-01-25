@@ -48,6 +48,8 @@ class Operator
             self::NOT_EQUAL,
             self::NOT_IN,
             self::BETWEEN,
+            self::TIME_FROM_IN_MINUTES,
+            self::GEODIST,
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {
