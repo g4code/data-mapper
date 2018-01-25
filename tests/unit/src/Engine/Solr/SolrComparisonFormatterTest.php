@@ -99,12 +99,21 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
 
-    public function timeFromInMinutes()
+    public function testTimeFromInMinutes()
     {
         $this->operatorMock->expects($this->any())
             ->method('getSymbol')
             ->willReturn(Operator::TIME_FROM_IN_MINUTES);
 
         $this->assertEquals('online:[NOW-30MINUTES TO *]', $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue('30')));
+    }
+
+    public function testGeodist()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::GEODIST);
+
+        $this->assertEquals(['latitude' => 20, 'longitude' => 10, 'distance' => null, 'spatialField' => 'location', 'filterQuery' => '{!geofilt}', '_dist_' => 'geodist()'], $this->comparisonFormatter->format('location', $this->operatorMock, new \G4\DataMapper\Common\CoordinatesValue(10, 20)));
     }
 }
