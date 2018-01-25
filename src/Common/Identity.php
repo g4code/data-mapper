@@ -280,7 +280,7 @@ class Identity implements IdentityInterface
         return $this;
     }
 
-    private function arrayException($value)
+    protected function arrayException($value)
     {
         if (is_array($value)) {
             throw new \Exception('Value cannot be array', 101);
@@ -299,7 +299,7 @@ class Identity implements IdentityInterface
      * @param string $value
      * @throws \Exception
      */
-    private function operator($symbol, $value)
+    protected function operator($symbol, $value)
     {
         if ($this->isVoid()) {
             throw new \Exception('Field is not defined', 101);
