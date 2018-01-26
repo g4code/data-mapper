@@ -160,6 +160,10 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
             ->method('offset')
             ->willReturn('0');
 
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('getGeodistParameters')
+            ->willReturn([]);
 
         $this->clientMock
             ->expects($this->once())
