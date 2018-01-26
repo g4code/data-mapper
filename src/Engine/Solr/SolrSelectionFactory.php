@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Engine\Solr;
 
+use G4\DataMapper\Common\CoordinatesValue;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\Selection\Comparison;
@@ -78,6 +79,11 @@ class SolrSelectionFactory implements SelectionFactoryInterface
         $comparisonsString = join(' AND ', $comparisons);
 
         return $this->identity->hasRawQuery() ? sprintf('%s AND %s', $this->identity->getRawQuery(), $comparisonsString) : $comparisonsString;
+    }
+
+    public function getGeodistParameters()
+    {
+        return $this->identity->getCoordinates()->format();
     }
 
     private function makeComparisonFormatter()
