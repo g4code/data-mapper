@@ -2,16 +2,19 @@
 
 namespace G4\DataMapper\Common;
 
+use G4\DataMapper\Common\QueryConnector;
+
 class CoordinatesValue implements ValueInterface
 {
     private $longitude;
     private $latitude;
     private $distance;
 
-    public function __construct($longitude, $latitude)
+    public function __construct($longitude, $latitude, $distance)
     {
         $this->longitude = $longitude;
         $this->latitude  = $latitude;
+        $this->distance  = $distance;
     }
 
     public function getLongitude()
@@ -22,12 +25,6 @@ class CoordinatesValue implements ValueInterface
     public function getLatitude()
     {
         return $this->latitude;
-    }
-
-    public function setDistance($value)
-    {
-        $this->distance = $value;
-        return $this;
     }
 
     public function getDistance()
