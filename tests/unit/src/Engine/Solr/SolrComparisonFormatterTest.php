@@ -107,13 +107,4 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('online:[NOW-30MINUTES TO *]', $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue('30')));
     }
-
-    public function testGeodist()
-    {
-        $this->operatorMock->expects($this->any())
-            ->method('getSymbol')
-            ->willReturn(Operator::GEODIST);
-
-        $this->assertEquals(['latitude' => 20, 'longitude' => 10, 'distance' => null, 'spatialField' => 'location', 'filterQuery' => '{!geofilt}', '_dist_' => 'geodist()'], $this->comparisonFormatter->format('location', $this->operatorMock, new \G4\DataMapper\Common\CoordinatesValue(10, 20)));
-    }
 }
