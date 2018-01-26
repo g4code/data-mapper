@@ -80,16 +80,18 @@ class SolrAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $query = [
+            self::QUERY         => $selectionFactory->where(),
+            self::FIELDS        => $selectionFactory->fieldNames(),
+            self::LIMIT         => $selectionFactory->limit(),
+            self::SORT          => $selectionFactory->sort(),
+            self::OFFSET        => $selectionFactory->offset(),
+            self::RESPONSE_TYPE => self::JSON_RESPONSE_TYPE,
+        ];
+
         $data = $this->client
             ->setCollection($collectionName)
-            ->setQuery([
-                self::QUERY         => $selectionFactory->where(),
-                self::FIELDS        => $selectionFactory->fieldNames(),
-                self::LIMIT         => $selectionFactory->limit(),
-                self::SORT          => $selectionFactory->sort(),
-                self::OFFSET        => $selectionFactory->offset(),
-                self::RESPONSE_TYPE => self::JSON_RESPONSE_TYPE
-            ])
+            ->setQuery(array_merge($query, $selectionFactory->getGeodistParameters()))
             ->select();
 
         return new RawData($data['response']['docs'], $this->client->getTotalItemsCount());
