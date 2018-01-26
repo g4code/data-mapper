@@ -48,9 +48,6 @@ class SolrComparisonFormatter implements ComparisonFormatterInterface
             case Operator::TIME_FROM_IN_MINUTES:
                 $query = new TimeFromInMinutes($name, $value);
                 break;
-            case Operator::GEODIST:
-                $query = new GeodistOperator($name, $value);
-                break;
         }
 
         return $query->format();
