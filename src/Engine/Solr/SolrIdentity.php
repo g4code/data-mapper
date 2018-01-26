@@ -16,6 +16,11 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
     private $rawQuery;
 
     /**
+     * @var CoordinatesValue
+     */
+    private $coordinates;
+
+    /**
      * @param $value
      */
     public function setRawQuery($value)
@@ -56,15 +61,20 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
      * @param $distance
      * @return SolrIdentity
      */
-    public function geodist($latitude, $longitude, $distance = null)
+    public function geodist($latitude, $longitude, $distance = 1000000)
     {
-        $coordinates = new CoordinatesValue($latitude, $longitude);
+        $this->coordinates = new SolrGeolocationFormatter(
+            new CoordinatesValue($latitude, $longitude, $distance)
+        );
 
-        if (isset($distance)) {
-            $coordinates->setDistance($distance);
-        }
-
-        $this->operator(Operator::GEODIST, $coordinates);
         return $this;
+    }
+
+    /**
+     * @return CoordinatesValue
+     */
+    public function getCoordinates()
+    {
+        return $this->coordinates;
     }
 }
