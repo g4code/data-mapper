@@ -45,21 +45,23 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function sort()
     {
-
         $rawSorting = $this->identity->getSorting();
-
-        if (empty($rawSorting)) {
-            return [];
-        }
 
         $sorting = [];
 
-        foreach ($rawSorting as $oneSort) {
-            if ($oneSort instanceof Sort) {
-                $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
+        if (!empty($rawSorting)) {
+            foreach ($rawSorting as $oneSort) {
+                if ($oneSort instanceof Sort) {
+                    $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
+                }
             }
         }
-        return $sorting;
+
+        if (!empty($this->getGeodistParameters())) {
+           $sorting = array_merge($sorting, ['geodist() asc']);
+        }
+
+        return join(',', $sorting);
     }
 
     public function where()
