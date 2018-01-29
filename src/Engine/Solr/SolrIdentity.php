@@ -63,18 +63,16 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
      */
     public function geodist($latitude, $longitude, $distance = 1000000)
     {
-        $this->coordinates = new SolrGeolocationFormatter(
-            new CoordinatesValue($latitude, $longitude, $distance)
-        );
+        $this->coordinates = new CoordinatesValue($latitude, $longitude, $distance);
 
         return $this;
     }
 
     /**
-     * @return CoordinatesValue
+     * @return array
      */
     public function getCoordinates()
     {
-        return $this->coordinates;
+        return $this->coordinates === NULL ? [] : $this->coordinates->format();
     }
 }
