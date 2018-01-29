@@ -87,10 +87,45 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
                 $this->getMockForSort('name', 'asc'),
             ]);
 
-        $this->assertEquals([
-            ['id'   => 'desc'],
-            ['name' => 'asc'],
-        ], $this->selectionFactory->sort());
+        $this->assertEquals('id desc,name asc', $this->selectionFactory->sort());
+    }
+
+    public function testGeodistSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getCoordinates')
+            ->willReturn([
+                'fq'     => '{!geofilt}',
+                'sfield' => 'location',
+                'pt'     => '46.100376,19.667587',
+                'd'      => '100',
+            ]);
+
+        $this->assertEquals('geodist() asc', $this->selectionFactory->sort());
+    }
+
+    public function testCombinedSortAndGeodistSort()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getCoordinates')
+            ->willReturn([
+                'fq'     => '{!geofilt}',
+                'sfield' => 'location',
+                'pt'     => '46.100376,19.667587',
+                'd'      => '100',
+            ]);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->assertEquals('id desc,name asc,geodist() asc', $this->selectionFactory->sort());
     }
 
     public function testEmptySort()
@@ -98,9 +133,9 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->identityMock
             ->expects($this->once())
             ->method('getSorting')
-            ->willReturn([]);
+            ->willReturn('');
 
-        $this->assertEquals([], $this->selectionFactory->sort());
+        $this->assertEquals('', $this->selectionFactory->sort());
     }
 
     public function testWhere()
@@ -183,7 +218,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $mock
             ->expects($this->once())
             ->method('getSort')
-            ->willReturn([$column => $sortDirection]);
+            ->willReturn($column .' '. $sortDirection);
 
         return $mock;
     }
