@@ -2,8 +2,6 @@
 
 namespace G4\DataMapper\Common;
 
-use G4\DataMapper\Common\QueryConnector;
-
 class CoordinatesValue implements ValueInterface
 {
     private $longitude;
