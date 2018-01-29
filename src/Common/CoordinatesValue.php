@@ -15,18 +15,13 @@ class CoordinatesValue implements ValueInterface
         $this->distance  = $distance;
     }
 
-    public function getLongitude()
+    public function format()
     {
-        return $this->longitude;
-    }
-
-    public function getLatitude()
-    {
-        return $this->latitude;
-    }
-
-    public function getDistance()
-    {
-        return $this->distance;
+        return [
+            'fq'     => '{!geofilt}',
+            'sfield' => 'location',
+            'pt'     => $this->longitude . QueryConnector::COMMA . $this->latitude,
+            'd'      => $this->distance,
+        ];
     }
 }
