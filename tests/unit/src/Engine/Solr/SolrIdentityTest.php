@@ -40,4 +40,23 @@ class SolrIdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(false, $this->solrIdentity->hasRawQuery());
     }
+
+    public function testGetCoordinatesWithEmptyParams()
+    {
+        $this->assertEquals([], $this->solrIdentity->getCoordinates());
+    }
+
+    public function testGetCoordinatesWithParams()
+    {
+        $this->solrIdentity->geodist(46.100376, 19.667587, 100);
+
+        $expectedArray = [
+            'fq'     => '{!geofilt}',
+            'sfield' => 'location',
+            'pt'     => '46.100376,19.667587',
+            'd'      => '100',
+        ];
+
+        $this->assertEquals($expectedArray, $this->solrIdentity->getCoordinates());
+    }
 }
