@@ -83,7 +83,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function getGeodistParameters()
     {
-        return $this->identity->getCoordinates()->format();
+        return $this->identity->getCoordinates();
     }
 
     private function makeComparisonFormatter()
