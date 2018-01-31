@@ -4,6 +4,9 @@ namespace G4\DataMapper\Common;
 
 class SingleValue implements ValueInterface
 {
+    const EMPTY_ARRAY = [];
+    const NULL_VALUE  = null;
+
     /**
      * @var mixed
      */
@@ -24,8 +27,8 @@ class SingleValue implements ValueInterface
         return $this->value;
     }
 
-    public function isNull()
+    public function isEmpty()
     {
-        return $this->value === null;
+        return in_array($this->value, [self::NULL_VALUE, self::EMPTY_ARRAY]);
     }
 }
