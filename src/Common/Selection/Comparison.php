@@ -33,4 +33,9 @@ class Comparison
     {
         return $comparisonFormatter->format($this->name, $this->operator, $this->value);
     }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
 }
