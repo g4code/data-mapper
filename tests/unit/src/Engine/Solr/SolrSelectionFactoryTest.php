@@ -1,6 +1,9 @@
 <?php
 
 use G4\DataMapper\Engine\Solr\SolrSelectionFactory;
+use G4\DataMapper\Common\Selection\Comparison;
+use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\SingleValue;
 
 class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -149,8 +152,9 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getComparisons')
             ->willReturn([
-                $this->getMockForComparison('id', 1),
-                $this->getMockForComparison('age', 18)
+                new Comparison('id', new Operator(Operator::EQUAL), new SingleValue(1)),
+                new Comparison('age', new Operator(Operator::EQUAL), new SingleValue(18)),
+                new Comparison('gender', new Operator(Operator::EQUAL), new SingleValue(null)),
             ]);
 
         $this->assertEquals('id:1 AND age:18', $this->selectionFactory->where());
@@ -167,7 +171,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getComparisons')
             ->willReturn([
-                $this->getMockForComparison('age', 18)
+                new Comparison('age', new Operator(Operator::EQUAL), new SingleValue(18)),
             ]);
 
         $this->identityMock
@@ -191,21 +195,6 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->assertEquals('1', $this->selectionFactory->where());
-    }
-
-    private function getMockForComparison($column, $value)
-    {
-        $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getComparison'])
-            ->getMock();
-
-        $mock
-            ->expects($this->once())
-            ->method('getComparison')
-            ->willReturn($column . ':' . $value);
-
-        return $mock;
     }
 
     private function getMockForSort($column, $sortDirection)
