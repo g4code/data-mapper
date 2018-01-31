@@ -74,7 +74,9 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison) {
-                $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
+                if(!$oneComparison->getValue()->isNull()) {
+                    $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
+                }
             }
         }
 
