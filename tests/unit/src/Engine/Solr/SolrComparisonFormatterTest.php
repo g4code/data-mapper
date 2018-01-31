@@ -78,7 +78,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::IN);
 
-        $this->assertEquals('age:(18 OR 19 OR 20)', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue('18, 19, 20')));
+        $this->assertEquals('age:(18 OR 19 OR 20)', $this->comparisonFormatter->format('age', $this->operatorMock, new SingleValue(' 18, 19  ,  20  ')));
     }
 
     public function testLike()
