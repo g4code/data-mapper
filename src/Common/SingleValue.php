@@ -16,11 +16,16 @@ class SingleValue implements ValueInterface
 
     public function __toString()
     {
-        return (string) $this->value;
+        return is_array($this->value) ? join(',', $this->value) : (string) $this->value;
     }
 
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function isNull()
+    {
+        return $this->value === null;
     }
 }
