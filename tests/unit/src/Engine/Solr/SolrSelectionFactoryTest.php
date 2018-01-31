@@ -155,6 +155,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
                 new Comparison('id', new Operator(Operator::EQUAL), new SingleValue(1)),
                 new Comparison('age', new Operator(Operator::EQUAL), new SingleValue(18)),
                 new Comparison('gender', new Operator(Operator::EQUAL), new SingleValue(null)),
+                new Comparison('status', new Operator(Operator::IN), new SingleValue([])),
             ]);
 
         $this->assertEquals('id:1 AND age:18', $this->selectionFactory->where());
