@@ -22,7 +22,12 @@ class InOperator implements QueryOperatorInterface
         return $this->name
             . QueryConnector::COLON
             . QueryConnector::ROUND_BRACKET_OPEN
-            . str_replace(QueryConnector::COMMA, QueryConnector::EMPTY_SPACE . QueryConnector::CONNECTOR_OR, $this->value)
+            . str_replace(QueryConnector::COMMA, QueryConnector::EMPTY_SPACE . QueryConnector::CONNECTOR_OR . QueryConnector::EMPTY_SPACE, $this->getValueAttributeWithoutWhitespaceCharacters())
             . QueryConnector::ROUND_BRACKET_CLOSE;
+    }
+
+    private function getValueAttributeWithoutWhitespaceCharacters()
+    {
+        return preg_replace('/\s+/', '', $this->value);
     }
 }
