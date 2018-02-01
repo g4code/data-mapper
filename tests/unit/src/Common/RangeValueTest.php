@@ -25,4 +25,19 @@ class RangeValueTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(18, $this->rangeValueObject->getMax());
     }
+
+    public function testIsEmpty()
+    {
+        $this->assertEquals(true, (new RangeValue(null, null))->isEmpty());
+    }
+
+    public function testIsMinNull()
+    {
+        $this->assertEquals(true, (new RangeValue(null, 10))->isMinNull());
+    }
+
+    public function testIsMaxNull()
+    {
+        $this->assertEquals(true, (new RangeValue(1, null))->isMaxNull());
+    }
 }
