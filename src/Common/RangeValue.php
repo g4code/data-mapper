@@ -22,11 +22,26 @@ class RangeValue implements ValueInterface
 
     public function getMin()
     {
-        return min($this->min, $this->max);
+        return min(array_filter([$this->min, $this->max]));
     }
 
     public function getMax()
     {
-        return max($this->min, $this->max);
+        return max(array_filter([$this->min, $this->max]));
+    }
+
+    public function isEmpty()
+    {
+        return $this->min === null && $this->max === null;
+    }
+
+    public function isMinNull()
+    {
+        return $this->min === null;
+    }
+
+    public function isMaxNull()
+    {
+        return $this->max === null;
     }
 }
