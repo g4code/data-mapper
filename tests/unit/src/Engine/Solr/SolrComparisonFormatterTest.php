@@ -99,6 +99,24 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
 
+    public function testBetweenMinValueNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{* TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 18)));
+    }
+
+    public function testBetweenMaxValueNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{1 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, null)));
+    }
+
     public function testTimeFromInMinutes()
     {
         $this->operatorMock->expects($this->any())
