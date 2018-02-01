@@ -4,6 +4,7 @@ use G4\DataMapper\Engine\Solr\SolrSelectionFactory;
 use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Common\RangeValue;
 
 class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -156,6 +157,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
                 new Comparison('age', new Operator(Operator::EQUAL), new SingleValue(18)),
                 new Comparison('gender', new Operator(Operator::EQUAL), new SingleValue(null)),
                 new Comparison('status', new Operator(Operator::IN), new SingleValue([])),
+                new Comparison('registration_date', new Operator(Operator::BETWEEN), new RangeValue(null, null)),
             ]);
 
         $this->assertEquals('id:1 AND age:18', $this->selectionFactory->where());
