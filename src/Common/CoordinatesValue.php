@@ -24,4 +24,9 @@ class CoordinatesValue implements ValueInterface
             'd'      => $this->distance,
         ];
     }
+
+    public function isEmpty()
+    {
+        return $this->longitude === null && $this->latitude === null && $this->distance === null;
+    }
 }
