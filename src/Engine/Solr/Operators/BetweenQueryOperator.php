@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Solr\Operators;
 
 use G4\DataMapper\Common\RangeValue;
 use G4\DataMapper\Common\QueryConnector;
+use G4\DataMapper\Selection\Solr\Consts\Query;
 
 class BetweenQueryOperator implements QueryOperatorInterface
 {
@@ -22,11 +23,11 @@ class BetweenQueryOperator implements QueryOperatorInterface
         return $this->name
             . QueryConnector::COLON
             . QueryConnector::CURLY_BRACKET_OPEN
-            . $this->value->getMin()
+            . ($this->value->isMinNull() ? QueryConnector::WILDCARD : $this->value->getMin())
             . QueryConnector::EMPTY_SPACE
             . QueryConnector::CONNECTOR_TO
             . QueryConnector::EMPTY_SPACE
-            . $this->value->getMax()
+            . ($this->value->isMaxNull() ? QueryConnector::WILDCARD : $this->value->getMax())
             . QueryConnector::CURLY_BRACKET_CLOSE;
     }
 }
