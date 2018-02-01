@@ -32,4 +32,8 @@ class CoordinatesValueTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArray, $this->coordinates->format());
     }
 
+    public function testIsEmpty()
+    {
+        $this->assertEquals(true, (new CoordinatesValue(null, null, null))->isEmpty());
+    }
 }
