@@ -197,7 +197,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
             ->method('isVoid')
             ->willReturn(true);
 
-        $this->assertEquals('1', $this->selectionFactory->where());
+        $this->assertEquals('*:*', $this->selectionFactory->where());
     }
 
     private function getMockForSort($column, $sortDirection)
