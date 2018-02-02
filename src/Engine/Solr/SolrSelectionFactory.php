@@ -67,7 +67,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
     public function where()
     {
         if ($this->identity->isVoid()) {
-            return '1';
+            return '*:*';
         }
 
         $comparisons = [];
