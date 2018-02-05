@@ -46,6 +46,13 @@ class SolrIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->solrIdentity->getCoordinates());
     }
 
+    public function testGetCoordinatesWithEmptyGeodistAttributes()
+    {
+        $this->assertEquals([], $this->solrIdentity->geodist(null, 5, 100)->getCoordinates());
+        $this->assertEquals([], $this->solrIdentity->geodist(null, null, 100)->getCoordinates());
+        $this->assertEquals([], $this->solrIdentity->geodist(46, null, null)->getCoordinates());
+    }
+
     public function testGetCoordinatesWithParams()
     {
         $this->solrIdentity->geodist(46.100376, 19.667587, 100);
