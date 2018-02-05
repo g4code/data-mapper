@@ -73,6 +73,6 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
      */
     public function getCoordinates()
     {
-        return $this->coordinates === NULL ? [] : $this->coordinates->format();
+        return ($this->coordinates === null || $this->coordinates->isEmpty()) ? [] : $this->coordinates->format();
     }
 }
