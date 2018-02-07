@@ -129,7 +129,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
                 $this->getMockForSort('name', 'asc'),
             ]);
 
-        $this->assertEquals('id desc,name asc,geodist() asc', $this->selectionFactory->sort());
+        $this->assertEquals('geodist() asc,id desc,name asc', $this->selectionFactory->sort());
     }
 
     public function testEmptySort()
