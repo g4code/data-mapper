@@ -51,4 +51,21 @@ class RawDataTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->total, $this->rawData->getTotal());
     }
+
+    public function testGetAllWithIdIdentifier()
+    {
+        $data = [
+            ['id' => 5, 'first_name' => 'Test', 'last_name' => 'User 1'],
+            ['id' => 6, 'first_name' => 'Test', 'last_name' => 'User 2'],
+            ['id' => 7, 'first_name' => 'Test', 'last_name' => 'User 3'],
+        ];
+
+        $expectedData = [
+            5 => ['id' => 5, 'first_name' => 'Test', 'last_name' => 'User 1'],
+            6 => ['id' => 6, 'first_name' => 'Test', 'last_name' => 'User 2'],
+            7 => ['id' => 7, 'first_name' => 'Test', 'last_name' => 'User 3'],
+        ];
+
+        $this->assertEquals($expectedData, (new RawData($data, count($data)))->getAllDataWithIdIdentifier());
+    }
 }
