@@ -26,6 +26,7 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
     public function setRawQuery($value)
     {
         $this->rawQuery = $value;
+        return $this;
     }
 
     /**
