@@ -5,6 +5,8 @@ namespace G4\DataMapper\Common;
 class RawData implements \Countable
 {
 
+    const ID_IDENTIFIER = 'id';
+
     /**
      * @var int
      */
@@ -53,5 +55,18 @@ class RawData implements \Countable
     public function getTotal()
     {
         return $this->total;
+    }
+
+    public function getAllDataWithIdIdentifier()
+    {
+        $data = [];
+
+        foreach($this->data as $item) {
+            isset($item[self::ID_IDENTIFIER])
+                ? $data[$item[self::ID_IDENTIFIER]] = $item
+                : $data []= $item;
+        }
+
+        return $data;
     }
 }
