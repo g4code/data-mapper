@@ -4,6 +4,7 @@ use G4\DataMapper\Common\RawData;
 
 class RawDataTest extends PHPUnit_Framework_TestCase
 {
+    const ID_IDENTIFIER = 'id';
 
     private $data;
 
@@ -66,6 +67,15 @@ class RawDataTest extends PHPUnit_Framework_TestCase
             7 => ['id' => 7, 'first_name' => 'Test', 'last_name' => 'User 3'],
         ];
 
-        $this->assertEquals($expectedData, (new RawData($data, count($data)))->getAllDataWithIdIdentifier());
+        $this->assertEquals($expectedData, (new RawData($data, count($data)))->getAllDataWithIdIdentifier(self::ID_IDENTIFIER));
+    }
+
+    public function testGetAlWithIdIdentifierException()
+    {
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data.');
+        $this->expectExceptionCode(10105);
+
+        (new RawData([], count([])))->getAllDataWithIdIdentifier(self::ID_IDENTIFIER);
     }
 }
