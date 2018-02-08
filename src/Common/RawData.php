@@ -2,11 +2,10 @@
 
 namespace G4\DataMapper\Common;
 
+use G4\DataMapper\Exception\EmptyDataException;
+
 class RawData implements \Countable
 {
-
-    const ID_IDENTIFIER = 'id';
-
     /**
      * @var int
      */
@@ -57,14 +56,18 @@ class RawData implements \Countable
         return $this->total;
     }
 
-    public function getAllDataWithIdIdentifier()
+    public function getAllDataWithIdIdentifier($identifier)
     {
         $data = [];
 
         foreach($this->data as $item) {
-            isset($item[self::ID_IDENTIFIER])
-                ? $data[$item[self::ID_IDENTIFIER]] = $item
-                : $data []= $item;
+            if(isset($item[$identifier])) {
+                $data[$item[$identifier]] = $item;
+            }
+        }
+
+        if (empty($data)) {
+           throw new EmptyDataException();
         }
 
         return $data;
