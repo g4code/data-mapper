@@ -195,9 +195,9 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $mappingMock = $this->getMappingMock();
 
         $mappingMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('map')
-            ->willReturn(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']);
+            ->willReturn(['id' => 1, 'first_name' => 'Blaster', 'last_name' => 'Master']);
 
         $this->clientMock
             ->expects($this->once())
@@ -208,7 +208,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('setDocument')
-            ->with($this->equalTo(['id' => 1, 'first_name' => 'Bob', 'last_name' => 'Uncle', 'gender' => 'm']))
+            ->with($this->equalTo([['id' => '1', 'first_name' => ['set' => 'Blaster'], 'last_name' => ['set' => 'Master']]]))
             ->willReturnSelf();
 
         $this->clientMock->expects($this->once())
