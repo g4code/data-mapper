@@ -83,7 +83,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $mapping
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('map')
             ->willReturn($this->getData());
 
