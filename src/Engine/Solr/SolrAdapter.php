@@ -24,6 +24,8 @@ class SolrAdapter implements AdapterInterface
 
     const JSON_RESPONSE_TYPE = 'json';
 
+    const OPERATION_SET = 'set';
+
     private $client;
 
     public function __construct(SolrClientFactory $clientFactory)
@@ -104,18 +106,18 @@ class SolrAdapter implements AdapterInterface
      */
     public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
     {
-        $data = $mapping->map();
-
-        if (empty($data)) {
+        if (empty($mapping->map())) {
             throw new EmptyDataException('Empty data for update.');
         }
+
+        $data = $this->formatData($mapping->map());
 
         //TODO: Refactor id value extraction.
         $idValue = explode(':', $selectionFactory->where());
 
         $data['id'] = $idValue[1];
 
-        $this->client->setCollection($collectionName)->setDocument($data)->update();
+        $this->client->setCollection($collectionName)->setDocument([$data])->update();
     }
 
     /**
@@ -132,5 +134,21 @@ class SolrAdapter implements AdapterInterface
      */
     public function query($query)
     {
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function formatData(array $data)
+    {
+        $formattedData = [];
+
+        foreach($data as $key => $value)
+        {
+            $formattedData[$key] = [self::OPERATION_SET => $value];
+        }
+
+        return $formattedData;
     }
 }
