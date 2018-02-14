@@ -8,6 +8,7 @@ use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Exception\EmptyDataException;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class SolrAdapter implements AdapterInterface
 {
@@ -65,6 +66,7 @@ class SolrAdapter implements AdapterInterface
      */
     public function insertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -73,6 +75,7 @@ class SolrAdapter implements AdapterInterface
      */
     public function upsertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -135,6 +138,7 @@ class SolrAdapter implements AdapterInterface
      */
     public function upsert(CollectionNameInterface $collectionName, MappingInterface $mapping)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -143,6 +147,7 @@ class SolrAdapter implements AdapterInterface
      */
     public function query($query)
     {
+        throw new NotImplementedException();
     }
 
     /**
