@@ -120,6 +120,15 @@ class SolrAdapter implements AdapterInterface
         $this->client->setCollection($collectionName)->setDocument([$data])->update();
     }
 
+    public function updateBulk(CollectionNameInterface $collectionName, array $data)
+    {
+        if(empty($data)) {
+            throw new EmptyDataException('Empty data for bulk update');
+        }
+
+        $this->client->setCollection($collectionName)->setDocument($data)->update();
+    }
+
     /**
      * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
