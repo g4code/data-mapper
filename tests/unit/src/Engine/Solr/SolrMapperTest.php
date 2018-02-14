@@ -149,6 +149,46 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
         $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
+    public function testUpdateBulk()
+    {
+        $this->mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([
+                ['id' => 5, 'first_name' => 'Test user'],
+            ]);
+
+        $this->mapper->markForSet($this->mappingMock);
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('updateBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mapper->getDataForBulkUpdate()));
+
+        $this->mapper->updateBulk();
+    }
+
+    public function testUpdateBulkWithException()
+    {
+        $this->mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
+
+        $this->mapper->markForSet($this->mappingMock);
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('updateBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mapper->getDataForBulkUpdate()))
+            ->will($this->throwException(new SolrMapperException(self::SOLR_DATA_MAPPER_ERROR_MESSAGE)));
+
+        $this->expectException(SolrMapperException::class);
+
+        $this->mapper->updateBulk();
+
+    }
+
     public function testUpsert()
     {
         $this->adapterMock
@@ -191,5 +231,21 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
         $this->expectException(SolrMapperException::class);
 
         $this->mapper->query('solr');
+    }
+
+    public function testMarkForSet()
+    {
+        $this->mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn(['id' => 5, 'first_name' => 'Test user']);
+
+        $this->mapper
+            ->markForSet($this->mappingMock);
+
+
+        $expectedData = [['id' => 5, 'first_name' => ['set' => 'Test user']]];
+
+        $this->assertEquals($this->mapper->getDataForBulkUpdate(), $expectedData);
     }
 }
