@@ -11,6 +11,9 @@ use G4\DataMapper\Exception\SolrMapperException;
 
 class SolrMapper implements MapperInterface
 {
+    const METHOD_SET    = 'set';
+    const ID_IDENTIFIER = 'id';
+
     /**
      * @var AdapterInterface
      */
@@ -20,6 +23,11 @@ class SolrMapper implements MapperInterface
      * @var SolrCollectionName
      */
     private $collectionName;
+
+    /**
+     * @var array
+     */
+    private $dataForBulkUpdate;
 
     public function __construct(SolrCollectionName $collectionName, AdapterInterface $adapter)
     {
@@ -51,6 +59,14 @@ class SolrMapper implements MapperInterface
             $this->handleException($exception);
         }
         return $rawData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataForBulkUpdate()
+    {
+        return $this->dataForBulkUpdate;
     }
 
     /**
@@ -90,6 +106,22 @@ class SolrMapper implements MapperInterface
         }
     }
 
+    public function updateBulk()
+    {
+        try {
+            $this->adapter->updateBulk($this->collectionName, $this->getDataForBulkUpdate());
+            $this->clearData();
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    public function markForSet(MappingInterface $mapping)
+    {
+        $this->dataForBulkUpdate[] = $this->addToData($mapping->map(), self::METHOD_SET);
+        return $this;
+    }
+
     /**
      * @param mixed $query
      * @return mixed
@@ -104,6 +136,25 @@ class SolrMapper implements MapperInterface
         return $queryResult;
     }
 
+    /**
+     * @param array $data
+     * @param $method
+     * @return array
+     */
+    private function addToData(array $data, $method)
+    {
+        $formattedData = [];
+
+        foreach($data as $key => $value)
+        {
+            $key === self::ID_IDENTIFIER
+                ? $formattedData[$key] = $value
+                : $formattedData[$key] = [$method => $value];
+        }
+
+        return $formattedData;
+    }
+
     private function handleException(\Exception $exception)
     {
         throw new SolrMapperException($exception->getCode() . ': ' . $exception->getMessage());
@@ -116,5 +167,10 @@ class SolrMapper implements MapperInterface
     private function makeSelectionFactory(IdentityInterface $identity)
     {
         return new SolrSelectionFactory($identity);
+    }
+
+    private function clearData()
+    {
+        $this->dataForBulkUpdate = [];
     }
 }
