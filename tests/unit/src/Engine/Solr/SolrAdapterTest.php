@@ -248,6 +248,37 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactory);
     }
 
+    public function testUpdateBulk()
+    {
+        $data = [
+            ['id' => '1', 'first_name' => ['set' => 'Update User']],
+            ['id' => '2', 'first_name' => ['set' => 'Update User 2']]
+        ];
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setCollection')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setDocument')
+            ->with($this->equalTo($data))
+            ->willReturnSelf();
+
+        $this->adapter->updateBulk($this->collectionNameMock, $data);
+    }
+
+    public function testUpdateBulkWithEmptyData()
+    {
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for bulk update');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->updateBulk($this->collectionNameMock, []);
+    }
+
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
