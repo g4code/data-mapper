@@ -120,11 +120,13 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->assertEquals(
-            ['must' =>
-                [
-                    ['match' => ['id' => 1]],
-                    ['match' => ['name' => 'Test']],
-                    ['range' => ['age' => ['gt' => 18]]]
+            ['bool' =>
+                ['must' =>
+                    [
+                        ['match' => ['id' => 1]],
+                        ['match' => ['name' => 'Test']],
+                        ['range' => ['age' => ['gt' => 18]]]
+                    ]
                 ]
             ], $this->selectionFactory->where());
     }
@@ -136,7 +138,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('isVoid')
             ->willReturn(true);
 
-        $this->assertEquals(['must' => ['match_all' => []]], $this->selectionFactory->where());
+        $this->assertEquals(['bool' => ['must' => ['match_all' => []]]], $this->selectionFactory->where());
     }
 
     private function getMockForEqualComparison($column, $value)
