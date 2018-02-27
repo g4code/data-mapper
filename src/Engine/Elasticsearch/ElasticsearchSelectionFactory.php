@@ -64,18 +64,19 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     public function where()
     {
         if ($this->identity->isVoid()) {
-            return ['must' => ['match_all' => []]];
+            return ['bool' => ['must' => ['match_all' => []]]];
         }
 
         $comparisons = [];
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison) {
+
                 $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
             }
         }
 
-        return ['must' => $comparisons];
+        return ['bool' => ['must' => $comparisons]];
     }
 
     private function makeComparisonFormatter()
