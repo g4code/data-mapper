@@ -7,7 +7,9 @@ use G4\ValueObject\Url;
 class ElasticsearchClient
 {
     const DOCUMENT      = 'doc';
+    const SEARCH        = '_search';
     const TIMEOUT       = 5;
+    const METHOD_GET    = 'GET';
 
     private $index;
 
@@ -22,6 +24,8 @@ class ElasticsearchClient
 
     private $id;
 
+    private $response;
+
     public function __construct(Url $url)
     {
         $this->url = $url;
@@ -30,6 +34,15 @@ class ElasticsearchClient
     public function execute()
     {
         $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id);
+
+        $this->executeCurlRequest();
+    }
+
+    public function search()
+    {
+        $this->url = $this->url->path($this->index, self::SEARCH);
+
+        $this->method = self::METHOD_GET;
 
         $this->executeCurlRequest();
     }
