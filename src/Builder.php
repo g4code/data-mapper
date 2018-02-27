@@ -4,6 +4,9 @@ namespace G4\DataMapper;
 
 use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\CollectionNameInterface;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchAdapter;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchMapper;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\MapperInterface;
@@ -66,6 +69,12 @@ class Builder
         return $this;
     }
 
+    public function engineElasticsearch(array $params)
+    {
+        $this->adapter = new ElasticsearchAdapter(new ElasticsearchClientFactory($params));
+        return $this;
+    }
+
     /**
      * @return MapperInterface
      * @throws \Exception
@@ -115,6 +124,9 @@ class Builder
                 break;
             case $this->adapter instanceof SolrAdapter:
                 $mapper = new SolrMapper($this->collectionName, $this->adapter);
+                break;
+            case $this->adapter instanceof ElasticsearchAdapter:
+                $mapper = new ElasticsearchMapper($this->collectionName, $this->adapter);
                 break;
             default:
                 throw new \Exception('Unknown engine', 601);
