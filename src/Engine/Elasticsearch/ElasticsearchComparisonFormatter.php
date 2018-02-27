@@ -46,7 +46,7 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 
     private function formatEqualQuery($name, $value)
     {
-        return [self::MATCH => [$name => $value]];
+        return [self::MATCH => [$name => (string) $value]];
     }
 
     private function formatGreaterThanQuery($name, $value)
