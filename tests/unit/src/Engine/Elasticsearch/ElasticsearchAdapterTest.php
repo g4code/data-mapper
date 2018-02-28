@@ -196,6 +196,80 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update($this->collectionNameMock, $mappingMock);
     }
 
+    public function testSelect()
+    {
+        $solrData = [
+            'total' => 2,
+            'hits' => [
+                'hits' => [
+                    ['_source' => ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f']],
+                    ['_source' => ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm']],
+                ]
+            ]
+        ];
+
+        $data = [
+            ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
+            ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
+        ];
+
+
+        $rawData = new \G4\DataMapper\Common\RawData($data, count($data));
+
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn(['bool' => ['must' => ['match' => ['id' => '15500']]]]);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('fieldNames')
+            ->willReturn(['first_name', 'last_name']);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('limit')
+            ->willReturn('1');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('sort')
+            ->willReturn(['id' => ['order' => 'asc']]);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('offset')
+            ->willReturn('0');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('search')
+            ->willReturnSelf();
+
+        $this->clientMock->expects($this->once())->method('getResponse')->willReturn($solrData['hits']);
+
+        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
+
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $select);
+        $this->assertEquals($rawData->count(), $select->count());
+        $this->assertEquals($rawData->getAll(), $select->getAll());
+    }
+
     private function getMockForElasticsearchClientFactory()
     {
         $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory::class)
