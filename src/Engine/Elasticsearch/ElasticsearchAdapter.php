@@ -70,6 +70,17 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $query = [
+            'from'    => $selectionFactory->offset(),
+            'size'    => $selectionFactory->limit(),
+            'query'   => $selectionFactory->where(),
+            'sort'    => $selectionFactory->sort(),
+            '_source' => $selectionFactory->fieldNames()
+        ];
+
+        $data = $this->client->setIndex($collectionName)->setBody($query)->search();
+
+        return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
     }
 
     /**
@@ -103,5 +114,16 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function query($query)
     {
+    }
+
+    private function formatData($data)
+    {
+        $formattedData = [];
+
+        foreach($data['hits'] as $item) {
+            $formattedData []= $item['_source'];
+        }
+
+        return $formattedData;
     }
 }
