@@ -45,6 +45,8 @@ class ElasticsearchClient
         $this->method = self::METHOD_GET;
 
         $this->executeCurlRequest();
+
+        return $this;
     }
 
     public function setIndex($value)
@@ -71,6 +73,16 @@ class ElasticsearchClient
         return $this;
     }
 
+    public function getResponse()
+    {
+        return $this->getDecodedResponse()['hits'];
+    }
+
+    public function getTotalItemsCount()
+    {
+        return $this->getResponse()['total'];
+    }
+
     private function executeCurlRequest()
     {
         $handle = curl_init((string) $this->url);
@@ -89,5 +101,10 @@ class ElasticsearchClient
         curl_close($handle);
 
         return $this;
+    }
+
+    private function getDecodedResponse()
+    {
+        return json_decode($this->response, true);
     }
 }
