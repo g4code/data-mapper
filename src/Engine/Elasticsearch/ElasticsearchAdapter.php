@@ -8,6 +8,7 @@ use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Exception\EmptyDataException;
+use G4\ValueObject\Dictionary;
 
 class ElasticsearchAdapter implements AdapterInterface
 {
@@ -28,7 +29,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function delete(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_DELETE)->setId($selectionFactory->where())->execute();
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_DELETE)->setId($this->extractIdValue($selectionFactory->where()))->execute();
     }
 
     /**
@@ -114,6 +115,11 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function query($query)
     {
+    }
+
+    private function extractIdValue($data)
+    {
+        return (new Dictionary($data))->getFromDeeperLevels('bool', 'must', '0', 'match', 'id');
     }
 
     private function formatData($data)
