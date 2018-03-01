@@ -107,12 +107,6 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
         $this->clientMock
             ->expects($this->once())
-            ->method('setId')
-            ->with($this->equalTo($body['id']))
-            ->willReturnSelf();
-
-        $this->clientMock
-            ->expects($this->once())
             ->method('setBody')
             ->with($this->equalTo($body))
             ->willReturnSelf();
