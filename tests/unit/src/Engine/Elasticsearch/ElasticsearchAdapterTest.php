@@ -60,7 +60,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $selectionFactoryStub
             ->expects($this->once())
             ->method('where')
-            ->willReturn('id:1');
+            ->willReturn(['bool' => ['must' => ['match' => ['id' => '15500']]]]);
 
         $this->clientMock
             ->expects($this->once())
@@ -77,7 +77,6 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('setId')
-            ->with($this->equalTo('id:1'))
             ->willReturnSelf();
 
         $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
