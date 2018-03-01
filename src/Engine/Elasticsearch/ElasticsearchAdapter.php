@@ -98,7 +98,7 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update.');
         }
 
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($data['id'])->setBody([$data])->execute();
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($data['id'])->setBody($data)->execute();
     }
 
     /**
