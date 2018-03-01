@@ -52,7 +52,6 @@ class ElasticsearchAdapter implements AdapterInterface
         $this->client
             ->setIndex($collectionName)
             ->setMethod(self::METHOD_POST)
-            ->setId($data['id'])
             ->setBody($data)
             ->execute();
     }
