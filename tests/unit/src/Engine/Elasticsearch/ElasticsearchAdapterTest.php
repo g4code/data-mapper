@@ -145,6 +145,15 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
     {
         $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
 
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn(['bool' => ['must' => ['match' => ['id' => '1']]]]);
+
         $mappingMock = $this->getMappingMock();
 
         $mappingMock
@@ -167,7 +176,6 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('setId')
-            ->with($this->equalTo($body['id']))
             ->willReturnSelf();
 
         $this->clientMock
@@ -176,11 +184,15 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo($body))
             ->willReturnSelf();
 
-        $this->adapter->update($this->collectionNameMock, $mappingMock);
+        $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
     }
 
     public function testUpdateWithEmptyData()
     {
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $mappingMock = $this->getMappingMock();
 
         $mappingMock
@@ -192,7 +204,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Empty data for update.');
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
-        $this->adapter->update($this->collectionNameMock, $mappingMock);
+        $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
     }
 
     public function testSelect()
