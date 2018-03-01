@@ -90,7 +90,7 @@ class ElasticsearchAdapter implements AdapterInterface
      * @param SelectionFactoryInterface $selectionFactory
      * @throws EmptyDataException
      */
-    public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory = null)
+    public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
     {
         $data = $mapping->map();
 
@@ -98,7 +98,7 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update.');
         }
 
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($data['id'])->setBody($data)->execute();
+        $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($this->extractIdValue($selectionFactory->where()))->setBody($data)->execute();
     }
 
     /**
