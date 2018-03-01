@@ -29,7 +29,11 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function delete(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_DELETE)->setId($this->extractIdValue($selectionFactory->where()))->execute();
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_DELETE)
+            ->setId($this->extractIdValue($selectionFactory->where()))
+            ->execute();
     }
 
     /**
@@ -45,7 +49,12 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for insert.');
         }
 
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_POST)->setId($data['id'])->setBody($data)->execute();
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_POST)
+            ->setId($data['id'])
+            ->setBody($data)
+            ->execute();
     }
 
     /**
@@ -79,7 +88,10 @@ class ElasticsearchAdapter implements AdapterInterface
             '_source' => $selectionFactory->fieldNames()
         ];
 
-        $data = $this->client->setIndex($collectionName)->setBody($query)->search();
+        $data = $this->client
+            ->setIndex($collectionName)
+            ->setBody($query)
+            ->search();
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
     }
@@ -98,7 +110,12 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update.');
         }
 
-        $this->client->setIndex($collectionName)->setMethod(self::METHOD_PUT)->setId($this->extractIdValue($selectionFactory->where()))->setBody($data)->execute();
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_PUT)
+            ->setId($this->extractIdValue($selectionFactory->where()))
+            ->setBody($data)
+            ->execute();
     }
 
     /**
