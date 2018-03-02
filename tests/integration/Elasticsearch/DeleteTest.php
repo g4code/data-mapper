@@ -20,6 +20,6 @@ class DeleteTest extends TestCase
 
     public function getCollectionName()
     {
-        return 'integration_test';
+        return 'user';
     }
 }
