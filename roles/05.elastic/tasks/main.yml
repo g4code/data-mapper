@@ -1,0 +1,27 @@
+---
+- name: Download Elasticsearch
+  become: yes
+  get_url:
+    url: "{{ elastic.url }}"
+    dest: "{{ elastic.tmp_path }}"
+    force: no
+
+- name: Install Elasticsearch
+  apt: deb="{{ elastic.tmp_path }}"
+
+- name: Enable Elasticsearch service
+  systemd:
+    name: elasticsearch
+    enabled: yes
+    masked: no
+
+- name: Start Elasticsearch service
+  systemd:
+    name: elasticsearch
+    state: started
+
+- name: Delete all Indices
+  shell: curl -XDELETE '127.0.0.1:9200/*'
+
+- name: Created Indice
+  shell: curl -XPUT '127.0.0.1:9200/user'
