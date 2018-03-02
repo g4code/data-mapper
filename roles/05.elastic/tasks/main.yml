@@ -9,6 +9,9 @@
 - name: Install Elasticsearch
   apt: deb="{{ elastic.tmp_path }}"
 
+- name: Copy Elasticsearch configuration file
+  template: src=elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml owner=root group=elasticsearch mode="o+rwx,g+rx"
+
 - name: Enable Elasticsearch service
   systemd:
     name: elasticsearch
@@ -21,7 +24,7 @@
     state: started
 
 - name: Delete all Indices
-  shell: curl -XDELETE '127.0.0.1:9200/*'
+  shell: curl -XDELETE '192.168.32.11:9200/*'
 
 - name: Created Indice
-  shell: curl -XPUT '127.0.0.1:9200/user'
+  shell: curl -XPUT '192.168.32.11:9200/user'
