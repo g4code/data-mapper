@@ -14,7 +14,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
      */
     private $identity;
 
-    public function __construct(IdentityInterface $identity)
+    public function __construct(ElasticsearchIdentity $identity)
     {
         $this->identity = $identity;
     }
