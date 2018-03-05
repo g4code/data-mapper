@@ -13,7 +13,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Common\Identity::class)
+        $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class)
             ->disableOriginalConstructor()
             ->getMock();
 

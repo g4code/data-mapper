@@ -55,7 +55,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Common\IdentityInterface::class);
+        $identityStub = $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -71,7 +71,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteException()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Common\IdentityInterface::class);
+        $identityStub = $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -94,7 +94,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($rawDataStub);
 
-        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Common\Identity::class)));
+        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class)));
     }
 
     public function testFindException()
@@ -106,7 +106,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(ElasticSearchMapperException::class);
 
-        $this->mapper->find($this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
     public function testInsert()
@@ -139,7 +139,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             ->method('update')
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
     public function testUpdateException()
@@ -152,7 +152,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(ElasticSearchMapperException::class);
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Common\Identity::class));
+        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
     public function testUpsert()
