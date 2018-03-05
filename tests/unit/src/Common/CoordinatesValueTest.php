@@ -20,7 +20,7 @@ class CoordinatesValueTest extends PHPUnit_Framework_TestCase
         $this->coordinates = null;
     }
 
-    public function testFormat()
+    public function testFormatForSolr()
     {
         $expectedArray = [
             'fq'     => '{!geofilt}',
@@ -29,7 +29,7 @@ class CoordinatesValueTest extends PHPUnit_Framework_TestCase
             'd'      => '100',
         ];
 
-        $this->assertEquals($expectedArray, $this->coordinates->format());
+        $this->assertEquals($expectedArray, $this->coordinates->formatForSolr());
     }
 
     public function testIsEmpty()
