@@ -15,7 +15,7 @@ class CoordinatesValue implements ValueInterface
         $this->distance  = $distance;
     }
 
-    public function format()
+    public function formatForSolr()
     {
         return [
             'fq'     => '{!geofilt}',
