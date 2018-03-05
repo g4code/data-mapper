@@ -20,6 +20,21 @@ class CoordinatesValueTest extends PHPUnit_Framework_TestCase
         $this->coordinates = null;
     }
 
+    public function testFormatForElasticSearch()
+    {
+        $expectedArray = [
+            'geo_distance' => [
+                'distance'     => '100km',
+                'pin.location' => [
+                    'lon' => 46.100376,
+                    'lat' => 19.667587,
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expectedArray, $this->coordinates->formatForElasticsearch());
+    }
+
     public function testFormatForSolr()
     {
         $expectedArray = [
