@@ -30,4 +30,5 @@ class QueryConnector
     const MATCH                 = 'match';
     const RANGE                 = 'range';
     const TERMS                 = 'terms';
+    const NAME_WILDCARD         = 'wildcard';
 }
