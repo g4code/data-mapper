@@ -1,6 +1,6 @@
 <?php
 
-namespace G4\DataMapper\Engine\Solr\Operators;
+namespace G4\DataMapper\Common;
 
 interface QueryOperatorInterface
 {
