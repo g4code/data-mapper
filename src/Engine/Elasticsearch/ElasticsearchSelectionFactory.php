@@ -58,6 +58,24 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
                 $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
             }
         }
+
+        if ($this->identity->coordinatesSet()) {
+
+            $geodistSortParams = [
+                '_geo_distance' => [
+                    'location' => [
+                        'lat' => $this->identity->getCoordinates()->getLatitude(),
+                        'lon' => $this->identity->getCoordinates()->getLongitude(),
+                    ],
+                    'order' => 'asc',
+                    'unit'  => 'km',
+                    'distance_type' => 'plane',
+                ],
+            ];
+
+            $sorting = array_merge($geodistSortParams, $sorting);
+        }
+
         return $sorting;
     }
 
