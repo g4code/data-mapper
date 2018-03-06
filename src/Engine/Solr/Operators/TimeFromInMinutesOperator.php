@@ -5,7 +5,7 @@ namespace G4\DataMapper\Engine\Solr\Operators;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Common\QueryConnector;
 
-class TimeFromInMinutes implements QueryOperatorInterface
+class TimeFromInMinutesOperator implements QueryOperatorInterface
 {
     private $name;
 
