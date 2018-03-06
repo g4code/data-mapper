@@ -38,6 +38,21 @@ class CoordinatesValue implements ValueInterface
         ];
     }
 
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    public function getDistance()
+    {
+        return $this->distance;
+    }
+
     public function isEmpty()
     {
         return $this->longitude === null || $this->latitude === null || $this->distance === null;
