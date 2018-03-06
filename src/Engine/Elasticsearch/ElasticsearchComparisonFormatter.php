@@ -5,6 +5,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
+use G4\DataMapper\Engine\Elasticsearch\Operators\EqualOperator;
 
 class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -21,7 +22,7 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
     {
         switch ($operator->getSymbol()) {
             case Operator::EQUAL:
-                $query = $this->formatEqualQuery($name, $value);
+                $query = new EqualOperator($name, $value);
                 break;
             case Operator::GRATER_THAN:
                 $query = $this->formatGreaterThanQuery($name, $value);
@@ -41,12 +42,6 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
         }
 
         return $query;
-    }
-
-
-    private function formatEqualQuery($name, $value)
-    {
-        return [self::MATCH => [$name => (string) $value]];
     }
 
     private function formatGreaterThanQuery($name, $value)
