@@ -19,11 +19,13 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('location')->geodist(10, 15));
     }
 
-    public function testGetCoordinatesWithEmptyGeodistAttributes()
+    public function testCoordinatesSet()
     {
-        $this->assertEquals([], $this->elasticsearchIdentity->geodist(null, 5, 100)->getCoordinates());
-        $this->assertEquals([], $this->elasticsearchIdentity->geodist(null, null, 100)->getCoordinates());
-        $this->assertEquals([], $this->elasticsearchIdentity->geodist(46, null, null)->getCoordinates());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, 5, 100)->coordinatesSet());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, null, 100)->coordinatesSet());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(46, null, null)->coordinatesSet());
+
+        $this->assertEquals(false, $this->elasticsearchIdentity->coordinatesSet());
     }
 
     public function testGetCoordinatesWithParams()
@@ -40,6 +42,6 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertEquals($expectedArray, $this->elasticsearchIdentity->getCoordinates());
+        $this->assertEquals($expectedArray, $this->elasticsearchIdentity->getCoordinates()->formatForElasticsearch());
     }
 }
