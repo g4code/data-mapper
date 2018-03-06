@@ -189,6 +189,44 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ], $this->selectionFactory->where());
     }
 
+    public function testWhereWithRawQuery()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(false);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([
+                $this->getMockForEqualComparison('id', 1),
+                $this->getMockForEqualComparison('name', 'Test'),
+                $this->getMockForGtComparison('age', 18),
+            ]);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('hasRawQuery')
+            ->willReturn(true);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getRawQuery')
+            ->willReturn(['match' => ['last_name' => 'User']]);
+
+        $this->assertEquals(['bool' =>
+            ['must' =>
+                [
+                    ['match' => ['id' => 1]],
+                    ['match' => ['name' => 'Test']],
+                    ['range' => ['age' => ['gt' => 18]]],
+                    ['match' => ['last_name' => 'User']],
+                ]
+            ]
+        ], $this->selectionFactory->where());
+    }
+
     public function testWhereIfIdentityIsVoid()
     {
         $this->identityMock
