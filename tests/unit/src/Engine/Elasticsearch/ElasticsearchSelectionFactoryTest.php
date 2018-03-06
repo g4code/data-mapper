@@ -93,6 +93,64 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         ], $this->selectionFactory->sort());
     }
 
+    public function testSortWithGeodistParameters()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('coordinatesSet')
+            ->willReturn(true);
+
+        $this->identityMock
+            ->expects($this->any())
+            ->method('getCoordinates')
+            ->willReturn(new \G4\DataMapper\Common\CoordinatesValue(10, 10, 100));
+
+        $this->assertEquals([
+            '_geo_distance' => [
+                'location' => [
+                    'lat' => 10,
+                    'lon' => 10,
+                ],
+                'order' => 'asc',
+                'unit'  => 'km',
+                'distance_type' => 'plane',
+            ],
+            ['id'   => ['order' => 'desc']],
+            ['name' => ['order' => 'asc']],
+        ], $this->selectionFactory->sort());
+    }
+
+    public function testSortWithEmptyGeodistParameters()
+    {
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getSorting')
+            ->willReturn([
+                $this->getMockForSort('id', 'desc'),
+                $this->getMockForSort('name', 'asc'),
+            ]);
+
+        $this->identityMock
+            ->expects($this->any())
+            ->method('getCoordinates')
+            ->willReturn(new \G4\DataMapper\Common\CoordinatesValue(10, 10, null));
+
+        $this->assertEquals([
+            ['id'   => ['order' => 'desc']],
+            ['name' => ['order' => 'asc']],
+        ], $this->selectionFactory->sort());
+
+    }
+
     public function testEmptySort()
     {
         $this->identityMock
