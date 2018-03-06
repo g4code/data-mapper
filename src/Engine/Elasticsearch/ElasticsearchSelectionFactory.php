@@ -90,8 +90,12 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison) {
 
-                $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
+                $comparisons[]= $oneComparison->getComparison($this->makeComparisonFormatter());
             }
+        }
+
+        if($this->identity->hasRawQuery()) {
+            $comparisons[]= $this->identity->getRawQuery();
         }
 
         return ['bool' => ['must' => $comparisons]];
