@@ -14,6 +14,11 @@ class ElasticsearchIdentity extends Identity
     private $coordinates;
 
     /**
+     * @var array
+     */
+    private $rawQuery;
+
+    /**
      * @param $latitude
      * @param $longitude
      * @param $distance
@@ -44,5 +49,31 @@ class ElasticsearchIdentity extends Identity
     public function coordinatesSet()
     {
         return $this->coordinates !== null && !$this->coordinates->isEmpty();
+    }
+
+    /**
+     * @param $value
+     * @return ElasticsearchIdentity
+     */
+    public function setRawQuery(array $value)
+    {
+        $this->rawQuery = $value;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawQuery()
+    {
+        return $this->rawQuery;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRawQuery()
+    {
+        return !empty($this->rawQuery);
     }
 }
