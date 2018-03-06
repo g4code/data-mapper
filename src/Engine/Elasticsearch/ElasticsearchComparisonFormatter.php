@@ -6,6 +6,11 @@ use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\Elasticsearch\Operators\EqualOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOrEqualOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\InOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\LessThanOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\LessThanOrEqualOperator;
 
 class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -25,47 +30,22 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 $query = new EqualOperator($name, $value);
                 break;
             case Operator::GRATER_THAN:
-                $query = $this->formatGreaterThanQuery($name, $value);
+                $query = new GreaterThanOperator($name, $value);
                 break;
             case Operator::LESS_THAN:
-                $query = $this->formatLessThanQuery($name, $value);
+                $query = new LessThanOperator($name, $value);
                 break;
             case Operator::GRATER_THAN_OR_EQUAL:
-                $query = $this->formatGreaterThanOrEqualQuery($name, $value);
+                $query = new GreaterThanOrEqualOperator($name, $value);
                 break;
             case Operator::LESS_THAN_OR_EQUAL:
-                $query = $this->formatLessThanOrEqualQuery($name, $value);
+                $query = new LessThanOrEqualOperator($name, $value);
                 break;
             case Operator::IN:
-                $query = $this->formatInQuery($name, $value);
+                $query = new InOperator($name, $value);
                 break;
         }
 
-        return $query;
-    }
-
-    private function formatGreaterThanQuery($name, $value)
-    {
-        return [self::RANGE => [$name => [self::GREATER_THAN => $value]]];
-    }
-
-    private function formatLessThanQuery($name, $value)
-    {
-        return [self::RANGE => [$name => [self::LESS_THAN => $value]]];
-    }
-
-    private function formatGreaterThanOrEqualQuery($name, $value)
-    {
-        return [self::RANGE => [$name => [self::GREATER_THAN_OR_EQUAL => $value]]];
-    }
-
-    private function formatLessThanOrEqualQuery($name, $value)
-    {
-        return [self::RANGE => [$name => [self::LESS_THAN_OR_EQUAL => $value]]];
-    }
-
-    private function formatInQuery($name, $value)
-    {
-        return [self::TERMS => [$name => explode(',', $value)]];
+        return $query->format();
     }
 }
