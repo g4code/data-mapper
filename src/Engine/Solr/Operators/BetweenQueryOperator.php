@@ -4,7 +4,7 @@ namespace G4\DataMapper\Engine\Solr\Operators;
 
 use G4\DataMapper\Common\RangeValue;
 use G4\DataMapper\Common\QueryConnector;
-use G4\DataMapper\Selection\Solr\Consts\Query;
+use G4\DataMapper\Common\QueryOperatorInterface;
 
 class BetweenQueryOperator implements QueryOperatorInterface
 {

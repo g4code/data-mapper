@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Solr\Operators;
 
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Common\QueryConnector;
+use G4\DataMapper\Common\QueryOperatorInterface;
 
 class InOperator implements QueryOperatorInterface
 {
