@@ -5,6 +5,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
+use G4\DataMapper\Engine\Elasticsearch\Operators\BetweenOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\EqualOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOrEqualOperator;
@@ -43,6 +44,9 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::IN:
                 $query = new InOperator($name, $value);
+                break;
+            case Operator::BETWEEN:
+                $query = new BetweenOperator($name, $value);
                 break;
         }
 
