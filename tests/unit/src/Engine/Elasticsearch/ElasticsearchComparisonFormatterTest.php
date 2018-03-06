@@ -93,4 +93,13 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['range' => ['age' => ['gt' => 12, 'lt' => 20]]], $this->comparisonFormatter->format('age', $this->operatorMock, new \G4\DataMapper\Common\RangeValue(12, 20)));
     }
+
+    public function testTimeFromInMinutes()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::TIME_FROM_IN_MINUTES);
+
+        $this->assertEquals(['range' => ['online' => ['gt' => 'now-15m']]], $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue(15)));
+    }
 }

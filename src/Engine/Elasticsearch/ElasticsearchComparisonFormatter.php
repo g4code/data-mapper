@@ -12,6 +12,7 @@ use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOrEqualOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\InOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\LessThanOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\LessThanOrEqualOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\TimeFromInMinutesOperator;
 
 class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -47,6 +48,9 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::BETWEEN:
                 $query = new BetweenOperator($name, $value);
+                break;
+            case Operator::TIME_FROM_IN_MINUTES:
+                $query = new TimeFromInMinutesOperator($name, $value);
                 break;
         }
 
