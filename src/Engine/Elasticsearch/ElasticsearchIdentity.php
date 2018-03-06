@@ -31,11 +31,18 @@ class ElasticsearchIdentity extends Identity
     }
 
     /**
-     * @return array
+     * @return CoordinatesValue
      */
     public function getCoordinates()
     {
-        return ($this->coordinates === null || $this->coordinates->isEmpty()) ? [] : $this->coordinates->formatForElasticsearch();
+        return $this->coordinates;
     }
 
+    /**
+     * @return bool
+     */
+    public function coordinatesSet()
+    {
+        return $this->coordinates !== null && !$this->coordinates->isEmpty();
+    }
 }
