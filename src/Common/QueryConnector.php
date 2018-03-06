@@ -21,4 +21,13 @@ class QueryConnector
 
     const EMPTY_SPACE          = ' ';
     const COMMA                = ',';
+
+    const GREATER_THAN          = 'gt';
+    const GREATER_THAN_OR_EQUAL = 'gte';
+    const LESS_THAN             = 'lt';
+    const LESS_THAN_OR_EQUAL    = 'lte';
+
+    const MATCH                 = 'match';
+    const RANGE                 = 'range';
+    const TERMS                 = 'terms';
 }
