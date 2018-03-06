@@ -102,4 +102,13 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['range' => ['online' => ['gt' => 'now-15m']]], $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue(15)));
     }
+
+    public function testLike()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::LIKE);
+
+        $this->assertEquals(['wildcard' => ['name' => '*lada*']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
+    }
 }
