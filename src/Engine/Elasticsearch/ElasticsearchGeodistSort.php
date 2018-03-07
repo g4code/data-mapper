@@ -1,8 +1,6 @@
 <?php
 
-namespace G4\DataMapper\Engine\Elasticsearch\Operators;
-
-use G4\DataMapper\Engine\Elasticsearch\ElasticSearchIdentityInterface;
+namespace G4\DataMapper\Engine\Elasticsearch;
 
 class ElasticsearchGeodistSort
 {
