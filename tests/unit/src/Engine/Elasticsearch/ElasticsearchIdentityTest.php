@@ -19,29 +19,19 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('location')->geodist(10, 15));
     }
 
-    public function testCoordinatesSet()
+    public function testHasCoordinates()
     {
-        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, 5, 100)->coordinatesSet());
-        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, null, 100)->coordinatesSet());
-        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(46, null, null)->coordinatesSet());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, 5, 100)->hasCoordinates());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, null, 100)->hasCoordinates());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(46, null, null)->hasCoordinates());
 
-        $this->assertEquals(false, $this->elasticsearchIdentity->coordinatesSet());
+        $this->assertEquals(false, $this->elasticsearchIdentity->hasCoordinates());
     }
 
-    public function testGetCoordinatesWithParams()
+    public function testHasRawQuery()
     {
-        $this->elasticsearchIdentity->geodist(46.100376, 19.667587, 100);
+        $this->elasticsearchIdentity->setRawQuery('test query');
 
-        $expectedArray = [
-            'geo_distance' => [
-                'distance'     => '100km',
-                'pin.location' => [
-                    'lon' => 46.100376,
-                    'lat' => 19.667587,
-                ],
-            ],
-        ];
-
-        $this->assertEquals($expectedArray, $this->elasticsearchIdentity->getCoordinates()->formatForElasticsearch());
+        $this->assertEquals(true, $this->elasticsearchIdentity->hasRawQuery());
     }
 }
