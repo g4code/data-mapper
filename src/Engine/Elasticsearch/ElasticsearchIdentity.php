@@ -5,7 +5,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\CoordinatesValue;
 
-class ElasticsearchIdentity extends Identity implements ElasticSearchIdentityInterface
+class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInterface
 {
 
     /**

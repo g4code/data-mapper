@@ -2,7 +2,7 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
-interface ElasticSearchIdentityInterface
+interface ElasticsearchIdentityInterface
 {
     public function geodist($latitude, $longitude, $distance);
 
