@@ -83,7 +83,7 @@ class ElasticsearchAdapter implements AdapterInterface
         $query = [
             'from'    => $selectionFactory->offset(),
             'size'    => $selectionFactory->limit(),
-            'query'   => $selectionFactory->where(),
+            'query'   => array_merge($selectionFactory->where(), $selectionFactory->getGeodistParameters()),
             'sort'    => $selectionFactory->sort(),
             '_source' => $selectionFactory->fieldNames()
         ];
