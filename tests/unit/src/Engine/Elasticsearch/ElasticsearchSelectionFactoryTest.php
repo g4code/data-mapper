@@ -105,7 +105,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->identityMock
             ->expects($this->once())
-            ->method('coordinatesSet')
+            ->method('hasCoordinates')
             ->willReturn(true);
 
         $this->identityMock
