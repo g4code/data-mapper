@@ -6,7 +6,7 @@ use G4\DataMapper\Builder;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchAdapter;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchCollectionName;
-use G4\DataMapper\Common\Identity;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         ];
 
         $params = [
-            'host' => '192.168.32.11.',
+            'host' => '192.168.32.11',
             'port' => '9200',
         ];
 
@@ -91,7 +91,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function makeIdentityById()
     {
-        $identity = new Identity();
+        $identity = new ElasticsearchIdentity();
         $identity
             ->field('id')
             ->equal($this->getId());
