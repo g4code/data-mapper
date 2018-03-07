@@ -6,6 +6,7 @@ use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\IdentityInterface;
+use G4\DataMapper\Engine\Elasticsearch\Operators\ElasticsearchGeodistSort;
 
 class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 {
@@ -14,7 +15,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
      */
     private $identity;
 
-    public function __construct(ElasticsearchIdentity $identity)
+    public function __construct(ElasticSearchIdentityInterface $identity)
     {
         $this->identity = $identity;
     }
@@ -59,22 +60,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
             }
         }
 
-        if ($this->identity->coordinatesSet()) {
-
-            $geodistSortParams = [
-                '_geo_distance' => [
-                    'location' => [
-                        'lat' => $this->identity->getCoordinates()->getLatitude(),
-                        'lon' => $this->identity->getCoordinates()->getLongitude(),
-                    ],
-                    'order' => 'asc',
-                    'unit'  => 'km',
-                    'distance_type' => 'plane',
-                ],
-            ];
-
-            $sorting = array_merge($geodistSortParams, $sorting);
-        }
+        $sorting = array_merge((new ElasticsearchGeodistSort($this->identity))->sort(), $sorting);
 
         return $sorting;
     }
