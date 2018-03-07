@@ -20,6 +20,6 @@ class EqualOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [QueryConnector::MATCH => [$this->name => $this->value]];
+        return [QueryConnector::MATCH => [$this->name => $this->value->getValue()]];
     }
 }
