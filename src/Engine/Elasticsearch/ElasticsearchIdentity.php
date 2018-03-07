@@ -5,7 +5,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\CoordinatesValue;
 
-class ElasticsearchIdentity extends Identity
+class ElasticsearchIdentity extends Identity implements ElasticSearchIdentityInterface
 {
 
     /**
@@ -46,16 +46,16 @@ class ElasticsearchIdentity extends Identity
     /**
      * @return bool
      */
-    public function coordinatesSet()
+    public function hasCoordinates()
     {
-        return $this->coordinates !== null && !$this->coordinates->isEmpty();
+        return !($this->coordinates === null || $this->coordinates->isEmpty());
     }
 
     /**
      * @param $value
      * @return ElasticsearchIdentity
      */
-    public function setRawQuery(array $value)
+    public function setRawQuery($value)
     {
         $this->rawQuery = $value;
         return $this;
