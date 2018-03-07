@@ -6,7 +6,6 @@ use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\IdentityInterface;
-use G4\DataMapper\Engine\Elasticsearch\Operators\ElasticsearchGeodistSort;
 
 class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 {
