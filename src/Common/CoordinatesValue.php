@@ -15,19 +15,6 @@ class CoordinatesValue implements ValueInterface
         $this->distance  = $distance;
     }
 
-    public function formatForElasticsearch()
-    {
-        return [
-            'geo_distance' => [
-                'distance'     => $this->distance . 'km',
-                'pin.location' => [
-                    'lon' => $this->longitude,
-                    'lat' => $this->latitude,
-                ],
-            ],
-        ];
-    }
-
     public function formatForSolr()
     {
         return [
