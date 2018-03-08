@@ -3,6 +3,7 @@
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchAdapter;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -136,6 +137,20 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->insert($this->collectionNameMock, $mappingMock);
     }
 
+    public function testInsertBulk()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->insertBulk($this->collectionNameMock, new \ArrayIterator());
+    }
+
+    public function testUpsertBulk()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->upsertBulk($this->collectionNameMock, new \ArrayIterator());
+    }
+
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
@@ -205,6 +220,13 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
+    }
+
+    public function testUpsert()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->upsert($this->collectionNameMock, $this->getMappingMock());
     }
 
     public function testSelect()
@@ -284,6 +306,13 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $select);
         $this->assertEquals($rawData->count(), $select->count());
         $this->assertEquals($rawData->getAll(), $select->getAll());
+    }
+
+    public function testQuery()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->query('Some test query');
     }
 
     private function getMockForElasticsearchClientFactory()
