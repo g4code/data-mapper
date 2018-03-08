@@ -9,6 +9,7 @@ use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\ValueObject\Dictionary;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class ElasticsearchAdapter implements AdapterInterface
 {
@@ -63,6 +64,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function insertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -71,6 +73,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function upsertBulk(CollectionNameInterface $collectionName, \ArrayIterator $mappingsCollection)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -124,6 +127,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function upsert(CollectionNameInterface $collectionName, MappingInterface $mapping)
     {
+        throw new NotImplementedException();
     }
 
     /**
@@ -132,6 +136,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function query($query)
     {
+        throw new NotImplementedException();
     }
 
     private function extractIdValue($data)
