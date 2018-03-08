@@ -1,28 +1,32 @@
 <?php
 
-namespace G4\DataMapper\Profiler\Mysql;
 
+namespace G4\DataMapper\Profiler\Ticker;
 
-class Ticker extends \G4\Profiler\Ticker\TickerAbstract
+use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
+use G4\Profiler\Ticker\TickerAbstract;
+
+//TODO: Drasko - tmp solution - fix after Profiler refactoring is done!
+class ProfilerTickerMysql extends TickerAbstract
 {
 
-    private $db;
-
-    public function __construct(\G4\DataMapper\Adapter\Mysql\Db $dbAdapter)
-    {
-        $this->db = $dbAdapter->get();
-    }
-
-    private function __clone()
-    {
-    }
+    const NAME = 'data_mapper_mysql_1.x';
 
     /**
-     * @return string
+     * @var \Zend_Db_Adapter_Abstract
      */
+    private $db;
+
+    public function __construct(MySQLClientFactory $clientFactory)
+    {
+        $this->db = $clientFactory->create();
+    }
+
+    private function __clone() {}
+
     public function getName()
     {
-        return 'data_mapper_mysql_0.x';
+        return self::NAME;
     }
 
     /**

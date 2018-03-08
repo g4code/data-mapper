@@ -3,6 +3,9 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\Factory\CreateInterface;
+use Zend_Db_Adapter_Abstract;
+use Zend_Db;
+use Exception;
 
 class MySQLClientFactory implements CreateInterface
 {
@@ -17,6 +20,11 @@ class MySQLClientFactory implements CreateInterface
     private $params;
 
     /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    private $client;
+
+    /**
      * @param array $params
      */
     public function __construct(array $params)
@@ -25,36 +33,38 @@ class MySQLClientFactory implements CreateInterface
     }
 
     /**
-     * @return \Zend_Db_Adapter_Abstract
+     * @return Zend_Db_Adapter_Abstract
      */
     public function create()
     {
-        $client = \Zend_Db::factory(self::ADAPTER, $this->params);
-        $client
-            ->getProfiler()->setEnabled(true);
-        return $client;
+        if (!$this->client instanceof Zend_Db_Adapter_Abstract) {
+            $this->client = Zend_Db::factory(self::ADAPTER, $this->params);
+            $this->client
+                ->getProfiler()->setEnabled(true);
+        }
+        return $this->client;
     }
 
     /**
      * @param array $params
-     * @throws \Exception
+     * @throws Exception
      */
     private function filterParams(array $params)
     {
         if (empty($params['host'])) {
-            throw new \Exception('No host param', 101);
+            throw new Exception('No host param', 101);
         }
         if (empty($params['port'])) {
-            throw new \Exception('No port param', 101);
+            throw new Exception('No port param', 101);
         }
         if (empty($params['username'])) {
-            throw new \Exception('No username param', 101);
+            throw new Exception('No username param', 101);
         }
         if (!array_key_exists('password', $params) || $params['password'] === null) {
-            throw new \Exception('No password param', 101);
+            throw new Exception('No password param', 101);
         }
         if (empty($params['dbname'])) {
-            throw new \Exception('No dbname param', 101);
+            throw new Exception('No dbname param', 101);
         }
         $this->params = [
             'host'     => $params['host'],
