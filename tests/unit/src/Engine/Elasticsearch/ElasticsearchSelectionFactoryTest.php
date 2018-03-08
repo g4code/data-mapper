@@ -237,6 +237,31 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['bool' => ['must' => ['match_all' => []]]], $this->selectionFactory->where());
     }
 
+    public function testGetGeodistParameters()
+    {
+        $this->identityMock
+            ->expects($this->any())
+            ->method('getCoordinates')
+            ->willReturn(new \G4\DataMapper\Common\CoordinatesValue(10, 15, 100));
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('hasCoordinates')
+            ->willReturn(true);
+
+        $expectedArray = [
+            'geo_distance' => [
+                'distance'     => '100km',
+                'pin.location' => [
+                    'lon' => '10',
+                    'lat' => '15',
+                ],
+            ]
+        ];
+
+        $this->assertEquals($expectedArray, $this->selectionFactory->getGeodistParameters());
+    }
+
     private function getMockForEqualComparison($column, $value)
     {
         $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)

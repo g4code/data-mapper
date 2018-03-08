@@ -28,6 +28,13 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->elasticsearchIdentity->hasCoordinates());
     }
 
+    public function testGetRawQuery()
+    {
+        $this->elasticsearchIdentity->setRawQuery('test query');
+
+        $this->assertEquals('test query', $this->elasticsearchIdentity->getRawQuery());
+    }
+
     public function testHasRawQuery()
     {
         $this->elasticsearchIdentity->setRawQuery('test query');
