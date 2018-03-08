@@ -1,17 +1,18 @@
 <?php
 
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchGeodistFormatter;
 
 class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ElasticsearchGeodistFormatter
+     * @var ElasticsearchIdentity
      */
     private $identity;
 
     protected function setUp()
     {
-        $this->identity = new \G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity();
+        $this->identity = new ElasticsearchIdentity();
     }
 
     public function testFormatWithGeodistParameters()
@@ -33,7 +34,7 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArray, $geodistFormatter->format());
     }
 
-    public function testWithEmptyGeodistParameters()
+    public function testFormatWithEmptyGeodistParameters()
     {
         $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
 
