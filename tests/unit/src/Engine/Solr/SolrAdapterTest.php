@@ -3,6 +3,7 @@
 use G4\DataMapper\Engine\Solr\SolrAdapter;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class SolrAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -71,31 +72,27 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
     }
 
-    public function insert()
+    public function testInsert()
     {
+        $expectedData = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
+
         $mappingMock = $this->getMappingMock();
 
         $mappingMock
             ->expects($this->once())
             ->method('map')
-            ->willReturn(['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm']);
+            ->willReturn($expectedData);
 
-        $mappingMock
+        $this->clientMock
             ->expects($this->once())
             ->method('setCollection')
             ->with($this->equalTo((string) $this->collectionNameMock))
             ->willReturnSelf();
 
-        $mappingMock
+        $this->clientMock
             ->expects($this->once())
             ->method('setDocument')
-            ->with($this->equalTo(
-                [
-                    ['first_name' => ['add' => 'Uncle']],
-                    ['last_name'  => ['add' => 'Bob']],
-                    ['gender'     => ['add' => 'm']]
-                ])
-            )
+            ->with($this->equalTo([$expectedData]))
             ->willReturnSelf();
 
         $this->clientMock
@@ -122,6 +119,20 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $this->adapter->insert($this->collectionNameMock, $mappingMock);
+    }
+
+    public function testInsertBulk()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->insertBulk($this->collectionNameMock, new \ArrayIterator());
+    }
+
+    public function testUpsertBulk()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->upsertBulk($this->collectionNameMock, new \ArrayIterator());
     }
 
     public function testSelect()
@@ -277,6 +288,20 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
 
         $this->adapter->updateBulk($this->collectionNameMock, []);
+    }
+
+    public function testUpsert()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->upsert($this->collectionNameMock, $this->getMappingMock());
+    }
+
+    public function testQuery()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->query('Test query');
     }
 
     private function getMappingMock()

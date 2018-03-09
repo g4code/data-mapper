@@ -66,4 +66,11 @@ class SolrIdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedArray, $this->solrIdentity->getCoordinates());
     }
+
+    public function testGetRawQuery()
+    {
+        $this->solrIdentity->setRawQuery('some raw query');
+
+        $this->assertEquals('some raw query', $this->solrIdentity->getRawQuery());
+    }
 }
