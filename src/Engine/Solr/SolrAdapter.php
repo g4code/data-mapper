@@ -94,12 +94,12 @@ class SolrAdapter implements AdapterInterface
             self::RESPONSE_TYPE => self::JSON_RESPONSE_TYPE,
         ];
 
-        $data = $this->client
+        $this->client
             ->setCollection($collectionName)
             ->setQuery(array_merge($query, $selectionFactory->getGeodistParameters()))
             ->select();
 
-        return new RawData($data['response']['docs'], $this->client->getTotalItemsCount());
+        return new RawData($this->client->getDocuments(), $this->client->getTotalItemsCount());
     }
 
     /**
