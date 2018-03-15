@@ -58,9 +58,11 @@ class RawData implements \Countable
 
     public function getAllDataWithIdIdentifier($identifier)
     {
+        $rawData = ($this->data === null || empty($this->data)) ? [] : $this->data;
+
         $data = [];
 
-        foreach($this->data as $item) {
+        foreach($rawData as $item) {
             if(isset($item[$identifier])) {
                 $data[$item[$identifier]] = $item;
             }
