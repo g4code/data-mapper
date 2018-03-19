@@ -312,7 +312,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     }
 
 
-        public function testUpsertException()
+    public function testUpsertException()
     {
         $this->clientMock
             ->expects($this->never())
