@@ -343,12 +343,22 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testQueryForSelect()
     {
+        $query      = 'select * from table_name where 1 group by id limit 0,1';
+        $countQuery = 'SELECT COUNT(*) AS cnt FROM table_name where 1 group by id';
+
         $this->clientMock
             ->expects($this->once())
             ->method('fetchAll')
+            ->with($query)
             ->willReturn([['data' => 1]]);
 
-        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $this->adapter->query('select * from table_name where 1'));
+        $this->clientMock
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with($countQuery)
+            ->willReturn(10);
+
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $this->adapter->query($query));
     }
 
     public function testQueryWithEmptyQuery()

@@ -241,7 +241,19 @@ class MySQLAdapter implements AdapterInterface
 
         if (preg_match('~^\s*(select\s)~usxi', $query) === 1) {
             $data = $this->client->fetchAll($query);
-            return new RawData($data, 0);
+            $selectForTotal = preg_replace(
+                [
+                    '~^\s*select\s(.+)\sfrom~Ui',
+                    '~limit\s\d+\,(\s|)\d+~Ui',
+                ],
+                [
+                    'SELECT COUNT(*) AS cnt FROM',
+                    '',
+                ],
+                $query
+            );
+            $total = $this->client->fetchOne(trim($selectForTotal));
+            return new RawData($data, $total);
         }
 
         throw new \Exception('Query does not match a known pattern (insert, delete, update, select)', 101);
