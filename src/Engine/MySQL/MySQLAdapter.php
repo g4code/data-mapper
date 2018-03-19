@@ -239,7 +239,7 @@ class MySQLAdapter implements AdapterInterface
             return;
         }
 
-        if (preg_match('~^\s*(select\s|show\s)~usxi', $query) === 1) {
+        if (preg_match('~^\s*(select\s)~usxi', $query) === 1) {
             $data = $this->client->fetchAll($query);
             return new RawData($data, 0);
         }
