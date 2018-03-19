@@ -243,12 +243,12 @@ class MySQLAdapter implements AdapterInterface
             $data = $this->client->fetchAll($query);
             $selectForTotal = preg_replace(
                 [
-                    '~^\s*select\s(.+)\sfrom~Ui',
-                    '~limit\s\d+\,(\s|)\d+~Ui',
+                    '~^\s*select\s(.+)\sfrom~Uix',
+                    '~limit\s\d+\,(\s|)\d+(\s|$)~Uix',
                 ],
                 [
                     'SELECT COUNT(*) AS cnt FROM',
-                    '',
+                    ' ',
                 ],
                 $query
             );

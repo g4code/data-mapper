@@ -343,7 +343,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testQueryForSelect()
     {
-        $query      = 'select * from table_name where 1 group by id limit 0,1';
+        $query      = 'select * from table_name where 1 group by id limit 0,100';
         $countQuery = 'SELECT COUNT(*) AS cnt FROM table_name where 1 group by id';
 
         $this->clientMock
