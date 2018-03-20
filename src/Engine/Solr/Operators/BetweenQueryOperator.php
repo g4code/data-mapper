@@ -22,12 +22,12 @@ class BetweenQueryOperator implements QueryOperatorInterface
     {
         return $this->name
             . QueryConnector::COLON
-            . QueryConnector::CURLY_BRACKET_OPEN
+            . QueryConnector::SQUARE_BRACKET_OPEN
             . ($this->value->isMinNull() ? QueryConnector::WILDCARD : $this->value->getMin())
             . QueryConnector::EMPTY_SPACE
             . QueryConnector::CONNECTOR_TO
             . QueryConnector::EMPTY_SPACE
             . ($this->value->isMaxNull() ? QueryConnector::WILDCARD : $this->value->getMax())
-            . QueryConnector::CURLY_BRACKET_CLOSE;
+            . QueryConnector::SQUARE_BRACKET_CLOSE;
     }
 }

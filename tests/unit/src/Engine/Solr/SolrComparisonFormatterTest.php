@@ -96,7 +96,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
+        $this->assertEquals('age:[1 TO 18]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
 
     public function testBetweenZeroNull()
@@ -105,7 +105,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{0 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 0)));
+        $this->assertEquals('age:[0 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 0)));
     }
 
     public function testBetweenNullNumber()
@@ -114,7 +114,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{* TO 5}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 5)));
+        $this->assertEquals('age:[* TO 5]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 5)));
     }
 
     public function testBetweenNumberNull()
@@ -123,7 +123,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{5 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(5, null)));
+        $this->assertEquals('age:[5 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(5, null)));
     }
 
     public function testBetweenNullZero()
@@ -132,7 +132,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{0 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(0, null)));
+        $this->assertEquals('age:[0 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(0, null)));
     }
 
     public function testBetweenNullNull()
@@ -141,7 +141,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{* TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, null)));
+        $this->assertEquals('age:[* TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, null)));
     }
 
     public function testBetweenMinValueNull()
@@ -150,7 +150,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{* TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 18)));
+        $this->assertEquals('age:[* TO 18]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 18)));
     }
 
     public function testBetweenMaxValueNull()
@@ -159,7 +159,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::BETWEEN);
 
-        $this->assertEquals('age:{1 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, null)));
+        $this->assertEquals('age:[1 TO *]', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, null)));
     }
 
     public function testTimeFromInMinutes()
