@@ -99,6 +99,51 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('age:{1 TO 18}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(1, 18)));
     }
 
+    public function testBetweenZeroNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{0 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 0)));
+    }
+
+    public function testBetweenNullNumber()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{* TO 5}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, 5)));
+    }
+
+    public function testBetweenNumberNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{5 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(5, null)));
+    }
+
+    public function testBetweenNullZero()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{0 TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(0, null)));
+    }
+
+    public function testBetweenNullNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals('age:{* TO *}', $this->comparisonFormatter->format('age', $this->operatorMock, new RangeValue(null, null)));
+    }
+
     public function testBetweenMinValueNull()
     {
         $this->operatorMock->expects($this->any())
