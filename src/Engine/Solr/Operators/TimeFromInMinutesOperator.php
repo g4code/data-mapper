@@ -20,10 +20,12 @@ class TimeFromInMinutesOperator implements QueryOperatorInterface
 
     public function format()
     {
+        $value = preg_replace('~^\-~', '', $this->value);
+
         return $this->name
             . QueryConnector::COLON
             . QueryConnector::SQUARE_BRACKET_OPEN
-            . "NOW-{$this->value}MINUTES"
+            . "NOW-{$value}MINUTES"
             . QueryConnector::EMPTY_SPACE
             . QueryConnector::CONNECTOR_TO
             . QueryConnector::EMPTY_SPACE
