@@ -57,10 +57,6 @@ class SolrSelectionFactory implements SelectionFactoryInterface
             }
         }
 
-        if (!empty($this->getGeodistParameters())) {
-           $sorting = array_merge(['geodist() asc'], $sorting);
-        }
-
         return join(',', $sorting);
     }
 
