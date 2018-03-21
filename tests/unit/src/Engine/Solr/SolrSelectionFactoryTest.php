@@ -98,13 +98,8 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->identityMock
             ->expects($this->once())
-            ->method('getCoordinates')
-            ->willReturn([
-                'fq'     => '{!geofilt}',
-                'sfield' => 'location',
-                'pt'     => '46.100376,19.667587',
-                'd'      => '100',
-            ]);
+            ->method('getSorting')
+            ->willreturn( [$this->getMockForSort('geodist()', 'asc')]);
 
         $this->assertEquals('geodist() asc', $this->selectionFactory->sort());
     }
@@ -113,18 +108,9 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->identityMock
             ->expects($this->once())
-            ->method('getCoordinates')
-            ->willReturn([
-                'fq'     => '{!geofilt}',
-                'sfield' => 'location',
-                'pt'     => '46.100376,19.667587',
-                'd'      => '100',
-            ]);
-
-        $this->identityMock
-            ->expects($this->once())
             ->method('getSorting')
             ->willReturn([
+                $this->getMockForSort('geodist()', 'asc'),
                 $this->getMockForSort('id', 'desc'),
                 $this->getMockForSort('name', 'asc'),
             ]);
