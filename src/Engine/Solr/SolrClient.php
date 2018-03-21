@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Engine\Solr;
 
+use G4\DataMapper\Profiler\Ticker\ProfilerTickerSolr;
 use G4\ValueObject\Dictionary;
 use G4\ValueObject\Url;
 
@@ -24,9 +25,15 @@ class SolrClient
 
     private $response;
 
+    /**
+     * @var ProfilerTickerSolr
+     */
+    private $profiler;
+
     public function __construct(Url $url)
     {
         $this->url = $url;
+        $this->profiler = ProfilerTickerSolr::getInstance();
     }
 
     public function select()
@@ -93,6 +100,7 @@ class SolrClient
 
     private function execute()
     {
+        $uniqueId = $this->profiler->start();
         $handle = curl_init((string) $this->url);
 
         curl_setopt_array($handle, [
@@ -108,8 +116,10 @@ class SolrClient
         }
 
         $this->response = curl_exec($handle);
+        $this->profiler->setInfo($uniqueId, curl_getinfo($handle));
 
         curl_close($handle);
+        $this->profiler->end($uniqueId);
 
         return $this;
     }

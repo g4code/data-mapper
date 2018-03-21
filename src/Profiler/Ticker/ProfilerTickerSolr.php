@@ -1,9 +1,15 @@
 <?php
 
-namespace G4\DataMapper\Profiler\Solr;
+namespace G4\DataMapper\Profiler\Ticker;
 
-class Ticker extends \G4\Profiler\Ticker\TickerAbstract
+use G4\DataMapper\Profiler\Solr\Formatter;
+use G4\Profiler\Ticker\TickerAbstract;
+
+//TODO: Drasko - tmp solution - fix after Profiler refactoring is done!
+class ProfilerTickerSolr extends TickerAbstract
 {
+
+    const NAME = 'data_mapper_solr_1.x';
 
     private static $instance;
 
@@ -15,7 +21,9 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
     {
     }
 
-
+    /**
+     * @return ProfilerTickerSolr
+     */
     final public static function getInstance()
     {
         if (static::$instance === null) {
@@ -35,7 +43,7 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 
     public function getName()
     {
-        return 'data_mapper_solr_0.x';
+        return self::NAME;
     }
 
     /**
