@@ -70,6 +70,10 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
 
         $this->coordinates = new CoordinatesValue($latitude, $longitude, $distance);
 
+        if (!$this->coordinates->isEmpty()) {
+            $this->sortAscending('geodist()');
+        }
+
         return $this;
     }
 
