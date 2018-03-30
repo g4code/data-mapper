@@ -41,4 +41,9 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(true, $this->elasticsearchIdentity->hasRawQuery());
     }
+
+    public function testTimeFromInMinutes()
+    {
+        $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('online')->timeFromInMinutes(15));
+    }
 }

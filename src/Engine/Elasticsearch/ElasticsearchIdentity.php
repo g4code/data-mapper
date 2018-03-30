@@ -4,6 +4,8 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\CoordinatesValue;
+use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\SingleValue;
 
 class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInterface
 {
@@ -75,5 +77,16 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function hasRawQuery()
     {
         return !empty($this->rawQuery);
+    }
+
+    /**
+     * @param $value
+     * @return ElasticsearchIdentity
+     */
+    public function timeFromInMinutes($value)
+    {
+        $this->arrayException($value);
+        $this->operator(Operator::TIME_FROM_IN_MINUTES, new SingleValue($value));
+        return $this;
     }
 }
