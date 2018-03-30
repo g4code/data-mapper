@@ -73,7 +73,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         $comparisons = [];
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
-            if ($oneComparison instanceof Comparison) {
+            if ($oneComparison instanceof Comparison && !$oneComparison->getValue()->isEmpty()) {
 
                 $comparisons[]= $oneComparison->getComparison($this->makeComparisonFormatter());
             }
