@@ -1,6 +1,7 @@
 <?php
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory;
+use G4\DataMapper\Common\SingleValue;
 
 class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -266,13 +267,17 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getComparison'])
             ->getMock();
 
         $mock
             ->expects($this->once())
             ->method('getComparison')
             ->willReturn(['match' => [$column => $value]]);
+
+        $mock
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(new SingleValue($value));
 
         return $mock;
     }
@@ -281,13 +286,17 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getComparison'])
             ->getMock();
 
         $mock
             ->expects($this->once())
             ->method('getComparison')
             ->willReturn(['range' => [$column => ['gt' => $value]]]);
+
+        $mock
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(new SingleValue($value));
 
         return $mock;
     }
