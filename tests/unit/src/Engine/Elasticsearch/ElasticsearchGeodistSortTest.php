@@ -17,7 +17,7 @@ class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
 
     public function testSortWithGeodistParameters()
     {
-        $this->identity->geodist(10, 5, 100);
+        $this->identity->geodist(5, 10, 100);
 
         $geodistFormatter = new ElasticsearchGeodistSort($this->identity);
 

@@ -26,7 +26,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
      * @param $distance
      * @return ElasticsearchIdentity
      */
-    public function geodist($latitude, $longitude, $distance = null)
+    public function geodist($longitude, $latitude, $distance = null)
     {
         if($distance === null) {
             $distance = 1000000;
