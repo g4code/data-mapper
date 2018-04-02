@@ -21,7 +21,7 @@ class ElasticsearchGeodistFormatter
         return [
             'geo_distance' => [
                 'distance'     => $this->identity->getCoordinates()->getDistance() . 'km',
-                'pin.location' => [
+                'location' => [
                     'lon' => $this->identity->getCoordinates()->getLongitude(),
                     'lat' => $this->identity->getCoordinates()->getLatitude(),
                 ],

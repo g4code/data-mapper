@@ -24,7 +24,7 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
         $expectedArray = [
             'geo_distance' => [
                 'distance'     => '100km',
-                'pin.location' => [
+                'location' => [
                     'lon' => '10',
                     'lat' => '5',
                 ],
