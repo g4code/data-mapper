@@ -231,7 +231,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testSelect()
     {
-        $solrData = [
+        $elasticsearchData = [
             'total' => 2,
             'hits' => [
                 'hits' => [
@@ -299,7 +299,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             ->method('search')
             ->willReturnSelf();
 
-        $this->clientMock->expects($this->once())->method('getResponse')->willReturn($solrData['hits']);
+        $this->clientMock->expects($this->once())->method('getResponse')->willReturn($elasticsearchData['hits']);
 
         $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
 
