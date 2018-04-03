@@ -83,12 +83,11 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
             $comparisons[]= $this->identity->getRawQuery();
         }
 
-        return ['bool' => ['must' => $comparisons]];
-    }
+        if (empty($comparisons)) {
+            $comparisons =  ['match_all' => []];
+        }
 
-    public function getGeodistParameters()
-    {
-        return (new ElasticsearchGeodistFormatter($this->identity))->format();
+        return ['bool' => ['must' => $comparisons, 'filter' => (new ElasticsearchGeodistFormatter($this->identity))->format()]];
     }
 
     private function makeComparisonFormatter()

@@ -83,17 +83,15 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
-        $query = [
-            'from'    => $selectionFactory->offset(),
-            'size'    => $selectionFactory->limit(),
-            'query'   => array_merge($selectionFactory->where(), $selectionFactory->getGeodistParameters()),
-            'sort'    => $selectionFactory->sort(),
-            '_source' => $selectionFactory->fieldNames()
-        ];
-
         $data = $this->client
             ->setIndex($collectionName)
-            ->setBody($query)
+            ->setBody([
+                'from'    => $selectionFactory->offset(),
+                'size'    => $selectionFactory->limit(),
+                'query'   => $selectionFactory->where(),
+                'sort'    => $selectionFactory->sort(),
+                '_source' => $selectionFactory->fieldNames()
+            ])
             ->search();
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());

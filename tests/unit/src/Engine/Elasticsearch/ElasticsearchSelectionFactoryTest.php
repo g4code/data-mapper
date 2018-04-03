@@ -180,13 +180,15 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             ['bool' =>
-                ['must' =>
-                    [
-                        ['match' => ['id' => 1]],
-                        ['match' => ['name' => 'Test']],
-                        ['range' => ['age' => ['gt' => 18]]]
-                    ]
-                ]
+                [
+                    'must' =>
+                        [
+                            ['match' => ['id' => 1]],
+                            ['match' => ['name' => 'Test']],
+                            ['range' => ['age' => ['gt' => 18]]]
+                        ],
+                    'filter' => [],
+                ],
             ], $this->selectionFactory->where());
     }
 
@@ -217,14 +219,16 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['match' => ['last_name' => 'User']]);
 
         $this->assertEquals(['bool' =>
-            ['must' =>
-                [
-                    ['match' => ['id' => 1]],
-                    ['match' => ['name' => 'Test']],
-                    ['range' => ['age' => ['gt' => 18]]],
-                    ['match' => ['last_name' => 'User']],
-                ]
-            ]
+            [
+                'must' =>
+                    [
+                        ['match' => ['id' => 1]],
+                        ['match' => ['name' => 'Test']],
+                        ['range' => ['age' => ['gt' => 18]]],
+                        ['match' => ['last_name' => 'User']],
+                    ],
+                'filter' => [],
+            ],
         ], $this->selectionFactory->where());
     }
 
@@ -250,17 +254,29 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('hasCoordinates')
             ->willReturn(true);
 
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([]);
+
         $expectedArray = [
-            'geo_distance' => [
-                'distance'     => '100km',
-                'location' => [
-                    'lon' => '10',
-                    'lat' => '15',
+            'bool' => [
+                'must'   => [
+                    'match_all' => []
                 ],
-            ]
+                'filter' => [
+                    'geo_distance' => [
+                        'distance'     => '100km',
+                        'location' => [
+                            'lon' => '10',
+                            'lat' => '15',
+                        ],
+                    ]
+                ],
+            ],
         ];
 
-        $this->assertEquals($expectedArray, $this->selectionFactory->getGeodistParameters());
+        $this->assertEquals($expectedArray, $this->selectionFactory->where());
     }
 
     private function getMockForEqualComparison($column, $value)
