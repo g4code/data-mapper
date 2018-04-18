@@ -20,10 +20,12 @@ class TimeFromInMinutesOperator implements QueryOperatorInterface
 
     public function format()
     {
+        $value = preg_replace('~^\-~', '', $this->value);
+
         return [
             QueryConnector::RANGE => [
                 $this->name => [
-                    QueryConnector::GREATER_THAN => "now-{$this->value}m"
+                    QueryConnector::GREATER_THAN => strtotime("-{$value} minute", time())
                 ]
             ]
         ];
