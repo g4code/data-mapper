@@ -64,6 +64,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         return $sorting;
     }
 
+    //TODO:Vladan:It is too complicated.
     public function where()
     {
         if ($this->identity->isVoid()) {
@@ -74,20 +75,25 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison && !$oneComparison->getValue()->isEmpty()) {
-
-                $comparisons[]= $oneComparison->getComparison($this->makeComparisonFormatter());
+                if (preg_match("/^-/", $oneComparison->getName())) {
+                    $comparisons['must_not'][]= $oneComparison->getComparison($this->makeComparisonFormatter());
+                } else {
+                    $comparisons['must'][]= $oneComparison->getComparison($this->makeComparisonFormatter());
+                }
             }
         }
 
         if($this->identity->hasRawQuery()) {
-            $comparisons[]= $this->identity->getRawQuery();
+            $comparisons['must'][]= $this->identity->getRawQuery();
         }
 
         if (empty($comparisons)) {
-            $comparisons =  ['match_all' => []];
+            $comparisons =  ['must' => ['match_all' => []]];
         }
 
-        return ['bool' => ['must' => $comparisons, 'filter' => (new ElasticsearchGeodistFormatter($this->identity))->format()]];
+        $comparisons['filter'] = (new ElasticsearchGeodistFormatter($this->identity))->format();
+
+        return ['bool' => $comparisons];
     }
 
     private function makeComparisonFormatter()
