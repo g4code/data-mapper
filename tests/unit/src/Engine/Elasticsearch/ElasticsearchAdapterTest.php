@@ -185,7 +185,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('setMethod')
-            ->with($this->equalTo(self::METHOD_PUT))
+            ->with($this->equalTo(self::METHOD_POST))
             ->willReturnSelf();
 
         $this->clientMock
@@ -196,7 +196,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('setBody')
-            ->with($this->equalTo(['docs' => $body]))
+            ->with($this->equalTo(['doc' => $body]))
             ->willReturnSelf();
 
         $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
