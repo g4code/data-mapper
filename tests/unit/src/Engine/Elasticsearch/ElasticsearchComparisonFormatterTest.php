@@ -100,7 +100,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::TIME_FROM_IN_MINUTES);
 
-        $this->assertEquals(['range' => ['online' => ['gt' => 'now-15m']]], $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue(15)));
+        $this->assertEquals(['range' => ['online' => ['gt' => strtotime("-15 minute", time())]]], $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue(15)));
     }
 
     public function testLike()
