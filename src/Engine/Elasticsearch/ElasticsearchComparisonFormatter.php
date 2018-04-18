@@ -28,6 +28,11 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 
     public function format($name, Operator $operator, ValueInterface $value)
     {
+        //TODO:Vladan:This should be refactored.
+        if (preg_match("/^-/", $name)) {
+            $name = ltrim($name,  '-');
+        }
+
         switch ($operator->getSymbol()) {
             case Operator::EQUAL:
                 $query = new EqualOperator($name, $value);
