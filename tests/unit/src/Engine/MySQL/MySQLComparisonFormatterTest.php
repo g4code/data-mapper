@@ -123,7 +123,8 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn('not_in_map');
 
-        $this->expectException(\Exception::class);
+        $this->expectException(\G4\DataMapper\Exception\InvalidValueException::class);
+        $this->expectExceptionCode(14010);
         $this->expectExceptionMessage('Operator not in map');
         $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('test'));
     }

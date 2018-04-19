@@ -59,7 +59,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     public function testParamsWithNullPassword()
     {
         $this->params['password'] = null;
-        $this->expectException(\Exception::class);
+        $this->expectException(\G4\DataMapper\Exception\NoParameterException::class);
         $this->expectExceptionMessage('No password param');
         new MySQLClientFactory($this->params);
     }
@@ -84,7 +84,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     private function paramsTest($key, $message)
     {
         unset($this->params[$key]);
-        $this->expectException(\Exception::class);
+        $this->expectException(\G4\DataMapper\Exception\NoParameterException::class);
         $this->expectExceptionMessage($message);
         new MySQLClientFactory($this->params);
     }

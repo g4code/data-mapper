@@ -7,6 +7,8 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Field;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Exception\InvalidFieldException;
+use G4\DataMapper\Exception\InvalidValueTypeException;
 
 class Identity implements IdentityInterface
 {
@@ -234,11 +236,11 @@ class Identity implements IdentityInterface
     public function field($fieldName)
     {
         if (!$this->isVoid() && $this->currentField->isIncomplete()) {
-            throw new \Exception("Incomplete field", 101);
+            throw new InvalidFieldException('Incomplete field');
         }
 
         if (isset($this->fields[$fieldName])) {
-            throw new \Exception("Field is already set", 101);
+            throw new InvalidFieldException('Field is already set');
         }
 
         $this->currentField       = new Field($fieldName);
@@ -283,7 +285,7 @@ class Identity implements IdentityInterface
     protected function arrayException($value)
     {
         if (is_array($value)) {
-            throw new \Exception('Value cannot be array', 101);
+            throw new InvalidValueTypeException('Value can not be array');
         }
     }
 
@@ -302,7 +304,7 @@ class Identity implements IdentityInterface
     protected function operator($symbol, $value)
     {
         if ($this->isVoid()) {
-            throw new \Exception('Field is not defined', 101);
+            throw new InvalidFieldException('Field is not defined');
         }
         $this->currentField->add(new Operator($symbol), $value);
     }

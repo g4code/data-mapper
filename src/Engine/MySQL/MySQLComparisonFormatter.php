@@ -6,6 +6,7 @@ use G4\DataMapper\Common\ComparisonFormatterInterface;
 use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\MySQL\Quote;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Exception\InvalidValueException;
 
 class MySQLComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -43,7 +44,7 @@ class MySQLComparisonFormatter implements ComparisonFormatterInterface
         $symbol = $operator->getSymbol();
 
         if (!isset($this->map[$symbol])) {
-            throw new \Exception('Operator not in map', 101);
+            throw new InvalidValueException('Operator not in map');
         }
 
         return $this->map[$symbol];

@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Engine\MySQL;
 
+use G4\DataMapper\Exception\DatabaseOperationException;
+
 class MySQLTransaction
 {
 
@@ -30,7 +32,7 @@ class MySQLTransaction
     public function begin()
     {
         if ($this->active) {
-            throw new \Exception('Database transaction is already started', 101);
+            throw new DatabaseOperationException('Database transaction has already started');
         }
 
         $this->active = true;

@@ -3,6 +3,8 @@
 namespace G4\DataMapper\Common\Selection;
 
 use G4\DataMapper\Common\SortingFormatterInterface;
+use G4\DataMapper\Exception\InvalidValueException;
+use G4\DataMapper\Exception\InvalidValueTypeException;
 
 class Sort
 {
@@ -35,7 +37,7 @@ class Sort
         ];
 
         if (!in_array($this->order, $validSymbols)) {
-            throw new \Exception('Sort order is not valid', 101);
+            throw new InvalidValueException('Sort order is not valid');
         }
     }
 }

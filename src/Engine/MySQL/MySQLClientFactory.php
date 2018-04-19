@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Engine\MySQL;
 
+use G4\DataMapper\Exception\NoHostParameterException;
+use G4\DataMapper\Exception\NoParameterException;
 use G4\Factory\CreateInterface;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
@@ -52,19 +54,19 @@ class MySQLClientFactory implements CreateInterface
     private function filterParams(array $params)
     {
         if (empty($params['host'])) {
-            throw new Exception('No host param', 101);
+            throw new NoParameterException('No host param');
         }
         if (empty($params['port'])) {
-            throw new Exception('No port param', 101);
+            throw new NoParameterException('No port param');
         }
         if (empty($params['username'])) {
-            throw new Exception('No username param', 101);
+            throw new NoParameterException('No username param');
         }
         if (!array_key_exists('password', $params) || $params['password'] === null) {
-            throw new Exception('No password param', 101);
+            throw new NoParameterException('No password param');
         }
         if (empty($params['dbname'])) {
-            throw new Exception('No dbname param', 101);
+            throw new NoParameterException('No dbname param');
         }
         $this->params = [
             'host'     => $params['host'],

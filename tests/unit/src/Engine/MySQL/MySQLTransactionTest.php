@@ -48,9 +48,9 @@ class MySQLTransactionTest extends PHPUnit_Framework_TestCase
 
         $this->transaction->begin();
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(101);
-        $this->expectExceptionMessage('Database transaction is already started');
+        $this->expectException(\G4\DataMapper\Exception\DatabaseOperationException::class);
+        $this->expectExceptionCode(14011);
+        $this->expectExceptionMessage('Database transaction has already started');
 
         $this->transaction->begin();
     }

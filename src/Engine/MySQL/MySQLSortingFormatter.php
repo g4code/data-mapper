@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\SortingFormatterInterface;
 use G4\DataMapper\Common\Selection\Sort;
+use G4\DataMapper\Exception\InvalidValueException;
 
 class MySQLSortingFormatter implements SortingFormatterInterface
 {
@@ -25,7 +26,7 @@ class MySQLSortingFormatter implements SortingFormatterInterface
     private function sortMap($order)
     {
         if (!isset($this->map[$order])) {
-            throw new \Exception('Order not in map', 101);
+            throw new InvalidValueException('Order not in map');
         }
 
         return $this->map[$order];

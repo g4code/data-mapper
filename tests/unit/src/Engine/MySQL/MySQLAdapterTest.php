@@ -172,8 +172,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testInsertBulkException()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(101);
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
+        $this->expectExceptionCode(10105);
         $this->expectExceptionMessage('Collection in insertBulk() must not be empty.');
 
         $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([]));
@@ -209,8 +209,8 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testUpsertBulkException()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(101);
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
+        $this->expectExceptionCode(10105);
         $this->expectExceptionMessage('Collection in upsertBulk() must not be empty.');
 
         $this->adapter->upsertBulk($this->tableNameMock, new \ArrayIterator([]));
@@ -324,9 +324,9 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
         $this->expectExceptionMessage('Empty data for upsert');
-        $this->expectExceptionCode(101);
+        $this->expectExceptionCode(10105);
 
         $this->adapter->upsert($this->tableNameMock, $mappingMock);
     }
@@ -363,17 +363,17 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testQueryWithEmptyQuery()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(101);
-        $this->expectExceptionMessage('Query cannot be empty');
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
+        $this->expectExceptionCode(10105);
+        $this->expectExceptionMessage('Query can not be empty');
 
         $this->adapter->query('');
     }
 
     public function testQueryWithUnknown()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionCode(101);
+        $this->expectException(\G4\DataMapper\Exception\InvalidValueException::class);
+        $this->expectExceptionCode(14010);
         $this->expectExceptionMessage('Query does not match a known pattern (insert, delete, update, select)');
 
         $this->adapter->query('tralala');

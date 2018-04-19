@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Common;
 
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Exception\BulkOperationException;
 
 class Bulk implements \Countable
 {
@@ -45,7 +46,7 @@ class Bulk implements \Countable
         try {
             $this->adapter->insertBulk($this->collectionName, $this->getData());
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+            throw new BulkOperationException($exception->getCode() . ': ' . $exception->getMessage());
         }
     }
 
@@ -54,7 +55,7 @@ class Bulk implements \Countable
         try {
             $this->adapter->upsertBulk($this->collectionName, $this->getData());
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getCode() . ': ' . $exception->getMessage(), 101);
+            throw new BulkOperationException($exception->getCode() . ': ' . $exception->getMessage());
         }
     }
 

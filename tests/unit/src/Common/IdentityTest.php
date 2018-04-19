@@ -27,7 +27,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Comparison::class, $this->identity->getComparisons()[0]);
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->equal([1]);
     }
 
@@ -42,7 +42,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThan(1));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->greaterThan([1]);
     }
 
@@ -50,7 +50,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThanOrEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->greaterThanOrEqual([1]);
     }
 
@@ -63,7 +63,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThan(1));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->lessThan([1]);
     }
 
@@ -71,7 +71,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThanOrEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->lessThanOrEqual([1]);
     }
 
@@ -79,7 +79,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->like('this'));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->like([1]);
     }
 
@@ -103,7 +103,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->notEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value cannot be array');
+        $this->setExpectedException('\Exception', 'Value can not be array');
         $this->identity->field('name')->notEqual([1]);
     }
 

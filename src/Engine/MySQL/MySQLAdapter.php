@@ -8,6 +8,9 @@ use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
+use G4\DataMapper\Exception\EmptyDataException;
+use G4\DataMapper\Exception\InvalidValueException;
+use G4\DataMapper\Exception\InvalidValueTypeException;
 use Zend_Db_Adapter_Abstract;
 use Zend_Db;
 use G4\DataMapper\Common\SelectionFactoryInterface;
@@ -101,7 +104,7 @@ class MySQLAdapter implements AdapterInterface
         $data = $mappings->map();
 
         if (empty($data)) {
-            throw new \Exception('Empty data for insert', 101);
+            throw new EmptyDataException('Empty data for insert.');
         }
 
         $this->innerTransactionBegin();
@@ -112,7 +115,7 @@ class MySQLAdapter implements AdapterInterface
     public function insertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
     {
         if (count($mappingsCollection) === 0) {
-            throw new \Exception('Collection in insertBulk() must not be empty.', 101);
+            throw new EmptyDataException('Collection in insertBulk() must not be empty.');
         }
 
         $mappingsCollection->rewind();
@@ -140,7 +143,7 @@ class MySQLAdapter implements AdapterInterface
     public function upsertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
     {
         if (count($mappingsCollection) === 0) {
-            throw new \Exception('Collection in upsertBulk() must not be empty.', 101);
+            throw new EmptyDataException('Collection in upsertBulk() must not be empty.');
         }
 
         $mappingsCollection->rewind();
@@ -199,7 +202,7 @@ class MySQLAdapter implements AdapterInterface
         $data = $mapping->map();
 
         if (empty($data)) {
-            throw new \Exception('Empty data for update', 101);
+            throw new EmptyDataException('Empty data for update');
         }
 
         $this->innerTransactionBegin();
@@ -212,7 +215,7 @@ class MySQLAdapter implements AdapterInterface
         $data = $mapping->map();
 
         if (empty($data)) {
-            throw new \Exception('Empty data for upsert', 101);
+            throw new EmptyDataException('Empty data for upsert');
         }
 
         $fields = implode(", ", array_keys($data));
@@ -231,7 +234,7 @@ class MySQLAdapter implements AdapterInterface
     public function query($query)
     {
         if (empty($query)) {
-            throw new \Exception('Query cannot be empty', 101);
+            throw new EmptyDataException('Query can not be empty');
         }
 
         if (preg_match('~^\s*(insert\sinto|delete\sfrom|update\s)~usxi', $query) === 1) {
@@ -256,6 +259,6 @@ class MySQLAdapter implements AdapterInterface
             return new RawData($data, $total);
         }
 
-        throw new \Exception('Query does not match a known pattern (insert, delete, update, select)', 101);
+        throw new InvalidValueException('Query does not match a known pattern (insert, delete, update, select)');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace G4\DataMapper\Common\Selection;
 
+use G4\DataMapper\Exception\InvalidValueException;
+use G4\DataMapper\Exception\InvalidValueTypeException;
+
 class Operator
 {
 
@@ -53,7 +56,7 @@ class Operator
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {
-            throw new \Exception('Symbol is not valid', 101);
+            throw new InvalidValueException('Symbol is not valid');
         }
     }
 }
