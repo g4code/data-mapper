@@ -16,7 +16,7 @@ class SolrAdapter implements AdapterInterface
     const METHOD_DELETE  = 'delete';
     const IDENTIFIER_KEY = 'id';
 
-    const FIELDS        = 'fields';
+    const FIELDS        = 'fl';
     const QUERY         = 'q';
     const LIMIT         = 'rows';
     const SORT          = 'sort';
