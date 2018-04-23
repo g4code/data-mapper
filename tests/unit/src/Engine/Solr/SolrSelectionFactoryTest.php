@@ -34,11 +34,21 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
     public function testFieldNames()
     {
         $this->identityMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFieldNames')
             ->willReturn(['name']);
 
-        $this->assertEquals(['name'], $this->selectionFactory->fieldNames());
+        $this->assertEquals('name', $this->selectionFactory->fieldNames());
+    }
+
+    public function testFieldNamesAsMultidimensionalArray()
+    {
+        $this->identityMock
+            ->expects($this->exactly(2))
+            ->method('getFieldNames')
+            ->willReturn([['user_id' => 'id'],'name', 'gender', ['dob' => 'birthday'], 'city_id']);
+
+        $this->assertEquals('user_id:id,name,gender,dob:birthday,city_id', $this->selectionFactory->fieldNames());
     }
 
     public function testEmptyFieldNames()
