@@ -21,11 +21,9 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function fieldNames()
     {
-        $fieldNames = $this->identity->getFieldNames();
-
-        return count($fieldNames) === 0
+        return count($this->identity->getFieldNames()) === 0
             ? '*'
-            : $fieldNames;
+            : $this->getFieldNamesString();
     }
 
     public function group()
@@ -84,6 +82,17 @@ class SolrSelectionFactory implements SelectionFactoryInterface
     public function getGeodistParameters()
     {
         return $this->identity->getCoordinates();
+    }
+
+    private function getFieldNamesString()
+    {
+        $fieldNames = [];
+
+        foreach($this->identity->getFieldNames() as $fieldName) {
+            $fieldNames[] = is_array($fieldName) ? key($fieldName) .':'.$fieldName[key($fieldName)] : $fieldName;
+        }
+
+        return join(',', $fieldNames);
     }
 
     private function makeComparisonFormatter()
