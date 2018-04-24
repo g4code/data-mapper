@@ -19,11 +19,21 @@ class ElasticsearchClientFactory implements CreateInterface
      */
     private $params;
 
+    /**
+     * ElasticsearchClientFactory constructor.
+     * @param array $params
+     * @throws NoHostParameterException
+     * @throws NoPortParameterException
+     */
     public function __construct(array $params)
     {
         $this->filterParams($params);
     }
 
+    /**
+     * @return ElasticsearchClient
+     * @throws \G4\ValueObject\Exception\InvalidIntegerNumberException
+     */
     public function create()
     {
         $url = new Url(self::PROTOCOL . self::COLON . self::FORWARD_SLASH . self::FORWARD_SLASH . $this->params['host']);
@@ -31,6 +41,11 @@ class ElasticsearchClientFactory implements CreateInterface
         return new ElasticsearchClient($url->port(new PortNumber($this->params['port'])));
     }
 
+    /**
+     * @param array $params
+     * @throws NoHostParameterException
+     * @throws NoPortParameterException
+     */
     private function filterParams(array $params)
     {
         if (empty($params['host'])) {
@@ -42,8 +57,24 @@ class ElasticsearchClientFactory implements CreateInterface
         }
 
         $this->params = [
-            'host'     => $params['host'],
+            'host'     => $this->handleHostParameter($params['host']),
             'port'     => $params['port'],
         ];
+    }
+
+    /**
+     * @param $host
+     * @return mixed
+     */
+    private function handleHostParameter($host)
+    {
+        if (is_array($host)) {
+            $hostsArray = array_filter($host);
+            $randomKey = array_rand($hostsArray);
+
+            return $hostsArray[$randomKey];
+        }
+
+        return $host;
     }
 }

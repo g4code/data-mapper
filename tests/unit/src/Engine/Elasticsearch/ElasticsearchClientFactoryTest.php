@@ -22,7 +22,7 @@ class ElasticsearchClientFactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->params = [
-            'host'     => '127.0.0.1',
+            'host'     => [null, '127.0.0.1', null, null],
             'port'     => '9200',
         ];
 
