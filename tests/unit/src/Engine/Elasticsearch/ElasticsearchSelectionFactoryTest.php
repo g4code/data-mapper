@@ -114,7 +114,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getCoordinates')
             ->willReturn(new \G4\DataMapper\Common\CoordinatesValue(10, 10, 100));
 
-        $this->assertEquals([
+        $this->assertEquals([[
             '_geo_distance' => [
                 'location' => [
                     'lat' => 10,
@@ -123,7 +123,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
                 'order' => 'asc',
                 'unit'  => 'km',
                 'distance_type' => 'plane',
-            ],
+            ]],
             ['id'   => ['order' => 'desc']],
             ['name' => ['order' => 'asc']],
         ], $this->selectionFactory->sort());

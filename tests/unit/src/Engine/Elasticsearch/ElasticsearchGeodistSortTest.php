@@ -21,7 +21,7 @@ class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
 
         $geodistFormatter = new ElasticsearchGeodistSort($this->identity);
 
-        $expectedArray = [
+        $expectedArray = [[
             '_geo_distance' => [
                 'location' => [
                     'lat' => '5',
@@ -31,7 +31,7 @@ class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
                 'unit'  => 'km',
                 'distance_type' => 'plane',
             ],
-        ];
+        ]];
 
         $this->assertEquals($expectedArray, $geodistFormatter->sort());
     }

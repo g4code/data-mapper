@@ -18,7 +18,7 @@ class ElasticsearchGeodistSort
 
     private function format()
     {
-        return [
+        return [[
             '_geo_distance' => [
                 'location' => [
                     'lat' => $this->identity->getCoordinates()->getLatitude(),
@@ -28,6 +28,6 @@ class ElasticsearchGeodistSort
                 'unit'  => 'km',
                 'distance_type' => 'plane',
             ],
-        ];
+        ]];
     }
 }
