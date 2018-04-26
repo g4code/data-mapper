@@ -9,7 +9,7 @@ class QueryTest extends TestCase
 
     public function testQueryShow()
     {
-        $rawData = $this->makeMapper()->query('show processlist;');
+        $rawData = $this->makeMapper()->query('SELECT * FROM test_insert');
 
         $this->assertInstanceOf('\G4\DataMapper\Common\RawData', $rawData);
     }
