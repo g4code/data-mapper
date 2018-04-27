@@ -94,6 +94,24 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['range' => ['age' => ['gt' => 12, 'lt' => 20]]], $this->comparisonFormatter->format('age', $this->operatorMock, new \G4\DataMapper\Common\RangeValue(12, 20)));
     }
 
+    public function testBetweenMinValueNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals(['range' => ['age' => ['lt' => 20]]], $this->comparisonFormatter->format('age', $this->operatorMock, new \G4\DataMapper\Common\RangeValue(null, 20)));
+    }
+
+    public function testBetweenMaxValueNull()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::BETWEEN);
+
+        $this->assertEquals(['range' => ['age' => ['gt' => 12]]], $this->comparisonFormatter->format('age', $this->operatorMock, new \G4\DataMapper\Common\RangeValue(12, null)));
+    }
+
     public function testTimeFromInMinutes()
     {
         $this->operatorMock->expects($this->any())
