@@ -20,13 +20,21 @@ class BetweenOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [
-            QueryConnector::RANGE =>
-                [$this->name => [
-                    QueryConnector::GREATER_THAN => $this->value->getMin(),
-                    QueryConnector::LESS_THAN => $this->value->getMax(),
-                ]
-            ]
-        ];
+        return [QueryConnector::RANGE => [$this->name => $this->handleRangeValues()]];
+    }
+
+    private function handleRangeValues()
+    {
+        $values = [];
+        
+        if (!$this->value->isMinNull()) {
+            $values[QueryConnector::GREATER_THAN] = $this->value->getMin();
+        }
+
+        if (!$this->value->isMaxNull()) {
+            $values[QueryConnector::LESS_THAN] = $this->value->getMax();
+        }
+
+        return $values;
     }
 }
