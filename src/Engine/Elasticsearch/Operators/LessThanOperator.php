@@ -20,6 +20,6 @@ class LessThanOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [QueryConnector::RANGE => [$this->name => [QueryConnector::LESS_THAN => $this->value]]];
+        return [QueryConnector::RANGE => [$this->name => [QueryConnector::LESS_THAN => (string) $this->value]]];
     }
 }
