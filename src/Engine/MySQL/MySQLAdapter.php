@@ -94,8 +94,20 @@ class MySQLAdapter implements AdapterInterface
 
     public function delete(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
+        $order      = $selectionFactory->sort();
+        $limit      = $selectionFactory->limit();
+
+        $query = sprintf('DELETE FROM %s WHERE %s %s %s',
+            (string) $table,
+            $selectionFactory->where(),
+            (count($order) === 0 ? '' : " ORDER BY " . implode(', ', $order)),
+            (empty($limit) ? '' : " LIMIT {$limit}")
+        );
+
+        $filteredQuery = preg_replace('/\s+/', ' ', trim($query));
+
         $this->innerTransactionBegin();
-        $this->client->delete((string) $table, $selectionFactory->where());
+        $this->client->query($filteredQuery);
         $this->innerTransactionEnd();
     }
 

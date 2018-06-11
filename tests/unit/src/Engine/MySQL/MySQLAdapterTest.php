@@ -74,19 +74,38 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->commitTransaction();
     }
 
-    public function testDelete()
+    public function testSimpleDelete()
     {
-        $this->clientMock
-            ->expects($this->once())
-            ->method('delete');
-
         $selectionFactoryMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectionFactoryMock
+        $selectionFactoryMock->expects($this->once())->method('where')->willReturn(1);
+        $selectionFactoryMock->expects($this->once())->method('sort')->willReturn([]);
+        $selectionFactoryMock->expects($this->once())->method('limit')->willReturn(0);
+
+        $this->clientMock
             ->expects($this->once())
-            ->method('where');
+            ->method('query')
+            ->with('DELETE FROM data WHERE 1');
+
+        $this->adapter->delete($this->tableNameMock, $selectionFactoryMock);
+    }
+
+    public function testComplexDelete()
+    {
+        $selectionFactoryMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryMock->expects($this->once())->method('where')->willReturn("name = 'test'");
+        $selectionFactoryMock->expects($this->once())->method('sort')->willReturn(['name', 'email']);
+        $selectionFactoryMock->expects($this->once())->method('limit')->willReturn(9);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('query')
+            ->with("DELETE FROM data WHERE name = 'test' ORDER BY name, email LIMIT 9");
 
         $this->adapter->delete($this->tableNameMock, $selectionFactoryMock);
     }
