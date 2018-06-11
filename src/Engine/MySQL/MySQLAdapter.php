@@ -3,16 +3,12 @@
 namespace G4\DataMapper\Engine\MySQL;
 
 use G4\DataMapper\Common\AdapterInterface;
-use G4\DataMapper\Common\Bulk;
 use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\SingleValue;
-use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\Exception\InvalidValueException;
-use G4\DataMapper\Exception\InvalidValueTypeException;
 use Zend_Db_Adapter_Abstract;
-use Zend_Db;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\RawData;
 
@@ -24,16 +20,32 @@ class MySQLAdapter implements AdapterInterface
      */
     private $client;
 
-    private $useInnerTransactions = false;
+    /**
+     * @var bool
+     */
+    private $useInnerTransactions;
 
-    private $innerTransactionStarted = false;
+    /**
+     * @var bool
+     */
+    private $innerTransactionStarted;
 
-    private $transactionActive = false;
+    /**
+     * @var bool
+     */
+    private $transactionActive;
 
 
+    /**
+     * MySQLAdapter constructor.
+     * @param \G4\DataMapper\Engine\MySQL\MySQLClientFactory $clientFactory
+     */
     public function __construct(MySQLClientFactory $clientFactory)
     {
-        $this->client = $clientFactory->create();
+        $this->client                   = $clientFactory->create();
+        $this->useInnerTransactions     = false;
+        $this->innerTransactionStarted  = false;
+        $this->transactionActive        = false;
     }
 
     public function setWrapInTransaction($value)
@@ -91,7 +103,10 @@ class MySQLAdapter implements AdapterInterface
         }
     }
 
-
+    /**
+     * @param CollectionNameInterface $table
+     * @param SelectionFactoryInterface $selectionFactory
+     */
     public function delete(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
         $order      = $selectionFactory->sort();
@@ -111,6 +126,11 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param MappingInterface $mappings
+     * @throws EmptyDataException
+     */
     public function insert(CollectionNameInterface $table, MappingInterface $mappings)
     {
         $data = $mappings->map();
@@ -124,6 +144,11 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param \ArrayIterator $mappingsCollection
+     * @throws EmptyDataException
+     */
     public function insertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
     {
         if (count($mappingsCollection) === 0) {
@@ -152,6 +177,11 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param \ArrayIterator $mappingsCollection
+     * @throws EmptyDataException
+     */
     public function upsertBulk(CollectionNameInterface $table, \ArrayIterator $mappingsCollection)
     {
         if (count($mappingsCollection) === 0) {
@@ -186,6 +216,11 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param SelectionFactoryInterface $selectionFactory
+     * @return RawData
+     */
     public function select(CollectionNameInterface $table, SelectionFactoryInterface $selectionFactory)
     {
         $selectForData = $this->client
@@ -209,6 +244,12 @@ class MySQLAdapter implements AdapterInterface
         return new RawData($data, $total);
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param MappingInterface $mapping
+     * @param SelectionFactoryInterface $selectionFactory
+     * @throws EmptyDataException
+     */
     public function update(CollectionNameInterface $table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
     {
         $data = $mapping->map();
@@ -222,6 +263,11 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param CollectionNameInterface $table
+     * @param MappingInterface $mapping
+     * @throws EmptyDataException
+     */
     public function upsert(CollectionNameInterface $table, MappingInterface $mapping)
     {
         $data = $mapping->map();
@@ -243,6 +289,12 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionEnd();
     }
 
+    /**
+     * @param string $query
+     * @return RawData|void
+     * @throws EmptyDataException
+     * @throws InvalidValueException
+     */
     public function query($query)
     {
         if (empty($query)) {
