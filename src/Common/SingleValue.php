@@ -29,6 +29,6 @@ class SingleValue implements ValueInterface
 
     public function isEmpty()
     {
-        return in_array($this->value, [self::NULL_VALUE, self::EMPTY_ARRAY]);
+        return in_array($this->value, [self::NULL_VALUE, self::EMPTY_ARRAY], true);
     }
 }
