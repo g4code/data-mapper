@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
+use G4\DataMapper\Profiler\Ticker\ProfilerTickerElasticsearch;
 use G4\ValueObject\Url;
 
 class ElasticsearchClient
@@ -27,9 +28,15 @@ class ElasticsearchClient
 
     private $response;
 
+    /**
+     * @var ProfilerTickerElasticsearch
+     */
+    private $profiler;
+
     public function __construct(Url $url)
     {
         $this->url = $url;
+        $this->profiler = ProfilerTickerElasticsearch::getInstance();
     }
 
     public function execute()
@@ -93,10 +100,13 @@ class ElasticsearchClient
 
     private function executeCurlRequest()
     {
+        $uniqueId = $this->profiler->start();
         $handle = curl_init((string) $this->url);
 
+        $postBody = json_encode($this->body);
+
         curl_setopt_array($handle, [
-            CURLOPT_POSTFIELDS     => json_encode($this->body),
+            CURLOPT_POSTFIELDS     => $postBody,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
             CURLOPT_URL            => (string) $this->url,
@@ -106,7 +116,15 @@ class ElasticsearchClient
 
         $this->response = curl_exec($handle);
 
+        $this->profiler->setInfo(
+            $uniqueId,
+            curl_getinfo($handle),
+            $this->method,
+            $postBody
+        );
+
         curl_close($handle);
+        $this->profiler->end($uniqueId);
 
         return $this;
     }
