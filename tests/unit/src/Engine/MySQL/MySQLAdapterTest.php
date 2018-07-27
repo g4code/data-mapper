@@ -166,7 +166,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->equalTo("INSERT INTO data (`id`,`ts`) VALUES ('123','456'),('789','321')"));
+            ->with($this->equalTo("INSERT INTO data (`id`,`ts`) VALUES ('123','456'),('789','321'),('999',NULL),(777,NULL)"));
 
         $mappingStubFirst = $this->getMockForMappings();
         $mappingStubFirst
@@ -186,7 +186,25 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
                 'ts' => new SingleValue(321),
             ]);
 
-        $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond]));
+        $mappingStubThird = $this->getMockForMappings();
+        $mappingStubThird
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => new SingleValue('999'),
+                'ts' => new SingleValue(null)
+            ]);
+
+        $mappingStubFourth = $this->getMockForMappings();
+        $mappingStubFourth
+            ->expects($this->any())
+            ->method('map')
+            ->willReturn([
+                'id' => 777,
+                'ts' => null
+            ]);
+
+        $this->adapter->insertBulk($this->tableNameMock, new \ArrayIterator([$mappingStubFirst, $mappingStubSecond, $mappingStubThird, $mappingStubFourth]));
     }
 
     public function testInsertBulkException()

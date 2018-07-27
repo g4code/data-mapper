@@ -31,4 +31,9 @@ class SingleValue implements ValueInterface
     {
         return in_array($this->value, [self::NULL_VALUE, self::EMPTY_ARRAY], true);
     }
+
+    public function isNull()
+    {
+        return $this->value === null;
+    }
 }
