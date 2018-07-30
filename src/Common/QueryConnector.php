@@ -31,4 +31,8 @@ class QueryConnector
     const RANGE                 = 'range';
     const TERMS                 = 'terms';
     const NAME_WILDCARD         = 'wildcard';
+
+    const FORMAT                = 'format';
+    const EPOCH_SECOND          = 'epoch_second';
+
 }

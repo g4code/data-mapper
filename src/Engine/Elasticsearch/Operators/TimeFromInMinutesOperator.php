@@ -25,7 +25,8 @@ class TimeFromInMinutesOperator implements QueryOperatorInterface
         return [
             QueryConnector::RANGE => [
                 $this->name => [
-                    QueryConnector::GREATER_THAN => strtotime("-{$value} minute", time())
+                    QueryConnector::GREATER_THAN => strtotime("-{$value} minute", time()),
+                    QueryConnector::FORMAT       => QueryConnector::EPOCH_SECOND,
                 ]
             ]
         ];
