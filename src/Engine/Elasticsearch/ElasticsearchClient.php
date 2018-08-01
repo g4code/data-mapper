@@ -26,6 +26,9 @@ class ElasticsearchClient
 
     private $id;
 
+    /**
+     * @var ElasticsearchResponse
+     */
     private $response;
 
     /**
@@ -88,14 +91,25 @@ class ElasticsearchClient
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getResponse()
     {
-        return $this->getDecodedResponse()['hits'];
+        return $this->response->getHits();
     }
 
+    /**
+     * @return int
+     */
     public function getTotalItemsCount()
     {
-        return $this->getResponse()['total'];
+        return $this->response->getTotal();
+    }
+
+    public function responseFactory($response)
+    {
+        $this->response = new ElasticsearchResponse($response);
     }
 
     private function executeCurlRequest()
@@ -114,7 +128,7 @@ class ElasticsearchClient
             CURLOPT_CUSTOMREQUEST  => $this->method,
         ]);
 
-        $this->response = curl_exec($handle);
+        $this->responseFactory(curl_exec($handle));
 
         $this->profiler->setInfo(
             $uniqueId,
@@ -127,10 +141,5 @@ class ElasticsearchClient
         $this->profiler->end($uniqueId);
 
         return $this;
-    }
-
-    private function getDecodedResponse()
-    {
-        return json_decode($this->response, true);
     }
 }
