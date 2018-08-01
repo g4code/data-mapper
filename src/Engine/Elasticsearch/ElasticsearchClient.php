@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
+use G4\DataMapper\Profiler\Ticker\ProfilerTickerElasticsearch;
 use G4\ValueObject\Url;
 
 class ElasticsearchClient
@@ -25,11 +26,20 @@ class ElasticsearchClient
 
     private $id;
 
+    /**
+     * @var ElasticsearchResponse
+     */
     private $response;
+
+    /**
+     * @var ProfilerTickerElasticsearch
+     */
+    private $profiler;
 
     public function __construct(Url $url)
     {
         $this->url = $url;
+        $this->profiler = ProfilerTickerElasticsearch::getInstance();
     }
 
     public function execute()
@@ -81,22 +91,36 @@ class ElasticsearchClient
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getResponse()
     {
-        return $this->getDecodedResponse()['hits'];
+        return $this->response->getHits();
     }
 
+    /**
+     * @return int
+     */
     public function getTotalItemsCount()
     {
-        return $this->getResponse()['total'];
+        return $this->response->getTotal();
+    }
+
+    public function responseFactory($response)
+    {
+        $this->response = new ElasticsearchResponse($response);
     }
 
     private function executeCurlRequest()
     {
+        $uniqueId = $this->profiler->start();
         $handle = curl_init((string) $this->url);
 
+        $postBody = json_encode($this->body);
+
         curl_setopt_array($handle, [
-            CURLOPT_POSTFIELDS     => json_encode($this->body),
+            CURLOPT_POSTFIELDS     => $postBody,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
             CURLOPT_URL            => (string) $this->url,
@@ -104,15 +128,18 @@ class ElasticsearchClient
             CURLOPT_CUSTOMREQUEST  => $this->method,
         ]);
 
-        $this->response = curl_exec($handle);
+        $this->responseFactory(curl_exec($handle));
+
+        $this->profiler->setInfo(
+            $uniqueId,
+            curl_getinfo($handle),
+            $this->method,
+            $postBody
+        );
 
         curl_close($handle);
+        $this->profiler->end($uniqueId);
 
         return $this;
-    }
-
-    private function getDecodedResponse()
-    {
-        return json_decode($this->response, true);
     }
 }
