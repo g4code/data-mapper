@@ -22,5 +22,6 @@ class ComparisonTest extends PHPUnit_Framework_TestCase
             ->willReturn('name = test');
 
         $this->assertEquals('name = test', $comparison->getComparison($comparisonFormatterMock));
+        $this->assertEquals('name', $comparison->getName());
     }
 }
