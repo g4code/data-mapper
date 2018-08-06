@@ -303,6 +303,68 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($rawData->getAll(), $select->getAll());
     }
 
+    public function testSelectWithError()
+    {
+        $elasticsearchData = [
+            'error' => 'error message',
+            'status' => 400
+        ];
+
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn(['bool' => ['must' => ['match' => ['id' => '15500']]]]);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('fieldNames')
+            ->willReturn(['first_name', 'last_name']);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('limit')
+            ->willReturn('1');
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('sort')
+            ->willReturn(['id' => ['order' => 'asc']]);
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('offset')
+            ->willReturn('0');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('search')
+            ->willReturnSelf();
+
+        $this->clientMock->expects($this->once())->method('getResponse')->willReturn([]);
+
+        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
+
+        $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $select);
+        $this->assertEquals(0, $select->count());
+        $this->assertEquals([], $select->getAll());
+    }
+
+
     public function testQuery()
     {
         $this->expectException(NotImplementedException::class);
