@@ -7,6 +7,7 @@ use G4\ValueObject\Url;
 
 class ElasticsearchClient
 {
+    const BULK          = '_bulk';
     const DOCUMENT      = 'doc';
     const SEARCH        = '_search';
     const TIMEOUT       = 5;
@@ -67,6 +68,13 @@ class ElasticsearchClient
         $this->executeCurlRequest();
     }
 
+    public function updateBulk()
+    {
+        $this->url = $this->url->path($this->index, self::DOCUMENT, self::BULK);
+
+        $this->executeBulkCurlRequest();
+    }
+
     public function setIndex($value)
     {
         $this->index = $value;
@@ -114,13 +122,45 @@ class ElasticsearchClient
 
     private function executeCurlRequest()
     {
+        $this
+            ->prepareBodyData()
+            ->submitCurlRequest();
+
+        return $this;
+    }
+
+    private function executeBulkCurlRequest()
+    {
+        $this
+            ->prepareBulkBodyData()
+            ->submitCurlRequest();
+
+        return $this;
+    }
+
+    private function prepareBodyData()
+    {
+        $this->body = json_encode($this->body);
+        return $this;
+    }
+
+    private function prepareBulkBodyData()
+    {
+        $compiledBody = '';
+        foreach ($this->body as $line) {
+            $compiledBody .= json_encode($line) . "\n";
+        }
+        $this->body = $compiledBody;
+        return $this;
+    }
+
+    private function submitCurlRequest()
+    {
         $uniqueId = $this->profiler->start();
         $handle = curl_init((string) $this->url);
 
-        $postBody = json_encode($this->body);
-
         curl_setopt_array($handle, [
-            CURLOPT_POSTFIELDS     => $postBody,
+            CURLOPT_POSTFIELDS     => $this->body,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_TIMEOUT        => self::TIMEOUT,
             CURLOPT_URL            => (string) $this->url,
@@ -134,7 +174,7 @@ class ElasticsearchClient
             $uniqueId,
             curl_getinfo($handle),
             $this->method,
-            $postBody
+            $this->body
         );
 
         curl_close($handle);

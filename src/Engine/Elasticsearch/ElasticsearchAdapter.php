@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\CollectionNameInterface;
+use G4\DataMapper\Common\IdentifiableMapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
@@ -16,6 +17,10 @@ class ElasticsearchAdapter implements AdapterInterface
     const METHOD_POST   = 'POST';
     const METHOD_PUT    = 'PUT';
     const METHOD_DELETE = 'DELETE';
+
+    const ELASTIC_BULK_ACTION_UPDATE = 'update';
+    const ELASTIC_PARAM_ID = '_id';
+    const ELASTIC_PAYLOAD_TYPE_DOC = 'doc';
 
     private $client;
 
@@ -121,6 +126,19 @@ class ElasticsearchAdapter implements AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param IdentifiableMapperInterface[] ...$mappings
+     */
+    public function updateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings)
+    {
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_POST)
+            ->setBody($this->prepareBulkUpdateData(...$mappings))
+            ->updateBulk();
+    }
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
      */
     public function upsert(CollectionNameInterface $collectionName, MappingInterface $mapping)
@@ -153,5 +171,31 @@ class ElasticsearchAdapter implements AdapterInterface
         }
 
         return $formattedData;
+    }
+
+    /**
+     * @param IdentifiableMapperInterface[] ...$mappings
+     * @return array
+     * @throws EmptyDataException
+     */
+    private function prepareBulkUpdateData(IdentifiableMapperInterface ... $mappings)
+    {
+        $data = [];
+        foreach ($mappings as $mapping) {
+            $data[] = [
+                self::ELASTIC_BULK_ACTION_UPDATE => [
+                    self::ELASTIC_PARAM_ID => $mapping->getId()
+                ]
+            ];
+            $data[] = [
+                self::ELASTIC_PAYLOAD_TYPE_DOC => $mapping->map()
+            ];
+        }
+
+        if (empty($data)) {
+            throw new EmptyDataException('Empty data for update.');
+        }
+
+        return $data;
     }
 }

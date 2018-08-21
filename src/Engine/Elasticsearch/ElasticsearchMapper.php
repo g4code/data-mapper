@@ -3,6 +3,7 @@
 namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\AdapterInterface;
+use G4\DataMapper\Common\IdentifiableMapperInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
@@ -91,6 +92,18 @@ class ElasticsearchMapper implements MapperInterface
     {
         try {
             $this->adapter->update($this->collectionName, $mapping, $this->makeSelectionFactory($identity));
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
+
+    /**
+     * @param IdentifiableMapperInterface[] ...$mappings
+     */
+    public function updateBulk(IdentifiableMapperInterface ...$mappings)
+    {
+        try {
+            $this->adapter->updateBulk($this->collectionName, ...$mappings);
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }

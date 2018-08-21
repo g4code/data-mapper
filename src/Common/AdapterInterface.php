@@ -49,6 +49,12 @@ interface AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param IdentifiableMapperInterface[] ...$mappings
+     */
+    public function updateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings);
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
      */
     public function upsert(CollectionNameInterface $collectionName, MappingInterface $mapping);
