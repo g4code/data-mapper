@@ -19,8 +19,8 @@ class ElasticsearchAdapter implements AdapterInterface
     const METHOD_DELETE = 'DELETE';
 
     const ELASTIC_BULK_ACTION_UPDATE = 'update';
-    const ELASTIC_PARAM_ID = '_id';
-    const ELASTIC_PAYLOAD_TYPE_DOC = 'doc';
+    const ELASTIC_PARAM_ID           = '_id';
+    const ELASTIC_PAYLOAD_TYPE_DOC   = 'doc';
 
     private $client;
 
@@ -130,19 +130,10 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function updateBulk(CollectionNameInterface $collectionName, array $data)
     {
-        $this->submitUpdateBulk($collectionName, ... $data);
-    }
-
-    /**
-     * @param CollectionNameInterface $collectionName
-     * @param IdentifiableMapperInterface[] ...$mappings
-     */
-    private function submitUpdateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings)
-    {
         $this->client
             ->setIndex($collectionName)
             ->setMethod(self::METHOD_POST)
-            ->setBody($this->prepareBulkUpdateData(...$mappings))
+            ->setBody($this->prepareBulkUpdateData(...$data))
             ->updateBulk();
     }
 
