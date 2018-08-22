@@ -155,6 +155,52 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
         $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
+    private function getIdentifiableMock()
+    {
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\IdentifiableMapperInterface::class)->getMock();
+        $mock
+            ->method('map')
+            ->willReturn([
+                'last_seen_portal' => rand(1534920000, 1534928000)
+            ]);
+        $mock
+            ->method('getId')
+            ->willReturn(rand(1234, 5678));
+
+        return $mock;
+    }
+
+    public function testUpdateBulk()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('updateBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($mappingMocks));
+
+        $this->mapper->updateBulk(...$mappingMocks);
+    }
+
+    public function testUpdateBulkException()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('updateBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($mappingMocks))
+            ->will($this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE)));
+
+        $this->expectException(ElasticSearchMapperException::class);
+
+        $this->mapper->updateBulk(...$mappingMocks);
+    }
+
     public function testUpsert()
     {
         $this->adapterMock

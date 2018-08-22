@@ -222,6 +222,73 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
     }
 
+    private function getIdentifiableMock()
+    {
+        $mock = $this->getMockBuilder(\G4\DataMapper\Common\IdentifiableMapperInterface::class)->getMock();
+        $mock
+            ->method('map')
+            ->willReturn([
+                'last_seen_portal' => rand(1534920000, 1534928000)
+            ]);
+        $mock
+            ->method('getId')
+            ->willReturn(rand(1234, 5678));
+
+        return $mock;
+    }
+
+    public function testUpdateBulk()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->exactly(1))
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->adapter->updateBulk($this->collectionNameMock, $mappingMocks);
+    }
+
+    public function testUpdateBulkWithEmptyData()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->never())
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for update.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->updateBulk($this->collectionNameMock, []);
+    }
+
     public function testUpsert()
     {
         $this->expectException(NotImplementedException::class);
