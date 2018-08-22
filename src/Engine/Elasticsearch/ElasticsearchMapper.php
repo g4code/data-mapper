@@ -103,7 +103,7 @@ class ElasticsearchMapper implements MapperInterface
     public function updateBulk(IdentifiableMapperInterface ...$mappings)
     {
         try {
-            $this->adapter->updateBulk($this->collectionName, ...$mappings);
+            $this->adapter->updateBulk($this->collectionName, $mappings);
         } catch (\Exception $exception) {
             $this->handleException($exception);
         }
