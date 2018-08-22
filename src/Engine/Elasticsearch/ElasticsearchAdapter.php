@@ -126,9 +126,18 @@ class ElasticsearchAdapter implements AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param IdentifiableMapperInterface[] $data
+     */
+    public function updateBulk(CollectionNameInterface $collectionName, array $data)
+    {
+        $this->submitUpdateBulk($collectionName, ... $data);
+    }
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param IdentifiableMapperInterface[] ...$mappings
      */
-    public function updateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings)
+    private function submitUpdateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings)
     {
         $this->client
             ->setIndex($collectionName)

@@ -49,9 +49,9 @@ interface AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
-     * @param IdentifiableMapperInterface[] ...$mappings
+     * @param array $data
      */
-    public function updateBulk(CollectionNameInterface $collectionName, IdentifiableMapperInterface ... $mappings);
+    public function updateBulk(CollectionNameInterface $collectionName, array $data);
 
     /**
      * @param CollectionNameInterface $collectionName

@@ -8,6 +8,7 @@ use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\Exception\InvalidValueException;
+use G4\DataMapper\Exception\NotImplementedException;
 use Zend_Db_Adapter_Abstract;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\RawData;
@@ -263,6 +264,16 @@ class MySQLAdapter implements AdapterInterface
         $this->innerTransactionBegin();
         $this->client->update((string) $table, $data, $selectionFactory->where());
         $this->innerTransactionEnd();
+    }
+
+    /**
+     * @param CollectionNameInterface $table
+     * @param array $data
+     * @throws NotImplementedException
+     */
+    public function updateBulk(CollectionNameInterface $table, array $data)
+    {
+        throw new NotImplementedException();
     }
 
     /**

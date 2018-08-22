@@ -329,6 +329,13 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update($this->tableNameMock, $mappingMock, $selectionFactoryMock);
     }
 
+    public function testUpdateBulk()
+    {
+        $this->expectException(\G4\DataMapper\Exception\NotImplementedException::class);
+
+        $this->adapter->updateBulk($this->tableNameMock, []);
+    }
+
     public function testUpsert()
     {
         $this->clientMock
