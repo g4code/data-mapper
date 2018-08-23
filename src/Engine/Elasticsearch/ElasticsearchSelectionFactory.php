@@ -67,7 +67,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     public function where()
     {
         if ($this->identity->isVoid()) {
-            return $this->addConsistentRandom(['bool' => ['must' => ['match_all' => []]]]);
+            return $this->addConsistentRandomKey(['bool' => ['must' => ['match_all' => []]]]);
         }
 
         $comparisons = [];
@@ -92,21 +92,21 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
         $comparisons['filter'] = (new ElasticsearchGeodistFormatter($this->identity))->format();
 
-        return $this->addConsistentRandom(['bool' => $comparisons]);
+        return $this->addConsistentRandomKey(['bool' => $comparisons]);
     }
 
     /**
      * @param array $data
      * @return array
      */
-    private function addConsistentRandom(array $data)
+    private function addConsistentRandomKey(array $data)
     {
         return $this->identity->hasConsistentRandomKey()
             ? [
                 'function_score' => [
                     'query' => $data,
                     'random_score' => [
-                        'seed' => $this->identity->getConsistentRandom()
+                        'seed' => $this->identity->getConsistentRandomKey()
                     ]
                 ]
             ]

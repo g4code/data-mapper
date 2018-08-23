@@ -87,7 +87,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     /**
      * @param string $key
      */
-    public function setConsistentRandom($key)
+    public function setConsistentRandomKey($key)
     {
         $this->consistentRandomKey = $key;
     }
@@ -95,7 +95,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     /**
      * @return string
      */
-    public function getConsistentRandom()
+    public function getConsistentRandomKey()
     {
         return $this->consistentRandomKey;
     }

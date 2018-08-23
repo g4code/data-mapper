@@ -19,12 +19,12 @@ interface ElasticsearchIdentityInterface
     /**
      * @param string $key
      */
-    public function setConsistentRandom($key);
+    public function setConsistentRandomKey($key);
 
     /**
      * @return string
      */
-    public function getConsistentRandom();
+    public function getConsistentRandomKey();
 
     /**
      * @return bool
