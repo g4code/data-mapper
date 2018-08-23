@@ -15,4 +15,19 @@ interface ElasticsearchIdentityInterface
     public function getRawQuery();
 
     public function hasRawQuery();
+
+    /**
+     * @param string $key
+     */
+    public function setConsistentRandom($key);
+
+    /**
+     * @return string
+     */
+    public function getConsistentRandom();
+
+    /**
+     * @return bool
+     */
+    public function hasConsistentRandomKey();
 }

@@ -16,6 +16,11 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     private $coordinates;
 
     /**
+     * @var string
+     */
+    private $consistentRandomKey;
+
+    /**
      * @var array
      */
     private $rawQuery;
@@ -77,6 +82,30 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function hasRawQuery()
     {
         return !empty($this->rawQuery);
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setConsistentRandom($key)
+    {
+        $this->consistentRandomKey = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsistentRandom()
+    {
+        return $this->consistentRandomKey;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasConsistentRandomKey()
+    {
+       return !($this->consistentRandomKey === null || $this->consistentRandomKey === '');
     }
 
     /**
