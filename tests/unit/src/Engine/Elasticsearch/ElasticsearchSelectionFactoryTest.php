@@ -279,6 +279,55 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArray, $this->selectionFactory->where());
     }
 
+    public function testWhereWithRandom()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('isVoid')
+            ->willReturn(false);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([
+                $this->getMockForEqualComparison('id', 1),
+                $this->getMockForEqualComparison('name', 'Test'),
+                $this->getMockForGtComparison('age', 18),
+            ]);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('hasConsistentRandomKey')
+            ->willReturn(true);
+
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getConsistentRandomKey')
+            ->willReturn('something');
+
+        $this->assertEquals(
+            [
+                'function_score' => [
+                    'query' => ['bool' =>
+                        [
+                            'must' =>
+                                [
+                                    ['match' => ['id' => 1]],
+                                    ['match' => ['name' => 'Test']],
+                                    ['range' => ['age' => ['gt' => 18]]]
+                                ],
+                            'filter' => [],
+                        ],
+                    ],
+                    'random_score' => [
+                        'seed' => 'something'
+                    ]
+                ]
+            ]
+
+            , $this->selectionFactory->where());
+    }
+
     private function getMockForEqualComparison($column, $value)
     {
         $mock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Comparison::class)

@@ -5,12 +5,11 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\Selection\Comparison;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
-use G4\DataMapper\Common\IdentityInterface;
 
 class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 {
     /**
-     * @var IdentityInterface
+     * @var ElasticsearchIdentityInterface
      */
     private $identity;
 
@@ -68,7 +67,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     public function where()
     {
         if ($this->identity->isVoid()) {
-            return ['bool' => ['must' => ['match_all' => []]]];
+            return $this->addConsistentRandomKey(['bool' => ['must' => ['match_all' => []]]]);
         }
 
         $comparisons = [];
@@ -93,7 +92,25 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
         $comparisons['filter'] = (new ElasticsearchGeodistFormatter($this->identity))->format();
 
-        return ['bool' => $comparisons];
+        return $this->addConsistentRandomKey(['bool' => $comparisons]);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function addConsistentRandomKey(array $data)
+    {
+        return $this->identity->hasConsistentRandomKey()
+            ? [
+                'function_score' => [
+                    'query' => $data,
+                    'random_score' => [
+                        'seed' => $this->identity->getConsistentRandomKey()
+                    ]
+                ]
+            ]
+            : $data;
     }
 
     private function makeComparisonFormatter()

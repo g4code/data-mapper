@@ -42,6 +42,22 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->elasticsearchIdentity->hasRawQuery());
     }
 
+    public function testGetConsistentRandomKey()
+    {
+        $this->elasticsearchIdentity->setConsistentRandomKey('something');
+
+        $this->assertEquals('something', $this->elasticsearchIdentity->getConsistentRandomKey());
+    }
+
+    public function testHasConsistentRandomKey()
+    {
+        $this->assertEquals(false, $this->elasticsearchIdentity->hasConsistentRandomKey());
+
+        $this->elasticsearchIdentity->setConsistentRandomKey('something');
+
+        $this->assertEquals(true, $this->elasticsearchIdentity->hasConsistentRandomKey());
+    }
+
     public function testTimeFromInMinutes()
     {
         $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('online')->timeFromInMinutes(15));
