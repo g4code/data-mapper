@@ -72,6 +72,13 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
     }
 
+    public function testDeleteBulk()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->deleteBulk($this->collectionNameMock, []);
+    }
+
     public function testInsert()
     {
         $expectedData = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];

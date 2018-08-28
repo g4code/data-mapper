@@ -83,6 +83,37 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
         $this->mapper->delete($identityStub);
     }
 
+    public function testDeleteBulk()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('deleteBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($mappingMocks));
+
+        $this->mapper->deleteBulk(...$mappingMocks);
+    }
+
+    public function testDeleteBulkException()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('deleteBulk')
+            ->with($this->equalTo($this->collectionNameMock), $this->equalTo($mappingMocks))
+            ->will($this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE)));
+
+        $this->expectException(ElasticSearchMapperException::class);
+
+        $this->mapper->deleteBulk(...$mappingMocks);
+    }
+
     public function testFind()
     {
         $rawDataStub = $this->getMockBuilder(\G4\DataMapper\Common\RawData::class)

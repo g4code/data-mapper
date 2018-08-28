@@ -128,6 +128,15 @@ class MySQLAdapter implements AdapterInterface
     }
 
     /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data
+     */
+    public function deleteBulk(CollectionNameInterface $collectionName, array $data)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
      * @param CollectionNameInterface $table
      * @param MappingInterface $mappings
      * @throws EmptyDataException

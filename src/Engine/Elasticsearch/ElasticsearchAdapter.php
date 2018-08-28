@@ -19,6 +19,7 @@ class ElasticsearchAdapter implements AdapterInterface
     const METHOD_DELETE = 'DELETE';
 
     const ELASTIC_BULK_ACTION_UPDATE = 'update';
+    const ELASTIC_BULK_ACTION_DELETE = 'delete';
     const ELASTIC_PARAM_ID           = '_id';
     const ELASTIC_PAYLOAD_TYPE_DOC   = 'doc';
 
@@ -40,6 +41,19 @@ class ElasticsearchAdapter implements AdapterInterface
             ->setMethod(self::METHOD_DELETE)
             ->setId($this->extractIdValue($selectionFactory->where()))
             ->execute();
+    }
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data
+     */
+    public function deleteBulk(CollectionNameInterface $collectionName, array $data)
+    {
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_POST)
+            ->setBody($this->prepareBulkDeleteData(...$data))
+            ->executeBulk();
     }
 
     /**
@@ -134,7 +148,7 @@ class ElasticsearchAdapter implements AdapterInterface
             ->setIndex($collectionName)
             ->setMethod(self::METHOD_POST)
             ->setBody($this->prepareBulkUpdateData(...$data))
-            ->updateBulk();
+            ->executeBulk();
     }
 
     /**
@@ -194,6 +208,29 @@ class ElasticsearchAdapter implements AdapterInterface
 
         if (empty($data)) {
             throw new EmptyDataException('Empty data for update.');
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param IdentifiableMapperInterface[] ...$mappings
+     * @return array
+     * @throws EmptyDataException
+     */
+    private function prepareBulkDeleteData(IdentifiableMapperInterface ... $mappings)
+    {
+        $data = [];
+        foreach ($mappings as $mapping) {
+            $data[] = [
+                self::ELASTIC_BULK_ACTION_DELETE => [
+                    self::ELASTIC_PARAM_ID => $mapping->getId()
+                ]
+            ];
+        }
+
+        if (empty($data)) {
+            throw new EmptyDataException('Empty data for delete.');
         }
 
         return $data;

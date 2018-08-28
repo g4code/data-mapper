@@ -50,6 +50,13 @@ class ElasticsearchClient
         $this->executeCurlRequest();
     }
 
+    public function executeBulk()
+    {
+        $this->url = $this->url->path($this->index, self::DOCUMENT, self::BULK);
+
+        $this->executeBulkCurlRequest();
+    }
+
     public function search()
     {
         $this->url = $this->url->path($this->index, self::SEARCH);
@@ -66,13 +73,6 @@ class ElasticsearchClient
         $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id, self::UPDATE);
 
         $this->executeCurlRequest();
-    }
-
-    public function updateBulk()
-    {
-        $this->url = $this->url->path($this->index, self::DOCUMENT, self::BULK);
-
-        $this->executeBulkCurlRequest();
     }
 
     public function setIndex($value)

@@ -385,6 +385,13 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->adapter->query('delete from table_name where 1'));
     }
 
+    public function testDeleteBulk()
+    {
+        $this->expectException(\G4\DataMapper\Exception\NotImplementedException::class);
+
+        $this->adapter->deleteBulk($this->tableNameMock, []);
+    }
+
     public function testQueryForSelect()
     {
         $query      = 'select * from table_name where 1 group by id limit 0,100';
