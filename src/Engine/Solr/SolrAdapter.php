@@ -47,6 +47,15 @@ class SolrAdapter implements AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param array $data
+     */
+    public function deleteBulk(CollectionNameInterface $collectionName, array $data)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
      */
     public function insert(CollectionNameInterface $collectionName, MappingInterface $mapping)

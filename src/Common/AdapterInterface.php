@@ -17,6 +17,12 @@ interface AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
+     * @param array $data
+     */
+    public function deleteBulk(CollectionNameInterface $collectionName, array $data);
+
+    /**
+     * @param CollectionNameInterface $collectionName
      * @param MappingInterface $mapping
      */
     public function insert(CollectionNameInterface $collectionName, MappingInterface $mapping);

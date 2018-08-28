@@ -46,6 +46,17 @@ class ElasticsearchMapper implements MapperInterface
         }
     }
 
+    /**
+     * @param IdentifiableMapperInterface[] ...$mappings
+     */
+    public function deleteBulk(IdentifiableMapperInterface ...$mappings)
+    {
+        try {
+            $this->adapter->deleteBulk($this->collectionName, $mappings);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+    }
 
     /**
      * @param IdentityInterface $identity

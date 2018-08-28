@@ -50,6 +50,13 @@ class ElasticsearchClient
         $this->executeCurlRequest();
     }
 
+    public function executeBulk()
+    {
+        $this->url = $this->url->path($this->index, self::DOCUMENT, self::BULK);
+
+        $this->executeBulkCurlRequest();
+    }
+
     public function search()
     {
         $this->url = $this->url->path($this->index, self::SEARCH);

@@ -83,6 +83,58 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->delete($this->collectionNameMock, $selectionFactoryStub);
     }
 
+    public function testDeleteBulk()
+    {
+        for ($i=0; $i<3; $i++) {
+            $mappingMocks[] = $this->getIdentifiableMock();
+        }
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->exactly(1))
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->adapter->deleteBulk($this->collectionNameMock, $mappingMocks);
+    }
+
+    public function testDeleteBulkWithEmptyData()
+    {
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->never())
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->expectException(EmptyDataException::class);
+        $this->expectExceptionMessage('Empty data for delete.');
+        $this->expectExceptionCode(ErrorCode::EMPTY_DATA);
+
+        $this->adapter->deleteBulk($this->collectionNameMock, []);
+    }
+
     public function testInsert()
     {
         $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
