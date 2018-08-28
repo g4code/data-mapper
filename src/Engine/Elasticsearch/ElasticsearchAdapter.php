@@ -148,7 +148,7 @@ class ElasticsearchAdapter implements AdapterInterface
             ->setIndex($collectionName)
             ->setMethod(self::METHOD_POST)
             ->setBody($this->prepareBulkUpdateData(...$data))
-            ->updateBulk();
+            ->executeBulk();
     }
 
     /**
