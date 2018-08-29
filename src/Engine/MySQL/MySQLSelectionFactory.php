@@ -28,7 +28,7 @@ class MySQLSelectionFactory implements SelectionFactoryInterface
     {
         $fieldNames = $this->identity->getFieldNames();
 
-        return count($fieldNames) === 0
+        return !is_array($fieldNames) || count($fieldNames) === 0
             ? '*'
             : $fieldNames;
     }
