@@ -61,6 +61,16 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('*', $this->selectionFactory->fieldNames());
     }
 
+    public function testInvalidTypeFieldNames()
+    {
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getFieldNames')
+            ->willReturn('tralala');
+
+        $this->assertEquals('*', $this->selectionFactory->fieldNames());
+    }
+
     public function testGroup()
     {
         $this->identityMock

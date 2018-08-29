@@ -21,7 +21,9 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
     public function fieldNames()
     {
-        return count($this->identity->getFieldNames()) === 0
+        $fieldNames = $this->identity->getFieldNames();
+
+        return !is_array($fieldNames) || count($fieldNames) === 0
             ? '*'
             : $this->getFieldNamesString();
     }
