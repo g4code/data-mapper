@@ -5,6 +5,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\CoordinatesValue;
 use G4\DataMapper\Common\Selection\Operator;
+use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\SingleValue;
 
 class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInterface
@@ -38,6 +39,8 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
         }
 
         $this->coordinates = new CoordinatesValue($latitude, $longitude, $distance);
+
+        $this->addSorting('_geo_distance', new ElasticsearchGeodistSort('_geo_distance', Sort::ASCENDING));
 
         return $this;
     }
@@ -105,7 +108,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
      */
     public function hasConsistentRandomKey()
     {
-       return !($this->consistentRandomKey === null || $this->consistentRandomKey === '');
+        return !($this->consistentRandomKey === null || $this->consistentRandomKey === '');
     }
 
     /**

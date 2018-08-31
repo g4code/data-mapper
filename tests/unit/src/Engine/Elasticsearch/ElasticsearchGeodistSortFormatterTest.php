@@ -1,9 +1,9 @@
 <?php
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
-use G4\DataMapper\Engine\Elasticsearch\ElasticsearchGeodistSort;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchGeodistSortFormatter;
 
-class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchGeodistSortFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ElasticsearchIdentity
@@ -19,9 +19,9 @@ class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
     {
         $this->identity->geodist(5, 10, 100);
 
-        $geodistFormatter = new ElasticsearchGeodistSort($this->identity);
+        $geodistFormatter = new ElasticsearchGeodistSortFormatter($this->identity);
 
-        $expectedArray = [[
+        $expectedArray = [
             '_geo_distance' => [
                 'location' => [
                     'lat' => '5',
@@ -31,15 +31,15 @@ class ElasticsearchGeodistSortTest extends \PHPUnit_Framework_TestCase
                 'unit'  => 'km',
                 'distance_type' => 'plane',
             ],
-        ]];
+        ];
 
-        $this->assertEquals($expectedArray, $geodistFormatter->sort());
+        $this->assertEquals($expectedArray, $geodistFormatter->format('_geo_distance', 'ASC'));
     }
 
     public function testSortWithEmptyGeodistParameters()
     {
-        $geodistFormatter = new ElasticsearchGeodistSort($this->identity);
+        $geodistFormatter = new ElasticsearchGeodistSortFormatter($this->identity);
 
-        $this->assertEquals([], $geodistFormatter->sort());
+        $this->assertEquals([], $geodistFormatter->format('_geo_distance', 'ASC'));
     }
 }

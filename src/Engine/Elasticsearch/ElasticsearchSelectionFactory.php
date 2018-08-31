@@ -54,11 +54,9 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
         foreach ($rawSorting as $oneSort) {
             if ($oneSort instanceof Sort) {
-                $sorting[] = $oneSort->getSort($this->makeSortingFormatter());
+                $sorting[] = $oneSort->getSort($this->makeSortingFormatter($oneSort));
             }
         }
-
-        $sorting = array_merge((new ElasticsearchGeodistSort($this->identity))->sort(), $sorting);
 
         return $sorting;
     }
@@ -118,8 +116,14 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         return new ElasticsearchComparisonFormatter();
     }
 
-    private function makeSortingFormatter()
+    /**
+     * @param Sort $sortData
+     * @return ElasticsearchGeodistSortFormatter|ElasticsearchSortingFormatter
+     */
+    private function makeSortingFormatter(Sort $sortData)
     {
-        return new ElasticsearchSortingFormatter();
+        return $sortData instanceof ElasticsearchGeodistSort
+            ? new ElasticsearchGeodistSortFormatter($this->identity)
+            : new ElasticsearchSortingFormatter();
     }
 }

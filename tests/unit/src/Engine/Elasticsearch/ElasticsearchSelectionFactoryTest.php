@@ -96,23 +96,15 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSortWithGeodistParameters()
     {
+
         $this->identityMock
             ->expects($this->once())
             ->method('getSorting')
             ->willReturn([
+                $this->getMockForGeodistSort(10, 10, 'asc'),
                 $this->getMockForSort('id', 'desc'),
-                $this->getMockForSort('name', 'asc'),
+                $this->getMockForSort('name', 'asc')
             ]);
-
-        $this->identityMock
-            ->expects($this->once())
-            ->method('hasCoordinates')
-            ->willReturn(true);
-
-        $this->identityMock
-            ->expects($this->any())
-            ->method('getCoordinates')
-            ->willReturn(new \G4\DataMapper\Common\CoordinatesValue(10, 10, 100));
 
         $this->assertEquals([[
             '_geo_distance' => [
@@ -379,5 +371,31 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$column => ['order' => $sortDirection]]);
 
         return $mock;
+    }
+
+    private function getMockForGeodistSort($lat, $long, $order)
+    {
+
+        $geodistSort = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchGeodistSort::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getSort'])
+            ->getMock();
+
+        $geodistSort
+            ->expects($this->once())
+            ->method('getSort')
+            ->willReturn([
+                '_geo_distance' => [
+                    'location' => [
+                        'lat' => $lat,
+                        'lon' => $long,
+                    ],
+                    'order' => $order,
+                    'unit'  => 'km',
+                    'distance_type' => 'plane',
+                ],
+            ]);
+
+        return $geodistSort;
     }
 }
