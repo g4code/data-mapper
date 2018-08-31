@@ -212,6 +212,17 @@ class Identity implements IdentityInterface
         return $this->setLimit($perPage);
     }
 
+    /**
+     * @param string $fieldName
+     * @param Sort $sorting
+     * @return $this
+     */
+    protected function addSorting($fieldName, Sort $sorting)
+    {
+        $this->sorting[$fieldName] = $sorting;
+        return $this;
+    }
+
     public function sortAscending($fieldName)
     {
         if ($fieldName !== null) {
