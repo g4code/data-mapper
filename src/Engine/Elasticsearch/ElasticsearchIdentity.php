@@ -40,7 +40,9 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
 
         $this->coordinates = new CoordinatesValue($latitude, $longitude, $distance);
 
-        $this->addSorting('_geo_distance', new ElasticsearchGeodistSort('_geo_distance', Sort::ASCENDING));
+        if ($this->hasCoordinates()){
+            $this->addSorting('_geo_distance', new ElasticsearchGeodistSort('_geo_distance', Sort::ASCENDING));
+        }
 
         return $this;
     }
