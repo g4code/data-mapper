@@ -18,12 +18,12 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
     private $adapter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Engine\Elasticsearch\ElasticsearchClient
      */
     private $clientMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\CollectionNameInterface
      */
     private $collectionNameMock;
 
@@ -54,6 +54,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
         $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -203,6 +204,9 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->upsertBulk($this->collectionNameMock, new \ArrayIterator());
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\MappingInterface
+     */
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();
@@ -212,6 +216,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
     {
         $body = ['id' => 1, 'first_name' => 'Uncle', 'last_name' => 'Bob', 'gender' => 'm'];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
         $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -256,6 +261,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testUpdateWithEmptyData()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
         $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -280,11 +286,11 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $mock
             ->method('map')
             ->willReturn([
-                'last_seen_portal' => rand(1534920000, 1534928000)
+                'last_seen_portal' => mt_rand(1534920000, 1534928000)
             ]);
         $mock
             ->method('getId')
-            ->willReturn(rand(1234, 5678));
+            ->willReturn(mt_rand(1234, 5678));
 
         return $mock;
     }
@@ -368,6 +374,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
 
         $rawData = new \G4\DataMapper\Common\RawData($data, count($data));
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
         $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -429,6 +436,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             'status' => 400
         ];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
         $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -473,7 +481,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('search')
             ->willReturnSelf();
-
+// todo wrong test in case of an error
         $this->clientMock->expects($this->once())->method('getResponse')->willReturn([]);
 
         $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
@@ -481,6 +489,44 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\G4\DataMapper\Common\RawData::class, $select);
         $this->assertEquals(0, $select->count());
         $this->assertEquals([], $select->getAll());
+    }
+
+    public function testClientHasError()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('hasError')
+            ->willReturn(true);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getErrorMessage')
+            ->willReturn('Some Es Error Message');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('search')
+            ->willReturnSelf();
+
+        $this->expectException(\G4\DataMapper\Exception\ClientException::class);
+        $this->expectExceptionMessage('Some Es Error Message, body={"from":null,"size":null,"query":null,"sort":null,"_source":null}');
+        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
     }
 
 
@@ -491,6 +537,9 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->query('Some test query');
     }
 
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory
+     */
     private function getMockForElasticsearchClientFactory()
     {
         $clientFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory::class)

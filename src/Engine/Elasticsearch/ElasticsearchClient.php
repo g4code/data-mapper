@@ -182,4 +182,14 @@ class ElasticsearchClient
 
         return $this;
     }
+
+    public function hasError()
+    {
+        return $this->response->hasError();
+    }
+
+    public function getErrorMessage()
+    {
+        return $this->response->getErrorMessage();
+    }
 }

@@ -11,6 +11,7 @@ use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\ValueObject\Dictionary;
 use G4\DataMapper\Exception\NotImplementedException;
+use G4\DataMapper\Exception\ClientException;
 
 class ElasticsearchAdapter implements AdapterInterface
 {
@@ -102,16 +103,22 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
+        $body = [
+            'from'    => $selectionFactory->offset(),
+            'size'    => $selectionFactory->limit(),
+            'query'   => $selectionFactory->where(),
+            'sort'    => $selectionFactory->sort(),
+            '_source' => $selectionFactory->fieldNames()
+        ];
+
         $data = $this->client
             ->setIndex($collectionName)
-            ->setBody([
-                'from'    => $selectionFactory->offset(),
-                'size'    => $selectionFactory->limit(),
-                'query'   => $selectionFactory->where(),
-                'sort'    => $selectionFactory->sort(),
-                '_source' => $selectionFactory->fieldNames()
-            ])
+            ->setBody($body)
             ->search();
+
+        if ($this->client->hasError()) {
+            throw new ClientException($this->client->getErrorMessage() . ', body=' . json_encode($body));
+        }
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
     }
