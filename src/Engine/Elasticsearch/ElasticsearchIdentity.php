@@ -93,6 +93,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function setConsistentRandomKey($key)
     {
         $this->consistentRandomKey = $key;
+        $this->addSorting('_score', new Sort('_score', \G4\DataMapper\Common\Selection\Sort::ASCENDING));
     }
 
     /**
