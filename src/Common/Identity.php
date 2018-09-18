@@ -219,7 +219,9 @@ class Identity implements IdentityInterface
      */
     public function addSorting($fieldName, Sort $sorting)
     {
-        $this->sorting[$fieldName] = $sorting;
+        if ($fieldName !== null) {
+            $this->sorting[$fieldName] = $sorting;
+        }
         return $this;
     }
 

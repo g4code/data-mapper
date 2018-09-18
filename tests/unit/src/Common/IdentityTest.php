@@ -158,6 +158,7 @@ class IdentityTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->sortDescending('ts'));
         $sortStub = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Sort::class)->disableOriginalConstructor()->getMock();
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->addSorting('sortStub', $sortStub));
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->addSorting(null, $sortStub));
 
         $sorting = $this->identity->getSorting();
 
