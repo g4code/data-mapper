@@ -156,12 +156,15 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->sortAscending('name'));
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->sortDescending('ts'));
+        $sortStub = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Sort::class)->disableOriginalConstructor()->getMock();
+        $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->addSorting('sortStub', $sortStub));
 
         $sorting = $this->identity->getSorting();
 
-        $this->assertEquals(2, count($sorting));
+        $this->assertEquals(3, count($sorting));
         $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Sort::class, $sorting['name']);
         $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Sort::class, $sorting['ts']);
+        $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Sort::class, $sorting['sortStub']);
     }
 
     public function testGrouping()

@@ -217,7 +217,7 @@ class Identity implements IdentityInterface
      * @param Sort $sorting
      * @return $this
      */
-    protected function addSorting($fieldName, Sort $sorting)
+    public function addSorting($fieldName, Sort $sorting)
     {
         $this->sorting[$fieldName] = $sorting;
         return $this;
