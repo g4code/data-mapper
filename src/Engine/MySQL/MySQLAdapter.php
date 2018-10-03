@@ -49,6 +49,14 @@ class MySQLAdapter implements AdapterInterface
         $this->transactionActive        = false;
     }
 
+    /**
+     * @return Zend_Db_Adapter_Abstract | \Zend_Db_Adapter_Pdo_Mysql
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
     public function setWrapInTransaction($value)
     {
         $this->useInnerTransactions = $value;
