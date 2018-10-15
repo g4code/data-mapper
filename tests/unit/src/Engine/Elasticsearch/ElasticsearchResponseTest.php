@@ -56,6 +56,23 @@ class ElasticsearchResponseTest extends PHPUnit_Framework_TestCase
     {
         $elasticsearchResponse = new ElasticsearchResponse($this->dataWithError);
 
+        $this->assertTrue($elasticsearchResponse->hasError());
+        $this->assertEquals(0, $elasticsearchResponse->getTotal());
+    }
+
+    public function testNullResponse()
+    {
+        $elasticsearchResponse = new ElasticsearchResponse(null);
+        $this->assertTrue($elasticsearchResponse->hasError());
+        $this->assertEquals('["Error decoding response",null]', $elasticsearchResponse->getErrorMessage());
+        $this->assertEquals(0, $elasticsearchResponse->getTotal());
+    }
+
+    public function testGarbageResponse()
+    {
+        $elasticsearchResponse = new ElasticsearchResponse('some garbage');
+        $this->assertTrue($elasticsearchResponse->hasError());
+        $this->assertEquals('["Error decoding response","some garbage"]', $elasticsearchResponse->getErrorMessage());
         $this->assertEquals(0, $elasticsearchResponse->getTotal());
     }
 
