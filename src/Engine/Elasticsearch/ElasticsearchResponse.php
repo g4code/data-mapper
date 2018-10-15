@@ -51,6 +51,9 @@ class ElasticsearchResponse
      */
     public function getTotal()
     {
+        if ($this->hasError()) {
+            return 0;
+        }
         return array_key_exists(self::KEY_HITS, $this->decodedResponse)
         && array_key_exists(self::KEY_TOTAL, $this->decodedResponse[self::KEY_HITS])
             ? $this->decodedResponse[self::KEY_HITS][self::KEY_TOTAL]
@@ -70,11 +73,14 @@ class ElasticsearchResponse
 
     public function hasError()
     {
-        return array_key_exists(self::KEY_ERROR, $this->decodedResponse);
+        return $this->decodedResponse === null || array_key_exists(self::KEY_ERROR, $this->decodedResponse);
     }
 
     public function getErrorMessage()
     {
+        if ($this->decodedResponse === null) {
+            return json_encode(['Error decoding response', $this->response]);
+        }
         return json_encode([
             $this->decodedResponse[self::KEY_ERROR][self::KEY_TYPE],
             $this->decodedResponse[self::KEY_ERROR][self::KEY_ROOT_CAUSE],
