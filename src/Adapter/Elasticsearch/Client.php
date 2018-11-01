@@ -71,7 +71,8 @@ class Client
 
     public function deleteMapping(SelectionFactory $selectionFactory)
     {
-        return $this->clientIndices->exists($selectionFactory->prepareIndex()) && $this->clientIndices->existsType($selectionFactory->prepareType())
+        return $this->clientIndices->exists($selectionFactory->prepareIndex())
+            && $this->clientIndices->existsType($selectionFactory->prepareType())
             ? $this->clientIndices->deleteMapping($selectionFactory->prepareType())
             : true;
     }

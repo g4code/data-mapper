@@ -51,7 +51,11 @@ interface AdapterInterface
      * @param MappingInterface $mapping
      * @param SelectionFactoryInterface $selectionFactory
      */
-    public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory);
+    public function update(
+        CollectionNameInterface $collectionName,
+        MappingInterface $mapping,
+        SelectionFactoryInterface $selectionFactory
+    );
 
     /**
      * @param CollectionNameInterface $collectionName
