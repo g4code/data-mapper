@@ -405,7 +405,11 @@ abstract class MysqlAbstract implements MapperInterface
      */
     protected function _returnCollection()
     {
-        return new \G4\DataMapper\Collection\Content($this->_rawData, $this->_getFactoryDomainName(), $this->_totalItemsCount);
+        return new \G4\DataMapper\Collection\Content(
+            $this->_rawData,
+            $this->_getFactoryDomainName(),
+            $this->_totalItemsCount
+        );
     }
 
     /**
