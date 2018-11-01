@@ -55,7 +55,8 @@ class ProfilerTickerMysql extends TickerAbstract
         if ($this->getDbProfiler()->getTotalNumQueries() && $this->getDbProfiler()->getQueryProfiles()) {
             foreach ($this->getDbProfiler()->getQueryProfiles() as $queryProfile) {
                 $queries[] = [
-                    'elapsed_time' => $this->getDataFormatterInstance()->getFormattedTime($queryProfile->getElapsedSecs()),
+                    'elapsed_time' => $this->getDataFormatterInstance()
+                        ->getFormattedTime($queryProfile->getElapsedSecs()),
                     'query'        => $queryProfile->getQuery()
                 ];
             }

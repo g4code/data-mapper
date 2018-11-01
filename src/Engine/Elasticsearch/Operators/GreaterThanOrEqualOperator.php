@@ -20,6 +20,12 @@ class GreaterThanOrEqualOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [QueryConnector::RANGE => [$this->name => [QueryConnector::GREATER_THAN_OR_EQUAL => (string) $this->value]]];
+        return [
+            QueryConnector::RANGE => [
+                $this->name => [
+                    QueryConnector::GREATER_THAN_OR_EQUAL => (string) $this->value
+                ]
+            ]
+        ];
     }
 }

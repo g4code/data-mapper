@@ -29,7 +29,13 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
     public function group()
     {
-        return ['group_by_' . $this->identity->getGrouping() => [ 'terms' => [ 'field' => $this->identity->getGrouping()]]];
+        return [
+            'group_by_' . $this->identity->getGrouping() => [
+                'terms' => [
+                    'field' => $this->identity->getGrouping()
+                ]
+            ]
+        ];
     }
 
     public function limit()

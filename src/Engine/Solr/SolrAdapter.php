@@ -116,8 +116,11 @@ class SolrAdapter implements AdapterInterface
      * @param MappingInterface $mapping
      * @param SelectionFactoryInterface $selectionFactory
      */
-    public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
-    {
+    public function update(
+        CollectionNameInterface $collectionName,
+        MappingInterface $mapping,
+        SelectionFactoryInterface $selectionFactory
+    ) {
         if (empty($mapping->map())) {
             throw new EmptyDataException('Empty data for update.');
         }

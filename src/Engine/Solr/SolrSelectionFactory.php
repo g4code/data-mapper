@@ -78,7 +78,9 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
         $comparisonsString = join(' AND ', $comparisons);
 
-        return $this->identity->hasRawQuery() ? sprintf('%s AND %s', $this->identity->getRawQuery(), $comparisonsString) : $comparisonsString;
+        return $this->identity->hasRawQuery()
+            ? sprintf('%s AND %s', $this->identity->getRawQuery(), $comparisonsString)
+            : $comparisonsString;
     }
 
     public function getGeodistParameters()

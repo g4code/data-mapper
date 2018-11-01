@@ -271,8 +271,11 @@ class MySQLAdapter implements AdapterInterface
      * @param SelectionFactoryInterface $selectionFactory
      * @throws EmptyDataException
      */
-    public function update(CollectionNameInterface $table, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
-    {
+    public function update(
+        CollectionNameInterface $table,
+        MappingInterface $mapping,
+        SelectionFactoryInterface $selectionFactory
+    ) {
         $data = $mapping->map();
 
         if (empty($data)) {

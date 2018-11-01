@@ -20,6 +20,10 @@ class LikeOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [QueryConnector::NAME_WILDCARD => [$this->name => QueryConnector::WILDCARD . $this->value . QueryConnector::WILDCARD]];
+        return [
+            QueryConnector::NAME_WILDCARD => [
+                $this->name => QueryConnector::WILDCARD . $this->value . QueryConnector::WILDCARD
+            ]
+        ];
     }
 }

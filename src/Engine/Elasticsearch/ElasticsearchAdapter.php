@@ -129,8 +129,11 @@ class ElasticsearchAdapter implements AdapterInterface
      * @param SelectionFactoryInterface $selectionFactory
      * @throws EmptyDataException
      */
-    public function update(CollectionNameInterface $collectionName, MappingInterface $mapping, SelectionFactoryInterface $selectionFactory)
-    {
+    public function update(
+        CollectionNameInterface $collectionName,
+        MappingInterface $mapping,
+        SelectionFactoryInterface $selectionFactory
+    ) {
         $data = $mapping->map();
 
         if (empty($data)) {

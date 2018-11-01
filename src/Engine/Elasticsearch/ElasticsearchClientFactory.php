@@ -36,7 +36,13 @@ class ElasticsearchClientFactory implements CreateInterface
      */
     public function create()
     {
-        $url = new Url(self::PROTOCOL . self::COLON . self::FORWARD_SLASH . self::FORWARD_SLASH . $this->params['host']);
+        $url = new Url(
+            self::PROTOCOL .
+            self::COLON .
+            self::FORWARD_SLASH .
+            self::FORWARD_SLASH .
+            $this->params['host']
+        );
 
         return new ElasticsearchClient($url->port(new PortNumber($this->params['port'])));
     }
