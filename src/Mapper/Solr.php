@@ -200,6 +200,10 @@ class Solr
                 $transformedData[empty($value['id']) ? $key : $value['id']] = $value;
             }
         }
-        return new \G4\DataMapper\Collection\Content($transformedData, $this->getFactoryDomainName(), $this->getTotalItemsCount());
+        return new \G4\DataMapper\Collection\Content(
+            $transformedData,
+            $this->getFactoryDomainName(),
+            $this->getTotalItemsCount()
+        );
     }
 }

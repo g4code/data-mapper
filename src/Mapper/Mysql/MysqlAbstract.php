@@ -54,8 +54,10 @@ abstract class MysqlAbstract implements MapperInterface
     public function delete(Identity $identity)
     {
         $sql  = "DELETE FROM " . $this->_db->quoteIdentifier($this->_getTablaName(), true);
-        $sql .= $this->_getSelectionFactory()->where($identity) ? (" WHERE " . $this->_getSelectionFactory()->where($identity)) : '';
-        $sql .= $identity->hasOrderBy() ? (" ORDER BY " . join(',', $this->_getSelectionFactory()->orderBy($identity))) : '';
+        $sql .= $this->_getSelectionFactory()->where($identity)
+            ? (" WHERE " . $this->_getSelectionFactory()->where($identity)) : '';
+        $sql .= $identity->hasOrderBy()
+            ? (" ORDER BY " . join(',', $this->_getSelectionFactory()->orderBy($identity))) : '';
         $sql .= $identity->getLimit() ? (" LIMIT " . $identity->getLimit()) : '';
 
         $this->innerTransactionBegin();
@@ -259,9 +261,10 @@ abstract class MysqlAbstract implements MapperInterface
 
     public function update(DomainAbstract $domain)
     {
+        //TODO: Drasko: move this to selection factory!!!
         return $this
             ->setRawDataFromDomain($domain)
-            ->_update('`' . $domain->getIdKey() . '` = ' . $this->_db->quote($domain->getId())); //TODO: Drasko: move this to selection factory!!!
+            ->_update('`' . $domain->getIdKey() . '` = ' . $this->_db->quote($domain->getId()));
     }
 
     public function updateAll(Identity $identity, array $rawData)
