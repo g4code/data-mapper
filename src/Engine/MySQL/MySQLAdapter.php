@@ -121,7 +121,8 @@ class MySQLAdapter implements AdapterInterface
         $order      = $selectionFactory->sort();
         $limit      = $selectionFactory->limit();
 
-        $query = sprintf('DELETE FROM %s WHERE %s %s %s',
+        $query = sprintf(
+            'DELETE FROM %s WHERE %s %s %s',
             (string) $table,
             $selectionFactory->where(),
             (count($order) === 0 ? '' : " ORDER BY " . implode(', ', $order)),

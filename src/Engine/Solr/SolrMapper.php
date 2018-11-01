@@ -145,8 +145,7 @@ class SolrMapper implements MapperInterface
     {
         $formattedData = [];
 
-        foreach($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $key === self::ID_IDENTIFIER
                 ? $formattedData[$key] = $value
                 : $formattedData[$key] = [$method => $value];

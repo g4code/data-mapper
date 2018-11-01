@@ -46,5 +46,4 @@ class ProfilerTickerElasticsearch extends \G4\Profiler\Ticker\TickerAbstract
         $this->getDataPart($uniqueId)->setMethod($method);
         $this->getDataPart($uniqueId)->setQuery($query);
     }
-
 }

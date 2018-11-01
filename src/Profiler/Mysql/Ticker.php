@@ -2,7 +2,6 @@
 
 namespace G4\DataMapper\Profiler\Mysql;
 
-
 class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 {
 

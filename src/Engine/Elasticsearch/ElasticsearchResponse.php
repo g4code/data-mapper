@@ -3,7 +3,6 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
-
 use Elasticsearch\Common\Exceptions\ClientErrorResponseException;
 
 class ElasticsearchResponse
@@ -86,5 +85,4 @@ class ElasticsearchResponse
             $this->decodedResponse[self::KEY_ERROR][self::KEY_ROOT_CAUSE],
         ]);
     }
-
 }

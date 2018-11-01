@@ -80,7 +80,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
             }
         }
 
-        if($this->identity->hasRawQuery()) {
+        if ($this->identity->hasRawQuery()) {
             $comparisons['must'][]= $this->identity->getRawQuery();
         }
 

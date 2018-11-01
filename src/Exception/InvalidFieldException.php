@@ -12,6 +12,6 @@ class InvalidFieldException extends \Exception
             $message = 'INVALID_FIELD';
         }
 
-        parent::__construct($message,ErrorCode::INVALID_FIELD);
+        parent::__construct($message, ErrorCode::INVALID_FIELD);
     }
 }

@@ -30,7 +30,7 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
     {
         //TODO:Vladan:This should be refactored.
         if (preg_match("/^-/", $name)) {
-            $name = ltrim($name,  '-');
+            $name = ltrim($name, '-');
         }
 
         switch ($operator->getSymbol()) {

@@ -62,14 +62,14 @@ class RawData implements \Countable
 
         $data = [];
 
-        foreach($rawData as $item) {
-            if(isset($item[$identifier])) {
+        foreach ($rawData as $item) {
+            if (isset($item[$identifier])) {
                 $data[$item[$identifier]] = $item;
             }
         }
 
         if (empty($data)) {
-           throw new EmptyDataException();
+            throw new EmptyDataException();
         }
 
         return $data;

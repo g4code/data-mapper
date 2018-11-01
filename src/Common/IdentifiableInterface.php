@@ -2,7 +2,6 @@
 
 namespace G4\DataMapper\Common;
 
-
 interface IdentifiableInterface
 {
     /**

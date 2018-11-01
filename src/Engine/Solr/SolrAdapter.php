@@ -134,7 +134,7 @@ class SolrAdapter implements AdapterInterface
 
     public function updateBulk(CollectionNameInterface $collectionName, array $data)
     {
-        if(empty($data)) {
+        if (empty($data)) {
             throw new EmptyDataException('Empty data for bulk update');
         }
 
@@ -167,8 +167,7 @@ class SolrAdapter implements AdapterInterface
     {
         $formattedData = [];
 
-        foreach($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $formattedData[$key] = [self::OPERATION_SET => $value];
         }
 

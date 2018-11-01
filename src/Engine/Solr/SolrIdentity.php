@@ -64,7 +64,7 @@ class SolrIdentity extends Identity implements SolrIdentityInterface
      */
     public function geodist($latitude, $longitude, $distance = null)
     {
-        if($distance === null) {
+        if ($distance === null) {
             $distance = 1000000;
         }
 

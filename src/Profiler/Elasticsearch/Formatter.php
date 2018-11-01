@@ -2,7 +2,6 @@
 
 namespace G4\DataMapper\Profiler\Elasticsearch;
 
-
 class Formatter extends \G4\Profiler\Ticker\Formatter
 {
     private $query;
@@ -43,5 +42,4 @@ class Formatter extends \G4\Profiler\Ticker\Formatter
     {
         $this->method = $method;
     }
-
 }

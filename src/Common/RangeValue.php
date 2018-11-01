@@ -22,7 +22,7 @@ class RangeValue implements ValueInterface
 
     public function getMin()
     {
-        if($this->min === null) {
+        if ($this->min === null) {
             return $this->max;
         } elseif ($this->max === null) {
             return $this->min;
@@ -33,7 +33,7 @@ class RangeValue implements ValueInterface
 
     public function getMax()
     {
-        if($this->min === null) {
+        if ($this->min === null) {
             return $this->max;
         } elseif ($this->max === null) {
             return $this->min;

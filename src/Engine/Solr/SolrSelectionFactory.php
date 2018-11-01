@@ -70,7 +70,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison) {
-                if(!$oneComparison->getValue()->isEmpty()) {
+                if (!$oneComparison->getValue()->isEmpty()) {
                     $comparisons[] = $oneComparison->getComparison($this->makeComparisonFormatter());
                 }
             }
@@ -90,7 +90,7 @@ class SolrSelectionFactory implements SelectionFactoryInterface
     {
         $fieldNames = [];
 
-        foreach($this->identity->getFieldNames() as $fieldName) {
+        foreach ($this->identity->getFieldNames() as $fieldName) {
             $fieldNames[] = is_array($fieldName) ? key($fieldName) .':'.$fieldName[key($fieldName)] : $fieldName;
         }
 

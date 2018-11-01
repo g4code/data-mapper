@@ -12,6 +12,6 @@ class InvalidValueException extends \Exception
             $message = 'INVALID_VALUE_EXCEPTION';
         }
 
-        parent::__construct($message,ErrorCode::INVALID_VALUE);
+        parent::__construct($message, ErrorCode::INVALID_VALUE);
     }
 }

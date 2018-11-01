@@ -12,6 +12,6 @@ class InvalidValueTypeException extends \Exception
             $message = 'WRONG_VALUE_TYPE_EXCEPTION';
         }
 
-        parent::__construct($message,ErrorCode::WRONG_VALUE_TYPE);
+        parent::__construct($message, ErrorCode::WRONG_VALUE_TYPE);
     }
 }
