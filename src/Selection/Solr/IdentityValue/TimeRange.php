@@ -2,6 +2,9 @@
 
 namespace G4\DataMapper\Selection\Solr\IdentityValue;
 
+use G4\DataMapper\Selection\Solr\Consts\Time;
+use G4\DataMapper\Selection\Solr\Consts\Query;
+
 class TimeRange implements \G4\DataMapper\Selection\Solr\IdentityValue\IdentityValueInterface
 {
     private $max;
@@ -34,15 +37,15 @@ class TimeRange implements \G4\DataMapper\Selection\Solr\IdentityValue\IdentityV
     private function getMax()
     {
         return $this->hasMax()
-            ? (\G4\DataMapper\Selection\Solr\Consts\Time::NOW . ((int) $this->max > 0 ? '+' : '') . $this->max . \G4\DataMapper\Selection\Solr\Consts\Time::MINUTES)
-            : ($this->field->hasCurrentValueMax() ? $this->field->getCurrentValueMax() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD);
+            ? (Time::NOW . ((int) $this->max > 0 ? '+' : '') . $this->max . Time::MINUTES)
+            : ($this->field->hasCurrentValueMax() ? $this->field->getCurrentValueMax() : Query::WILDCARD);
     }
 
     private function getMin()
     {
         return $this->hasMin()
-            ? (\G4\DataMapper\Selection\Solr\Consts\Time::NOW . ((int) $this->min > 0 ? '+' : '') . $this->min . \G4\DataMapper\Selection\Solr\Consts\Time::MINUTES)
-            : ($this->field->hasCurrentValueMin() ? $this->field->getCurrentValueMin() : \G4\DataMapper\Selection\Solr\Consts\Query::WILDCARD);
+            ? (Time::NOW . ((int) $this->min > 0 ? '+' : '') . $this->min . Time::MINUTES)
+            : ($this->field->hasCurrentValueMin() ? $this->field->getCurrentValueMin() : Query::WILDCARD);
     }
 
     private function hasMax()
