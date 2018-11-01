@@ -205,7 +205,9 @@ class Factory extends \G4\DataMapper\Selection\Factory
             } elseif ($key === Consts::GEO_DISTANCE_SORT) {
                 $sort[$key] = $value;
             } elseif ($key !== null) {
-                $sort[$key] = (strtolower($value) == Consts::DESCENDING ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING);
+                $sort[$key] = (strtolower($value) == Consts::DESCENDING)
+                    ? \G4\DataMapper\Selection\Solr\Consts\Query::DESCENDING
+                    : \G4\DataMapper\Selection\Solr\Consts\Query::ASCENDING;
             }
         }
         return $sort;

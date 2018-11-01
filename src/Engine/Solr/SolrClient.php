@@ -67,7 +67,9 @@ class SolrClient
 
     public function getDocuments()
     {
-        return (empty($this->getResponse()) || $this->getResponse() === null) ? [] : $this->getResponse()['response']['docs'];
+        return (empty($this->getResponse()) || $this->getResponse() === null)
+            ? []
+            : $this->getResponse()['response']['docs'];
     }
 
     public function getTotalItemsCount()

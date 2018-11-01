@@ -161,7 +161,13 @@ class Identity extends \G4\DataMapper\Selection\Identity
     {
         return $this->_operatorAttach(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange($value, null, $this->getCurrentField()))
+            $this->getValue(
+                new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(
+                    $value,
+                    null,
+                    $this->getCurrentField()
+                )
+            )
         );
     }
 
@@ -169,7 +175,13 @@ class Identity extends \G4\DataMapper\Selection\Identity
     {
         return $this->_operatorAttach(
             \G4\DataMapper\Selection\Solr\Consts\Query::COLON,
-            $this->getValue(new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(null, $value, $this->getCurrentField()))
+            $this->getValue(
+                new \G4\DataMapper\Selection\Solr\IdentityValue\TimeRange(
+                    null,
+                    $value,
+                    $this->getCurrentField()
+                )
+            )
         );
     }
 
