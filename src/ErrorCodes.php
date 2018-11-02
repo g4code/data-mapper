@@ -18,4 +18,5 @@ class ErrorCodes
     const WRONG_VALUE_TYPE           = 14009;
     const INVALID_VALUE              = 14010;
     const DATABASE_OPERATION         = 14011;
+    const HTTP_PATH_NOT_STRING       = 15001;
 }
