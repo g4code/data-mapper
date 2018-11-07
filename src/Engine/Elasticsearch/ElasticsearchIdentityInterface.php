@@ -30,4 +30,10 @@ interface ElasticsearchIdentityInterface
      * @return bool
      */
     public function hasConsistentRandomKey();
+
+    /**
+     * @param string $value
+     * @return ElasticsearchIdentity
+     */
+    public function likeCI($value);
 }

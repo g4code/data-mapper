@@ -13,6 +13,7 @@ class Operator
     const GRATER_THAN_OR_EQUAL = 'GRATER_THAN_OR_EQUAL';
     const IN                   = 'IN';
     const LIKE                 = 'LIKE';
+    const LIKE_CI              = 'LIKE_CI';
     const LESS_THAN            = 'LESS_THAN';
     const LESS_THAN_OR_EQUAL   = 'LESS_THAN_OR_EQUAL';
     const NOT_EQUAL            = 'NOT_EQUAL';
@@ -46,6 +47,7 @@ class Operator
             self::GRATER_THAN_OR_EQUAL,
             self::IN,
             self::LIKE,
+            self::LIKE_CI,
             self::LESS_THAN,
             self::LESS_THAN_OR_EQUAL,
             self::NOT_EQUAL,
