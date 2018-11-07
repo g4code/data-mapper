@@ -136,4 +136,13 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['wildcard' => ['name' => '*lada*']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
     }
+
+    public function testLikeCI()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::LIKE_CI);
+
+        $this->assertEquals(['query_string' => ['query' => 'name:*lada*']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
+    }
 }

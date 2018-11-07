@@ -124,4 +124,15 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
         $this->operator(Operator::TIME_FROM_IN_MINUTES, new SingleValue($value));
         return $this;
     }
+
+    /**
+     * @param string $value
+     * @return ElasticsearchIdentity
+     */
+    public function likeCI($value)
+    {
+        $this->arrayException($value);
+        $this->operator(Operator::LIKE_CI, new SingleValue($value));
+        return $this;
+    }
 }

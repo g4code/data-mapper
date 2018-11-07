@@ -27,10 +27,12 @@ class QueryConnector
     const LESS_THAN             = 'lt';
     const LESS_THAN_OR_EQUAL    = 'lte';
 
-    const MATCH                 = 'match';
-    const RANGE                 = 'range';
-    const TERMS                 = 'terms';
-    const NAME_WILDCARD         = 'wildcard';
+    const MATCH                   = 'match';
+    const RANGE                   = 'range';
+    const TERMS                   = 'terms';
+    const NAME_WILDCARD           = 'wildcard';
+    const NAME_QUERY_STRING       = 'query_string';
+    const NAME_QUERY_STRING_QUERY = 'query';
 
     const FORMAT                = 'format';
     const EPOCH_SECOND          = 'epoch_second';
