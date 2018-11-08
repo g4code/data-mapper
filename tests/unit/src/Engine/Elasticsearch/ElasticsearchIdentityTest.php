@@ -62,4 +62,13 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('online')->timeFromInMinutes(15));
     }
+
+    public function testLikeCI()
+    {
+        $identity = new ElasticsearchIdentity();
+        $this->assertInstanceOf(ElasticsearchIdentity::class, $identity->field('id')->likeCI('this'));
+
+        $this->setExpectedException('\Exception', 'Value can not be array');
+        $identity->field('name')->likeCI([1]);
+    }
 }
