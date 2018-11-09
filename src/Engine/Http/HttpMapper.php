@@ -6,6 +6,7 @@ use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Exception\HttpMapperException;
 
 class HttpMapper implements MapperInterface
 {
@@ -59,5 +60,23 @@ class HttpMapper implements MapperInterface
     public function query($query)
     {
         // TODO: Implement query() method.
+    }
+
+    /**
+     * @param \Exception $exception
+     * @throws HttpMapperException
+     */
+    private function handleException(\Exception $exception)
+    {
+        throw new HttpMapperException($exception->getCode() . ': ' . $exception->getMessage());
+    }
+
+    /**
+     * @param IdentityInterface $identity
+     * @return HttpSelectionFactory
+     */
+    private function makeSelectionFactory(IdentityInterface $identity)
+    {
+        return new HttpSelectionFactory($identity);
     }
 }
