@@ -4,6 +4,7 @@ use G4\DataMapper\Engine\Http\HttpSelectionFactory;
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Exception\MethodNotValidForHttpEngineException;
 use G4\DataMapper\Engine\Http\HttpComparisonFormatter;
+use G4\DataMapper\Common\Selection\Comparison;
 
 class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -39,9 +40,26 @@ class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory->sort();
     }
 
+    public function testWhereVoid()
+    {
+        $this->identityMock->expects($this->once())->method('isVoid')->willReturn(true);
+
+        $this->assertEquals('', $this->selectionFactory->where());
+    }
+
     public function testWhere()
     {
+        $this->identityMock->expects($this->once())->method('isVoid')->willReturn(false);
 
+        $this->identityMock
+            ->expects($this->once())
+            ->method('getComparisons')
+            ->willReturn([
+                $this->getMockForComparison(),
+                $this->getMockForComparison(),
+            ]);
+
+        $this->assertEquals('id=1&id=1', $this->selectionFactory->where());
     }
 
     public function testLimit()
@@ -76,5 +94,21 @@ class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
     {
         $this->identityMock     = null;
         $this->selectionFactory = null;
+    }
+
+    private function getMockForComparison()
+    {
+        $mock = $this->getMockBuilder(Comparison::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getComparison'])
+            ->getMock();
+
+        $mock
+            ->expects($this->once())
+            ->method('getComparison')
+            ->with($this->isInstanceOf(HttpComparisonFormatter::class))
+            ->willReturn('id=1');
+
+        return $mock;
     }
 }
