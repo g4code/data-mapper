@@ -14,5 +14,4 @@ class HttpPathException extends Exception
     {
         parent::__construct(self::MESSAGE, ErrorCodes::HTTP_PATH_NOT_STRING);
     }
-
 }
