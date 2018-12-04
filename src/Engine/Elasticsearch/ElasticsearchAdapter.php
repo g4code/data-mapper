@@ -178,6 +178,17 @@ class ElasticsearchAdapter implements AdapterInterface
     {
         throw new NotImplementedException();
     }
+    
+    /**
+     * @param CollectionNameInterface $collectionName
+     */
+    public function refresh(CollectionNameInterface $collectionName)
+    {
+        $this->client
+            ->setIndex($collectionName)
+            ->setMethod(self::METHOD_POST)
+            ->refresh();
+    }
 
     private function extractIdValue($data)
     {
