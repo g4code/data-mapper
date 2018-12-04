@@ -13,6 +13,7 @@ class ElasticsearchClient
     const TIMEOUT       = 5;
     const METHOD_GET    = 'GET';
     const UPDATE        = '_update';
+    const REFRESH       = '_refresh';
 
     private $index;
 
@@ -71,6 +72,13 @@ class ElasticsearchClient
     public function update()
     {
         $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id, self::UPDATE);
+
+        $this->executeCurlRequest();
+    }
+    
+    public function refresh()
+    {
+        $this->url = $this->url->path($this->index, self::REFRESH);
 
         $this->executeCurlRequest();
     }
