@@ -395,12 +395,12 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     public function testQueryForSelect()
     {
         $query      = 'select * from table_name where 1 group by id limit 0,100';
-        $countQuery = 'SELECT COUNT(*) AS cnt FROM table_name where 1 group by id';
+        $countQuery = 'SELECT FOUND_ROWS()';
 
         $this->clientMock
             ->expects($this->once())
             ->method('fetchAll')
-            ->with($query)
+            ->with(substr_replace($query, 'SQL_CALC_FOUND_ROWS ', 7, 0))
             ->willReturn([['data' => 1]]);
 
         $this->clientMock
