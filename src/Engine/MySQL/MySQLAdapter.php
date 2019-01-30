@@ -341,7 +341,7 @@ class MySQLAdapter implements AdapterInterface
         }
 
         if (preg_match('~^\s*(select\s)~usxi', $query) === 1) {
-            $data = $this->client->fetchAll(substr_replace($query, 'SQL_CALC_FOUND_ROWS ', 7, 0));
+            $data = $this->client->fetchAll(substr_replace(trim($query), 'SQL_CALC_FOUND_ROWS ', 7, 0));
             $total = $this->client->fetchOne('SELECT FOUND_ROWS()');
 
             return new RawData($data, $total);
