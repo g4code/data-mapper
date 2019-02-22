@@ -9,6 +9,7 @@ class Operator
 {
 
     const EQUAL                = 'EQUAL';
+    const EQUAL_CI             = 'EQUAL_CI';
     const GRATER_THAN          = 'GRATER_THAN';
     const GRATER_THAN_OR_EQUAL = 'GRATER_THAN_OR_EQUAL';
     const IN                   = 'IN';
@@ -43,6 +44,7 @@ class Operator
     {
         $validSymbols = [
             self::EQUAL,
+            self::EQUAL_CI,
             self::GRATER_THAN,
             self::GRATER_THAN_OR_EQUAL,
             self::IN,
