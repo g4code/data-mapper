@@ -30,6 +30,7 @@ class QueryConnector
     const MATCH                   = 'match';
     const RANGE                   = 'range';
     const TERMS                   = 'terms';
+    const TYPE                    = 'type';
     const NAME_WILDCARD           = 'wildcard';
     const NAME_QUERY_STRING       = 'query_string';
     const NAME_QUERY_STRING_QUERY = 'query';

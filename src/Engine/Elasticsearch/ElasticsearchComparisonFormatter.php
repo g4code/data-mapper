@@ -7,6 +7,7 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\Elasticsearch\Operators\BetweenOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\EqualOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\EqualCIOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOrEqualOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\InOperator;
@@ -37,6 +38,9 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
         switch ($operator->getSymbol()) {
             case Operator::EQUAL:
                 $query = new EqualOperator($name, $value);
+                break;
+            case Operator::EQUAL_CI:
+                $query = new EqualCIOperator($name, $value);
                 break;
             case Operator::GRATER_THAN:
                 $query = new GreaterThanOperator($name, $value);
