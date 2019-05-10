@@ -22,6 +22,10 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     {
         $fieldNames = $this->identity->getFieldNames();
 
+        if (!is_array($fieldNames)) {
+            return [];
+        }
+
         return count($fieldNames) === 0
             ? []
             : $fieldNames;
