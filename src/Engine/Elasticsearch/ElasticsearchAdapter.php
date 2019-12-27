@@ -205,7 +205,7 @@ class ElasticsearchAdapter implements AdapterInterface
 
         if (array_key_exists('hits', $data)) {
             foreach ($data['hits'] as $item) {
-                $formattedData []= $item['_source'];
+                $formattedData[] = ['_index' => $item['_index'], '_type' => $item['_type']] + $item['_source'];
             }
         }
 
