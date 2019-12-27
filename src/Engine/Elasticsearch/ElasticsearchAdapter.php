@@ -146,6 +146,10 @@ class ElasticsearchAdapter implements AdapterInterface
             ->setId($this->extractIdValue($selectionFactory->where()))
             ->setBody(['doc' => $data])
             ->update();
+
+        if ($this->client->hasError()) {
+            throw new ClientException($this->client->getErrorMessage() . ', doc=' . json_encode($data));
+        }
     }
 
     /**
