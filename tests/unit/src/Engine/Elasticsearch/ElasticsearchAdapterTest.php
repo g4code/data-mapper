@@ -360,15 +360,15 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             'total' => 2,
             'hits' => [
                 'hits' => [
-                    ['_source' => ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f']],
-                    ['_source' => ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm']],
+                    ['_index' => 'indexName1', '_type' => 'indexType1', '_source' => ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f']],
+                    ['_index' => 'indexName2', '_type' => 'indexType2', '_source' => ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm']],
                 ]
             ]
         ];
 
         $data = [
-            ['id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
-            ['id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
+            ['_index' => 'indexName1', '_type' => 'indexType1', 'id' => '1', 'first_name' => 'test', 'last_name' => 'user', 'gender' => 'f'],
+            ['_index' => 'indexName2', '_type' => 'indexType2', 'id' => '2', 'first_name' => 'test2', 'last_name' => 'user2', 'gender' => 'm'],
         ];
 
 
