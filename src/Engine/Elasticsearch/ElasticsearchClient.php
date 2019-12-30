@@ -18,6 +18,11 @@ class ElasticsearchClient
     private $index;
 
     /**
+     * @var string
+     */
+    private $indexType;
+
+    /**
      * @var Url
      */
     private $url;
@@ -32,28 +37,28 @@ class ElasticsearchClient
      * @var ElasticsearchResponse
      */
     private $response;
-
     /**
      * @var ProfilerTickerElasticsearch
      */
     private $profiler;
 
-    public function __construct(Url $url)
+    public function __construct(Url $url, $indexType = self::DOCUMENT)
     {
         $this->url = $url;
+        $this->indexType = $indexType;
         $this->profiler = ProfilerTickerElasticsearch::getInstance();
     }
 
     public function execute()
     {
-        $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id);
+        $this->url = $this->url->path($this->index, $this->indexType, $this->id);
 
         $this->executeCurlRequest();
     }
 
     public function executeBulk()
     {
-        $this->url = $this->url->path($this->index, self::DOCUMENT, self::BULK);
+        $this->url = $this->url->path($this->index, $this->indexType, self::BULK);
 
         $this->executeBulkCurlRequest();
     }
@@ -71,7 +76,7 @@ class ElasticsearchClient
 
     public function update()
     {
-        $this->url = $this->url->path($this->index, self::DOCUMENT, $this->id, self::UPDATE);
+        $this->url = $this->url->path($this->index, $this->indexType, $this->id, self::UPDATE);
 
         $this->executeCurlRequest();
     }
