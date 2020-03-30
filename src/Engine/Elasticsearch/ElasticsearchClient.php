@@ -42,10 +42,10 @@ class ElasticsearchClient
      */
     private $profiler;
 
-    public function __construct(Url $url, $indexType = self::DOCUMENT)
+    public function __construct(Url $url, $indexType = null)
     {
         $this->url = $url;
-        $this->indexType = $indexType;
+        $this->indexType = $indexType ?: self::DOCUMENT;
         $this->profiler = ProfilerTickerElasticsearch::getInstance();
     }
 
