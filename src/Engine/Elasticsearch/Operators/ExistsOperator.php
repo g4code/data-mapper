@@ -20,6 +20,6 @@ class ExistsOperator implements QueryOperatorInterface
 
     public function format()
     {
-        return [QueryConnector::EXISTS => ['field' => $this->name]];
+       return [QueryConnector::EXISTS => ['field' => $this->name]];
     }
 }
