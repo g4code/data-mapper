@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fdfc1f7dd04325a4c183ac724c9d0bb",
+    "content-hash": "e736771d484ea11c3b9c18ec7bc7b1f2",
     "packages": [
         {
             "name": "aura/accept",
@@ -594,16 +594,16 @@
         },
         {
             "name": "g4/value-object",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/g4code/value-object.git",
-                "reference": "07ebb1ab05ae2f5587328f3f441edb8ad2604114"
+                "reference": "23d60ebd58589b0aa3ae861fb9d5f35d7b51a849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/g4code/value-object/zipball/07ebb1ab05ae2f5587328f3f441edb8ad2604114",
-                "reference": "07ebb1ab05ae2f5587328f3f441edb8ad2604114",
+                "url": "https://api.github.com/repos/g4code/value-object/zipball/23d60ebd58589b0aa3ae861fb9d5f35d7b51a849",
+                "reference": "23d60ebd58589b0aa3ae861fb9d5f35d7b51a849",
                 "shasum": ""
             },
             "require": {
@@ -643,7 +643,7 @@
                 }
             ],
             "description": "PHP value objects",
-            "time": "2020-03-19T10:07:31+00:00"
+            "time": "2020-04-08T13:30:17+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2832,5 +2832,6 @@
         "ext-curl": "*",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
