@@ -28,7 +28,5 @@ class MissingOperator implements QueryOperatorInterface
                 ]
             ]
         ];
-
-
     }
 }

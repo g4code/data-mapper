@@ -212,6 +212,20 @@ class Identity implements IdentityInterface
         return $this->setLimit($perPage);
     }
 
+    public function missing($value)
+    {
+        $this->arrayException($value);
+        $this->operator(Operator::MISSING, new SingleValue($value));
+        return $this;
+    }
+
+    public function exists($value)
+    {
+        $this->arrayException($value);
+        $this->operator(Operator::EXISTS, new SingleValue($value));
+        return $this;
+    }
+
     /**
      * @param $value
      * @return $this
