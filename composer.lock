@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fdfc1f7dd04325a4c183ac724c9d0bb",
+    "content-hash": "1b17248b908a3eb0194f9f15607d32d5",
     "packages": [
         {
             "name": "aura/accept",
@@ -371,16 +371,16 @@
         },
         {
             "name": "g4/log",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/g4code/log.git",
-                "reference": "32444a86c6ac2a6fb34d5c42896b84db6736842e"
+                "reference": "709f2bedc2ea63d6f8d1f6d2f0260b9a9f2a2432"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/g4code/log/zipball/32444a86c6ac2a6fb34d5c42896b84db6736842e",
-                "reference": "32444a86c6ac2a6fb34d5c42896b84db6736842e",
+                "url": "https://api.github.com/repos/g4code/log/zipball/709f2bedc2ea63d6f8d1f6d2f0260b9a9f2a2432",
+                "reference": "709f2bedc2ea63d6f8d1f6d2f0260b9a9f2a2432",
                 "shasum": ""
             },
             "require": {
@@ -426,7 +426,7 @@
                 "logger",
                 "writer"
             ],
-            "time": "2020-03-19T13:16:17+00:00"
+            "time": "2020-04-03T10:56:42+00:00"
         },
         {
             "name": "g4/profiler",
@@ -594,16 +594,16 @@
         },
         {
             "name": "g4/value-object",
-            "version": "3.0.0",
+            "version": "2.43.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/g4code/value-object.git",
-                "reference": "07ebb1ab05ae2f5587328f3f441edb8ad2604114"
+                "reference": "9d5e563e3ce7f3992ac1f21f5a0032df6dfc697c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/g4code/value-object/zipball/07ebb1ab05ae2f5587328f3f441edb8ad2604114",
-                "reference": "07ebb1ab05ae2f5587328f3f441edb8ad2604114",
+                "url": "https://api.github.com/repos/g4code/value-object/zipball/9d5e563e3ce7f3992ac1f21f5a0032df6dfc697c",
+                "reference": "9d5e563e3ce7f3992ac1f21f5a0032df6dfc697c",
                 "shasum": ""
             },
             "require": {
@@ -643,7 +643,7 @@
                 }
             ],
             "description": "PHP value objects",
-            "time": "2020-03-19T10:07:31+00:00"
+            "time": "2020-02-24T11:46:58+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -927,16 +927,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.14.0",
+            "version": "v1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38"
+                "reference": "4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
-                "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/4719fa9c18b0464d399f1a63bf624b42b6fa8d14",
+                "reference": "4719fa9c18b0464d399f1a63bf624b42b6fa8d14",
                 "shasum": ""
             },
             "require": {
@@ -948,7 +948,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.14-dev"
+                    "dev-master": "1.15-dev"
                 }
             },
             "autoload": {
@@ -981,7 +981,21 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2020-01-13T11:15:53+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-02-27T09:26:54+00:00"
         },
         {
             "name": "twig/extensions",
@@ -2681,16 +2695,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.38",
+            "version": "v3.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "bc63e15160866e8730a1f738541b194c401f72bf"
+                "reference": "e701b47e11749970f63803879c4febb520f07b6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/bc63e15160866e8730a1f738541b194c401f72bf",
-                "reference": "bc63e15160866e8730a1f738541b194c401f72bf",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e701b47e11749970f63803879c4febb520f07b6c",
+                "reference": "e701b47e11749970f63803879c4febb520f07b6c",
                 "shasum": ""
             },
             "require": {
@@ -2736,7 +2750,21 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-16T19:04:26+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-25T12:02:26+00:00"
         },
         {
             "name": "vanilla/garden-cli",
@@ -2832,5 +2860,6 @@
         "ext-curl": "*",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
