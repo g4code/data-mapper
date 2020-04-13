@@ -37,4 +37,7 @@ class QueryConnector
 
     const FORMAT                = 'format';
     const EPOCH_SECOND          = 'epoch_second';
+
+    const MISSING          = 'missing';
+    const EXISTS           = 'exists';
 }
