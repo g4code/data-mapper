@@ -16,6 +16,7 @@ use G4\DataMapper\Engine\Elasticsearch\Operators\LessThanOrEqualOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\LikeCIOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\TimeFromInMinutesOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\LikeOperator;
+use G4\DataMapper\Engine\Elasticsearch\Operators\MissingOperator;
 
 class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 {
@@ -68,6 +69,9 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 break;
             case Operator::LIKE_CI:
                 $query = new LikeCIOperator($name, $value);
+                break;
+            case Operator::MISSING:
+                $query = new MissingOperator($name, $value);
                 break;
         }
 

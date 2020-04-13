@@ -22,6 +22,7 @@ class Operator
     const BETWEEN              = 'BETWEEN';
     const TIME_FROM_IN_MINUTES = 'TIME_FROM_IN_MINUTES';
     const GEODIST              = 'GEODIST';
+    const MISSING              = 'MISSING';
 
 
     /**
@@ -57,6 +58,7 @@ class Operator
             self::BETWEEN,
             self::TIME_FROM_IN_MINUTES,
             self::GEODIST,
+            self::MISSING,
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {
