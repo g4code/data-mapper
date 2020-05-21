@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Profiler\Ticker\ProfilerTickerElasticsearch;
 use G4\ValueObject\Url;
+use G4\DataMapper\Exception\ClientException;
 
 class ElasticsearchClient
 {
@@ -183,15 +184,33 @@ class ElasticsearchClient
 
         $this->responseFactory(curl_exec($handle));
 
+        $error = curl_error($handle);
+
+        if ($error) {
+            throw new ClientException(sprintf("Submit curl request failed. Error: %s",  $error));
+        }
+
+        $info = curl_getinfo($handle);
+
         $this->profiler->setInfo(
             $uniqueId,
-            curl_getinfo($handle),
+            $info,
             $this->method,
             $this->body
         );
 
         curl_close($handle);
         $this->profiler->end($uniqueId);
+
+        if (isset($info['http_code']) && (int) $info['http_code'] >= 400 && (int) $info['http_code'] <= 599) {
+            throw new ClientException(
+                sprintf(
+                    "Unexpected response code:%s from ES has been returned on submit. More info:%s",
+                    $info['http_code'],
+                    json_encode($info)
+                )
+            );
+        }
 
         return $this;
     }
@@ -204,5 +223,10 @@ class ElasticsearchClient
     public function getErrorMessage()
     {
         return $this->response->getErrorMessage();
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 }
