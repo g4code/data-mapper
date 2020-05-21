@@ -117,7 +117,12 @@ class ElasticsearchAdapter implements AdapterInterface
             ->search();
 
         if ($this->client->hasError()) {
-            throw new ClientException($this->client->getErrorMessage() . ', body=' . json_encode($body));
+            throw new ClientException(sprintf(
+                "error=%s, body=%s, url=%s",
+                $this->client->getErrorMessage(),
+                json_encode($body),
+                (string) $this->client->getUrl()
+            ));
         }
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
@@ -140,15 +145,23 @@ class ElasticsearchAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update.');
         }
 
+        $id = $this->extractIdValue($selectionFactory->where());
+
         $this->client
             ->setIndex($collectionName)
             ->setMethod(self::METHOD_POST)
-            ->setId($this->extractIdValue($selectionFactory->where()))
+            ->setId($id)
             ->setBody(['doc' => $data])
             ->update();
 
         if ($this->client->hasError()) {
-            throw new ClientException($this->client->getErrorMessage() . ', doc=' . json_encode($data));
+            throw new ClientException(sprintf(
+                "error=%s, body=%s, url=%s, id: %s",
+                $this->client->getErrorMessage(),
+                json_encode($data),
+                (string) $this->client->getUrl(),
+                $id
+            ));
         }
     }
 

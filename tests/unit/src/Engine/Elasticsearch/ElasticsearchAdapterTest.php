@@ -259,6 +259,74 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
     }
 
+    public function testUpdateWithError()
+    {
+        $body = ['id' => 123, 'first_name' => 'Marge', 'last_name' => 'Simpson', 'gender' => 'f'];
+
+        $selectionFactoryStub = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $selectionFactoryStub
+            ->expects($this->once())
+            ->method('where')
+            ->willReturn(['bool' => ['must' => [0 =>['match' => ['id' => '123']]]]]);
+
+        $mappingMock = $this->getMappingMock();
+
+        $mappingMock
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn($body);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setIndex')
+            ->with($this->equalTo((string) $this->collectionNameMock))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo(self::METHOD_POST))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setId')
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('setBody')
+            ->with($this->equalTo(['doc' => $body]))
+            ->willReturnSelf();
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('update');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('hasError')
+            ->willReturn(true);
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getErrorMessage')
+            ->willReturn('Failed to update');
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getUrl')
+            ->willReturn(new \G4\ValueObject\Url('http://example.net/'));
+
+        $this->expectException(\G4\DataMapper\Exception\ClientException::class);
+        $this->expectExceptionMessage('error=Failed to update, body={"id":123,"first_name":"Marge","last_name":"Simpson","gender":"f"}, url=http://example.net/, id: 123');
+
+        $this->adapter->update($this->collectionNameMock, $mappingMock, $selectionFactoryStub);
+    }
+
     public function testUpdateWithEmptyData()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Common\SelectionFactoryInterface $selectionFactoryStub */
@@ -524,9 +592,15 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
             ->method('search')
             ->willReturnSelf();
 
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getUrl')
+            ->willReturn(new \G4\ValueObject\Url('http://example.net/'));
+
         $this->expectException(\G4\DataMapper\Exception\ClientException::class);
-        $this->expectExceptionMessage('Some Es Error Message, body={"from":null,"size":null,"query":null,"sort":null,"_source":null}');
-        $select = $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
+        $this->expectExceptionMessage('error=Some Es Error Message, body={"from":null,"size":null,"query":null,"sort":null,"_source":null}, url=http://example.net/');
+
+        $this->adapter->select($this->collectionNameMock, $selectionFactoryStub);
     }
 
 

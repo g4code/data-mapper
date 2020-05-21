@@ -37,6 +37,11 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->elasticsearchClient->getTotalItemsCount());
     }
 
+    public function testGetUrl()
+    {
+        $this->assertEquals($this->urlMock, $this->elasticsearchClient->getUrl());
+    }
+
     protected function setUp()
     {
         $this->urlMock = $this->getMockBuilder(Url::class)
