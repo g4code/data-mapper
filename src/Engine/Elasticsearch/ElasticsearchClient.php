@@ -182,7 +182,9 @@ class ElasticsearchClient
             CURLOPT_CUSTOMREQUEST  => $this->method,
         ]);
 
-        $this->responseFactory(curl_exec($handle));
+        $response =  curl_exec($handle);
+
+        $this->responseFactory($response);
 
         $error = curl_error($handle);
 
@@ -205,9 +207,11 @@ class ElasticsearchClient
         if (isset($info['http_code']) && (int) $info['http_code'] >= 400 && (int) $info['http_code'] <= 599) {
             throw new ClientException(
                 sprintf(
-                    "Unexpected response code:%s from ES has been returned on submit. More info:%s",
+                    "Unexpected response code:%s from ES has been returned on submit. More info: %s. Body: %s. Response: %s",
                     $info['http_code'],
-                    json_encode($info)
+                    json_encode($info),
+                    json_encode($this->body),
+                    is_array($response) ? json_encode($response) : $response
                 )
             );
         }
