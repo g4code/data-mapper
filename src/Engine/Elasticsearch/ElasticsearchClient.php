@@ -3,18 +3,21 @@
 namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Profiler\Ticker\ProfilerTickerElasticsearch;
+use G4\ValueObject\Dictionary;
 use G4\ValueObject\Url;
 use G4\DataMapper\Exception\ClientException;
 
 class ElasticsearchClient
 {
-    const BULK          = '_bulk';
-    const DOCUMENT      = 'doc';
-    const SEARCH        = '_search';
-    const TIMEOUT       = 5;
-    const METHOD_GET    = 'GET';
-    const UPDATE        = '_update';
-    const REFRESH       = '_refresh';
+    const BULK              = '_bulk';
+    const DOCUMENT          = 'doc';
+    const SEARCH            = '_search';
+    const TIMEOUT           = 5;
+    const METHOD_GET        = 'GET';
+    const UPDATE            = '_update';
+    const REFRESH           = '_refresh';
+    const RETRY_ON_CONFLICT = 'retry_on_conflict';
+    const RETRY_COUNT       = 5;
 
     private $index;
 
@@ -77,7 +80,9 @@ class ElasticsearchClient
 
     public function update()
     {
-        $this->url = $this->url->path($this->index, $this->indexType, $this->id, self::UPDATE);
+        $this->url = $this->url
+            ->path($this->index, $this->indexType, $this->id, self::UPDATE)
+            ->query(new Dictionary([self::RETRY_ON_CONFLICT => self::RETRY_COUNT]));
 
         $this->executeCurlRequest();
     }
