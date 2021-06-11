@@ -5,6 +5,8 @@ namespace G4\DataMapper\Common;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\RawData;
+use G4\DataMapper\Exception\EmptyDataException;
+use G4\DataMapper\Exception\InvalidValueException;
 
 interface AdapterInterface
 {
@@ -74,4 +76,12 @@ interface AdapterInterface
      * @return mixed
      */
     public function query($query);
+
+    /**
+     * @param string $query
+     * @return SimpleRawData|void
+     * @throws EmptyDataException
+     * @throws InvalidValueException
+     */
+    public function simpleQuery($query);
 }

@@ -176,4 +176,9 @@ class SolrAdapter implements AdapterInterface
 
         return $formattedData;
     }
+
+    public function simpleQuery($query)
+    {
+        throw new NotImplementedException();
+    }
 }

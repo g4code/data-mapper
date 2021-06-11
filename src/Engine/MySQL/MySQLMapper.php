@@ -110,6 +110,16 @@ class MySQLMapper implements MapperInterface
         return $queryResult;
     }
 
+    public function simpleQuery($query)
+    {
+        try {
+            $queryResult = $this->adapter->simpleQuery($query);
+        } catch (\Exception $exception) {
+            $this->handleException($exception);
+        }
+        return $queryResult;
+    }
+
     /**
      * @param \Exception $exception
      * @throws \Exception

@@ -319,6 +319,13 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->query('Test query');
     }
 
+    public function testSimpleQuery()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->simpleQuery('Test query');
+    }
+
     private function getMappingMock()
     {
         return $this->getMockBuilder(\G4\DataMapper\Common\MappingInterface::class)->getMock();

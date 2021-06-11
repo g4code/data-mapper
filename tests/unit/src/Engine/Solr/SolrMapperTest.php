@@ -1,6 +1,7 @@
 <?php
 
 use G4\DataMapper\Engine\Solr\SolrMapper;
+use G4\DataMapper\Exception\NotImplementedException;
 use G4\DataMapper\Exception\SolrMapperException;
 
 class SolrMapperTest extends PHPUnit_Framework_TestCase
@@ -247,5 +248,12 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
         $expectedData = [['id' => 5, 'first_name' => ['set' => 'Test user']]];
 
         $this->assertEquals($this->mapper->getDataForBulkUpdate(), $expectedData);
+    }
+
+    public function testSimpleQueryException()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->mapper->simpleQuery('some query');
     }
 }

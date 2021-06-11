@@ -2,6 +2,7 @@
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchMapper;
 use G4\DataMapper\Exception\ElasticSearchMapperException;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -274,5 +275,12 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
         $this->expectException(ElasticSearchMapperException::class);
 
         $this->mapper->query('elastic search');
+    }
+
+    public function testSimpleQueryException()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->mapper->simpleQuery('some query');
     }
 }

@@ -611,6 +611,13 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter->query('Some test query');
     }
 
+    public function testSimpleQuery()
+    {
+        $this->expectException(NotImplementedException::class);
+
+        $this->adapter->simpleQuery('Test query');
+    }
+
     /**
      * @return PHPUnit_Framework_MockObject_MockObject | \G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory
      */

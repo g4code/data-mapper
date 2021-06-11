@@ -7,6 +7,7 @@ use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
+use G4\DataMapper\Exception\NotImplementedException;
 use G4\DataMapper\Exception\SolrMapperException;
 
 class SolrMapper implements MapperInterface
@@ -171,5 +172,10 @@ class SolrMapper implements MapperInterface
     private function clearData()
     {
         $this->dataForBulkUpdate = [];
+    }
+
+    public function simpleQuery($query)
+    {
+        throw new NotImplementedException();
     }
 }
