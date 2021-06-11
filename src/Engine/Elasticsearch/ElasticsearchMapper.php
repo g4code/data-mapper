@@ -8,6 +8,7 @@ use G4\DataMapper\Common\MapperInterface;
 use G4\DataMapper\Common\IdentityInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Exception\ElasticSearchMapperException;
+use G4\DataMapper\Exception\NotImplementedException;
 
 class ElasticsearchMapper implements MapperInterface
 {
@@ -146,5 +147,10 @@ class ElasticsearchMapper implements MapperInterface
     private function makeSelectionFactory(IdentityInterface $identity)
     {
         return new ElasticsearchSelectionFactory($identity);
+    }
+
+    public function simpleQuery($query)
+    {
+        throw new NotImplementedException();
     }
 }

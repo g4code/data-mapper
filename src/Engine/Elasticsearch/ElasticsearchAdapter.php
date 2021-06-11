@@ -273,4 +273,9 @@ class ElasticsearchAdapter implements AdapterInterface
 
         return $data;
     }
+
+    public function simpleQuery($query)
+    {
+        throw new NotImplementedException();
+    }
 }

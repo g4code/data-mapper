@@ -5,6 +5,7 @@ namespace G4\DataMapper\Engine\MySQL;
 use G4\DataMapper\Common\AdapterInterface;
 use G4\DataMapper\Common\CollectionNameInterface;
 use G4\DataMapper\Common\MappingInterface;
+use G4\DataMapper\Common\SimpleRawData;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\Exception\InvalidValueException;
@@ -345,6 +346,32 @@ class MySQLAdapter implements AdapterInterface
             $total = $this->client->fetchOne('SELECT FOUND_ROWS()');
 
             return new RawData($data, $total);
+        }
+
+        throw new InvalidValueException('Query does not match a known pattern (insert, delete, update, select)');
+    }
+
+    /**
+     * @param string $query
+     * @return SimpleRawData|void
+     * @throws EmptyDataException
+     * @throws InvalidValueException
+     */
+    public function simpleQuery($query)
+    {
+        if (empty($query)) {
+            throw new EmptyDataException('Query can not be empty');
+        }
+
+        if (preg_match('~^\s*(insert\sinto|delete\sfrom|update\s)~usxi', $query) === 1) {
+            $this->client->query($query);
+            return;
+        }
+
+        if (preg_match('~^\s*(select\s)~usxi', $query) === 1) {
+            $data = $this->client->fetchAll($query);
+
+            return new SimpleRawData($data);
         }
 
         throw new InvalidValueException('Query does not match a known pattern (insert, delete, update, select)');

@@ -1,9 +1,6 @@
 <?php
 
 use G4\DataMapper\Engine\MySQL\MySQLMapper;
-use G4\DataMapper\Engine\MySQL\MySQLAdapter;
-use G4\DataMapper\Common\MappingInterface;
-use G4\DataMapper\Engine\MySQL\MySQLTableName;
 use G4\DataMapper\Exception\MySQLMapperException;
 
 class MySQLMapperTest extends PHPUnit_Framework_TestCase
@@ -190,5 +187,27 @@ class MySQLMapperTest extends PHPUnit_Framework_TestCase
         $this->expectException(\G4\DataMapper\Exception\MySQLMapperException::class);
 
         $this->mapper->query('sql');
+    }
+
+    public function testSimpleQuery()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('simpleQuery')
+            ->willReturn(true);
+
+        $this->mapper->simpleQuery('query sql');
+    }
+
+    public function testSimpleQueryException()
+    {
+        $this->adapterMock
+            ->expects($this->once())
+            ->method('simpleQuery')
+            ->willThrowException(new MySQLMapperException(self::MYSQL_DATA_MAPPER_ERROR_MESSAGE));
+
+        $this->expectException(\G4\DataMapper\Exception\MySQLMapperException::class);
+
+        $this->mapper->simpleQuery('query sql');
     }
 }

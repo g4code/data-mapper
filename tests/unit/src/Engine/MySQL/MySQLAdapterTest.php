@@ -455,4 +455,35 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->getMock();
         return $mappingStub;
     }
+
+    public function testSimpleQueryForSelect()
+    {
+        $query  = ' select * from table_name where 1 group by id limit 0,100';;
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with($query)
+            ->willReturn([['data' => 1]]);
+
+        $this->assertInstanceOf(\G4\DataMapper\Common\SimpleRawData::class, $this->adapter->simpleQuery($query));
+    }
+
+    public function testSimpleQueryWithEmptyQuery()
+    {
+        $this->expectException(\G4\DataMapper\Exception\EmptyDataException::class);
+        $this->expectExceptionCode(10105);
+        $this->expectExceptionMessage('Query can not be empty');
+
+        $this->adapter->simpleQuery('');
+    }
+
+    public function testSimpleQueryWithUnknown()
+    {
+        $this->expectException(\G4\DataMapper\Exception\InvalidValueException::class);
+        $this->expectExceptionCode(14010);
+        $this->expectExceptionMessage('Query does not match a known pattern (insert, delete, update, select)');
+
+        $this->adapter->simpleQuery('tralala');
+    }
 }
