@@ -74,10 +74,10 @@ class MySQLClientFactory implements CreateInterface
             'username' => $params['username'],
             'password' => $params['password'],
             'dbname'   => $params['dbname'],
-            'charset'  => self::CHARSET,
+            'charset'  => isset($params['charset']) ? $params['charset'] : self::CHARSET,
             'driver_options' => [
-                1002 => self::CHARSET_NAMES,
-            ]
+                1002 => isset($params['driver_options'][1002]) ? $params['driver_options'][1002] : self::CHARSET_NAMES,
+            ],
         ];
     }
 }
