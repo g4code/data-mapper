@@ -123,7 +123,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
     private function makeComparisonFormatter()
     {
-        return new ElasticsearchComparisonFormatter();
+        return new ElasticsearchComparisonFormatter($this->identity);
     }
 
     /**

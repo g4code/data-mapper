@@ -56,12 +56,18 @@ class Identity implements IdentityInterface
      */
     private $sorting;
 
+    /**
+     * @var int
+     */
+    private $version;
 
-    public function __construct()
+
+    public function __construct($version = 0)
     {
         $this->fields   = [];
         $this->sorting  = [];
         $this->grouping = [];
+        $this->version = $version;
     }
 
     /**
@@ -307,6 +313,14 @@ class Identity implements IdentityInterface
     {
         $this->fieldNames = $fieldNames;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     protected function arrayException($value)
