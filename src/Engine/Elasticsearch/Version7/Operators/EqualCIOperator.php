@@ -23,8 +23,7 @@ class EqualCIOperator implements QueryOperatorInterface
         return [
             QueryConnector::MATCH => [
                 $this->name => [
-                    QueryConnector::NAME_QUERY_STRING_QUERY => $this->value->getValue(),
-                    QueryConnector::TYPE => "phrase"
+                    QueryConnector::NAME_QUERY_STRING_QUERY => $this->value->getValue()
                 ]
             ]
         ];
