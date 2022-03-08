@@ -49,6 +49,4 @@ interface IdentityInterface
     public function setFieldNames(array $fieldNames);
 
     public function between($min, $max);
-
-    public function getVersion();
 }

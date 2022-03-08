@@ -36,4 +36,6 @@ interface ElasticsearchIdentityInterface
      * @return ElasticsearchIdentity
      */
     public function likeCI($value);
+
+    public function getVersion();
 }
