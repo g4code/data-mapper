@@ -7,7 +7,6 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\ValueInterface;
 use G4\DataMapper\Engine\Elasticsearch\Operators\BetweenOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\EqualOperator;
-use G4\DataMapper\Engine\Elasticsearch\Operators\EqualCIOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\GreaterThanOrEqualOperator;
 use G4\DataMapper\Engine\Elasticsearch\Operators\InOperator;
@@ -30,6 +29,11 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
     const RANGE                 = 'range';
     const TERMS                 = 'terms';
 
+    public function __construct(ElasticsearchIdentity $identity)
+    {
+        $this->identity = $identity;
+    }
+
     public function format($name, Operator $operator, ValueInterface $value)
     {
         //TODO:Vladan:This should be refactored.
@@ -42,7 +46,7 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 $query = new EqualOperator($name, $value);
                 break;
             case Operator::EQUAL_CI:
-                $query = new EqualCIOperator($name, $value);
+                $query = $this->getOperatorBasedOnEsVersion('EqualCIOperator', $name, $value);
                 break;
             case Operator::GRATER_THAN:
                 $query = new GreaterThanOperator($name, $value);
@@ -80,5 +84,17 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
         }
 
         return $query->format();
+    }
+
+    private function getOperatorBasedOnEsVersion($operatorName, $name, $value)
+    {
+        $version = $this->identity->getVersion();
+        $versionedPath = "G4\\DataMapper\\Engine\\Elasticsearch\\Version$version\\Operators\\$operatorName";
+        if (class_exists($versionedPath)) {
+            return new $versionedPath($name, $value);
+        }
+
+        $defaultPath = "G4\\DataMapper\\Engine\\Elasticsearch\\Operators\\$operatorName";
+        return new $defaultPath($name, $value);
     }
 }

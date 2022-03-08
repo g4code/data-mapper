@@ -3,6 +3,7 @@
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
+use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 
 class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +19,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->comparisonFormatter = new ElasticsearchComparisonFormatter();
+        $this->comparisonFormatter = new ElasticsearchComparisonFormatter(new ElasticsearchIdentity(2));
 
         $this->operatorMock = $this->getMockBuilder(\G4\DataMapper\Common\Selection\Operator::class)
             ->disableOriginalConstructor()
@@ -54,6 +55,25 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
                 ]
             ]],
             $this->comparisonFormatter->format('email', $this->operatorMock, new SingleValue('text@example.com'))
+        );
+    }
+
+    public function testEqualCIEsVersion7()
+    {
+        $comparisonFormatter = new ElasticsearchComparisonFormatter(new ElasticsearchIdentity(7));
+
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::EQUAL_CI);
+
+        $this->assertEquals(
+            ['match' => [
+                'email' => [
+                    'query' => 'text@example.com',
+                    'type' => 'phrase'
+                ]
+            ]],
+            $comparisonFormatter->format('email', $this->operatorMock, new SingleValue('text@example.com'))
         );
     }
 

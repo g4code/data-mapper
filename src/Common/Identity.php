@@ -56,7 +56,6 @@ class Identity implements IdentityInterface
      */
     private $sorting;
 
-
     public function __construct()
     {
         $this->fields   = [];

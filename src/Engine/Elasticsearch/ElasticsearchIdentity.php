@@ -27,6 +27,17 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     private $rawQuery;
 
     /**
+     * @var int
+     */
+    private $version;
+
+
+    public function __construct($version = 2)
+    {
+        parent::__construct();
+        $this->version = $version;
+    }
+    /**
      * @param $latitude
      * @param $longitude
      * @param $distance
@@ -145,5 +156,13 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
         $this->arrayException($value);
         $this->operator(Operator::EQUAL_CI, new SingleValue($value));
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }

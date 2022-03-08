@@ -13,7 +13,11 @@ class Content extends CollectionAbstract
     {
         $this->_setRawData($rawData);
         $this->_factoryDomainName = $factoryDomainName;
-        $this->_totalItemsCount   = intval($count);
+        if (is_array($count) && isset($count['value'])) {
+            $this->_totalItemsCount = $count['value'];
+        } else {
+            $this->_totalItemsCount = intval($count);
+        }
     }
 
     protected function _factory()
