@@ -69,8 +69,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             ['match' => [
                 'email' => [
-                    'query' => 'text@example.com',
-                    'type' => 'phrase'
+                    'query' => 'text@example.com'
                 ]
             ]],
             $comparisonFormatter->format('email', $this->operatorMock, new SingleValue('text@example.com'))

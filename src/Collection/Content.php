@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Collection;
 
+use G4\DataMapper\Domain\TotalCount;
+
 class Content extends CollectionAbstract
 {
     private $_factoryDomainName;
@@ -13,11 +15,7 @@ class Content extends CollectionAbstract
     {
         $this->_setRawData($rawData);
         $this->_factoryDomainName = $factoryDomainName;
-        if (is_array($count) && isset($count['value'])) {
-            $this->_totalItemsCount = $count['value'];
-        } else {
-            $this->_totalItemsCount = intval($count);
-        }
+        $this->_totalItemsCount = (new TotalCount($count))->getValue();
     }
 
     protected function _factory()
