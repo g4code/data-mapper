@@ -73,7 +73,7 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
                 $query = new LikeOperator($name, $value);
                 break;
             case Operator::LIKE_CI:
-                $query = new LikeCIOperator($name, $value);
+                $query = $this->getOperatorBasedOnEsVersion('LikeCIOperator', $name, $value);
                 break;
             case Operator::MISSING:
                 $query = new MissingOperator($name, $value);

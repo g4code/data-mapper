@@ -4,12 +4,12 @@
 namespace G4\DataMapper\Engine\Elasticsearch;
 
 use Elasticsearch\Common\Exceptions\ClientErrorResponseException;
+use G4\DataMapper\Domain\TotalCount;
 
 class ElasticsearchResponse
 {
 
     const KEY_HITS  = 'hits';
-    const KEY_TOTAL = 'total';
 
     const KEY_ERROR      = 'error';
     const KEY_TYPE       = 'type';
@@ -50,13 +50,11 @@ class ElasticsearchResponse
      */
     public function getTotal()
     {
-        if ($this->hasError()) {
+        if ($this->hasError() || !array_key_exists(self::KEY_HITS, $this->decodedResponse)) {
             return 0;
+        } else {
+            return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
         }
-        return array_key_exists(self::KEY_HITS, $this->decodedResponse)
-        && array_key_exists(self::KEY_TOTAL, $this->decodedResponse[self::KEY_HITS])
-            ? $this->decodedResponse[self::KEY_HITS][self::KEY_TOTAL]
-            : 0;
     }
 
     /**

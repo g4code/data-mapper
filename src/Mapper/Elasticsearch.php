@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Mapper;
 
+use G4\DataMapper\Domain\TotalCount;
 use G4\DataMapper\Selection\Elasticsearch\Factory as SelectionFactory;
 use G4\DataMapper\Selection\Elasticsearch\Identity as SelectionIdentity;
 use G4\DataMapper\Adapter\Elasticsearch\Client as Adapter;
@@ -160,10 +161,8 @@ class Elasticsearch
      */
     private function getTotalItemsCount()
     {
-        $totalItemsCount = 0;
-        if (!empty($this->response['hits']['total'])) {
-            $totalItemsCount = $this->response['hits']['total'];
-        }
+        $totalItemsCount = (new TotalCount($this->response['hits']))->getValue();
+
         if (!empty($this->response['aggregations']) && !empty($this->response['aggregations']['group_by']['buckets'])) {
             $totalItemsCount = count($this->response['aggregations']['group_by']['buckets']);
         }
