@@ -159,7 +159,9 @@ class ElasticsearchClient
 
     private function prepareBodyData()
     {
-        $this->body = json_encode($this->body);
+        if (!empty($this->body)) {
+            $this->body = json_encode($this->body);
+        }
         return $this;
     }
 
@@ -167,6 +169,8 @@ class ElasticsearchClient
     {
         $compiledBody = '';
         foreach ($this->body as $line) {
+            //TODO: if line === null, json_encode will convert it to string 'null'.
+            // ES7 has a problem with that for methods that don't expect body (example: DELETE).
             $compiledBody .= json_encode($line) . "\n";
         }
         $this->body = $compiledBody;
@@ -194,7 +198,7 @@ class ElasticsearchClient
         $error = curl_error($handle);
 
         if ($error) {
-            throw new ClientException(sprintf("Submit curl request failed. Error: %s",  $error));
+            throw new ClientException(sprintf("Submit curl request failed. Error: %s", $error));
         }
 
         $info = curl_getinfo($handle);
