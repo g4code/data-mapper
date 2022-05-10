@@ -12,6 +12,8 @@ interface ElasticsearchIdentityInterface
 
     public function setRawQuery($value);
 
+    public function setRawQueryWrapped($value);
+
     public function getRawQuery();
 
     public function hasRawQuery();

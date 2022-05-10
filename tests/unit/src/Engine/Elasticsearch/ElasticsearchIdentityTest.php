@@ -1,5 +1,6 @@
 <?php
 
+use G4\DataMapper\Common\QueryConnector;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 
 class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
@@ -33,6 +34,19 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->elasticsearchIdentity->setRawQuery('test query');
 
         $this->assertEquals('test query', $this->elasticsearchIdentity->getRawQuery());
+    }
+
+    public function testGetRawQueryWrapped()
+    {
+        $this->elasticsearchIdentity->setRawQueryWrapped('test query');
+
+        $expected = [
+            QueryConnector::NAME_QUERY_STRING => [
+                QueryConnector::NAME_QUERY_STRING_QUERY => 'test query'
+            ]
+        ];
+
+        $this->assertEquals($expected, $this->elasticsearchIdentity->getRawQuery());
     }
 
     public function testHasRawQuery()

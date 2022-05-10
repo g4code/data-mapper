@@ -2,7 +2,7 @@ TITLE = [data-mapper]
 
 unit-tests:
 	@/bin/echo "${TITLE} unit test suite started..." \
-	&& ./vendor/bin/phpunit -c tests/unit/phpunit.xml --coverage-html tests/unit/coverage
+	&& XDEBUG_MODE=off php5.6 ./vendor/bin/phpunit -c tests/unit/phpunit.xml --coverage-html tests/unit/coverage
 
 integration-tests:
 	@/bin/echo "${TITLE} starting virtual machine ..." \
