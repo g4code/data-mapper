@@ -4,6 +4,7 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\CoordinatesValue;
+use G4\DataMapper\Common\QueryConnector;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\Selection\Sort;
 use G4\DataMapper\Common\SingleValue;
@@ -81,6 +82,20 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function setRawQuery($value)
     {
         $this->rawQuery = $value;
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return ElasticsearchIdentity
+     */
+    public function setRawQueryWrapped($value)
+    {
+        $this->rawQuery = [
+            QueryConnector::NAME_QUERY_STRING => [
+                QueryConnector::NAME_QUERY_STRING_QUERY => $value
+            ]
+        ];
         return $this;
     }
 
