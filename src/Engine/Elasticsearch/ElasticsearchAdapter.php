@@ -23,8 +23,11 @@ class ElasticsearchAdapter implements AdapterInterface
     const ELASTIC_BULK_ACTION_DELETE = 'delete';
     const ELASTIC_PARAM_ID           = '_id';
     const ELASTIC_PAYLOAD_TYPE_DOC   = 'doc';
+    const DEFAULT_LIMIT_RESULT = 20;
 
     private $client;
+
+    private $perPage;
 
     public function __construct(ElasticsearchClientFactory $clientFactory)
     {
@@ -126,6 +129,39 @@ class ElasticsearchAdapter implements AdapterInterface
         }
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
+    }
+
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $listOfEsSelectionFactories
+     * @return RawData
+     */
+    public function multiSelect(CollectionNameInterface $collectionName, array $listOfEsSelectionFactories)
+    {
+        $queries = $this->getQueries($listOfEsSelectionFactories);
+
+        $body = $this->formatMultiSearchBody($queries);
+
+        $data = $this->client
+            ->setIndex($collectionName)
+            ->setBody($body);
+
+        $data->multiSearch();
+
+
+        if ($this->client->hasError()) {
+            throw new ClientException(sprintf(
+                "error=%s, body=%s, url=%s",
+                $this->client->getErrorMessage(),
+                json_encode($body),
+                (string) $this->client->getUrl()
+            ));
+        }
+
+        $formattedData = $this->formatMultiData($data->getResponse());
+
+        return new RawData($formattedData, count($formattedData));
     }
 
     /**
@@ -230,7 +266,7 @@ class ElasticsearchAdapter implements AdapterInterface
      * @return array
      * @throws EmptyDataException
      */
-    private function prepareBulkUpdateData(IdentifiableMapperInterface ... $mappings)
+    private function prepareBulkUpdateData(IdentifiableMapperInterface ...$mappings)
     {
         $data = [];
         foreach ($mappings as $mapping) {
@@ -256,7 +292,7 @@ class ElasticsearchAdapter implements AdapterInterface
      * @return array
      * @throws EmptyDataException
      */
-    private function prepareBulkDeleteData(IdentifiableMapperInterface ... $mappings)
+    private function prepareBulkDeleteData(IdentifiableMapperInterface ...$mappings)
     {
         $data = [];
         foreach ($mappings as $mapping) {
@@ -277,5 +313,45 @@ class ElasticsearchAdapter implements AdapterInterface
     public function simpleQuery($query)
     {
         throw new NotImplementedException();
+    }
+
+    private function getQueries(array $listOfEsSelectionFactories)
+    {
+        $queries = [];
+
+        /** @var ElasticsearchSelectionFactory $selectionFactory */
+
+        //maybe better than putting it in foreach and setting it 1-4 times.
+        $this->perPage = $listOfEsSelectionFactories[0]->limit();
+
+        foreach ($listOfEsSelectionFactories as $selectionFactory) {
+            $queries[] = json_encode([
+                'from'    => $selectionFactory->offset(),
+                'size'    => $selectionFactory->limit(),
+                'query'   => $selectionFactory->where(),
+                'sort'    => $selectionFactory->sort(),
+                '_source' => $selectionFactory->fieldNames()
+            ], true);
+        }
+        return $queries;
+    }
+
+    private function formatMultiData(array $data)
+    {
+        $multiFormattedData = [];
+        foreach ($data as $singleItem) {
+            $multiFormattedData = array_merge($multiFormattedData, $this->formatData($singleItem));
+        }
+
+        shuffle($multiFormattedData);
+
+        $offset = $this->perPage ?: self::DEFAULT_LIMIT_RESULT;
+
+        return array_slice($multiFormattedData, 0, $offset);
+    }
+
+    private function formatMultiSearchBody(array $queries)
+    {
+        return PHP_EOL . '{}' . PHP_EOL . implode(PHP_EOL . '{}' . PHP_EOL, $queries) . PHP_EOL;
     }
 }

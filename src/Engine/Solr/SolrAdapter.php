@@ -181,4 +181,15 @@ class SolrAdapter implements AdapterInterface
     {
         throw new NotImplementedException();
     }
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data
+     * @return void
+     * @throws NotImplementedException
+     */
+    public function multiSelect(CollectionNameInterface $collectionName, array $data)
+    {
+        throw new NotImplementedException();
+    }
 }
