@@ -23,7 +23,6 @@ class ElasticsearchAdapter implements AdapterInterface
     const ELASTIC_BULK_ACTION_DELETE = 'delete';
     const ELASTIC_PARAM_ID           = '_id';
     const ELASTIC_PAYLOAD_TYPE_DOC   = 'doc';
-    const DEFAULT_LIMIT_RESULT = 20;
 
     private $client;
 
@@ -106,13 +105,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
-        $body = [
-            'from'    => $selectionFactory->offset(),
-            'size'    => $selectionFactory->limit(),
-            'query'   => $selectionFactory->where(),
-            'sort'    => $selectionFactory->sort(),
-            '_source' => $selectionFactory->fieldNames()
-        ];
+        $body = $this->getBody($selectionFactory);
 
         $data = $this->client
             ->setIndex($collectionName)
@@ -134,20 +127,20 @@ class ElasticsearchAdapter implements AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
-     * @param array $listOfEsSelectionFactories
-     * @return RawData
+     * @param array $data SelectionFactoryInterface[]
+     * @return array
      */
-    public function multiSelect(CollectionNameInterface $collectionName, array $listOfEsSelectionFactories)
+    public function multiSelect(CollectionNameInterface $collectionName, array $data)
     {
-        $queries = $this->getQueries($listOfEsSelectionFactories);
+        $queries = $this->getQueries($data);
 
         $body = $this->formatMultiSearchBody($queries);
 
-        $data = $this->client
+        $this->client
             ->setIndex($collectionName)
             ->setBody($body);
 
-        $data->multiSearch();
+        $this->client->multiSearch();
 
 
         if ($this->client->hasError()) {
@@ -159,9 +152,7 @@ class ElasticsearchAdapter implements AdapterInterface
             ));
         }
 
-        $formattedData = $this->formatMultiData($data->getResponse());
-
-        return new RawData($formattedData, count($formattedData));
+        return  $this->formatMultiData($this->client->getResponse());
     }
 
     /**
@@ -321,17 +312,8 @@ class ElasticsearchAdapter implements AdapterInterface
 
         /** @var ElasticsearchSelectionFactory $selectionFactory */
 
-        //maybe better than putting it in foreach and setting it 1-4 times.
-        $this->perPage = $listOfEsSelectionFactories[0]->limit();
-
         foreach ($listOfEsSelectionFactories as $selectionFactory) {
-            $queries[] = json_encode([
-                'from'    => $selectionFactory->offset(),
-                'size'    => $selectionFactory->limit(),
-                'query'   => $selectionFactory->where(),
-                'sort'    => $selectionFactory->sort(),
-                '_source' => $selectionFactory->fieldNames()
-            ], true);
+            $queries[] = json_encode($this->getBody($selectionFactory), true);
         }
         return $queries;
     }
@@ -340,18 +322,25 @@ class ElasticsearchAdapter implements AdapterInterface
     {
         $multiFormattedData = [];
         foreach ($data as $singleItem) {
-            $multiFormattedData = array_merge($multiFormattedData, $this->formatData($singleItem));
+            $multiFormattedData = (new RawData($this->formatData($singleItem), count($singleItem['hits'])));
         }
 
-        shuffle($multiFormattedData);
-
-        $offset = $this->perPage ?: self::DEFAULT_LIMIT_RESULT;
-
-        return array_slice($multiFormattedData, 0, $offset);
+        return $multiFormattedData;
     }
 
     private function formatMultiSearchBody(array $queries)
     {
         return PHP_EOL . '{}' . PHP_EOL . implode(PHP_EOL . '{}' . PHP_EOL, $queries) . PHP_EOL;
+    }
+
+    private function getBody(SelectionFactoryInterface $selectionFactory)
+    {
+        return [
+            'from'    => $selectionFactory->offset(),
+            'size'    => $selectionFactory->limit(),
+            'query'   => $selectionFactory->where(),
+            'sort'    => $selectionFactory->sort(),
+            '_source' => $selectionFactory->fieldNames()
+        ];
     }
 }

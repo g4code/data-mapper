@@ -14,6 +14,7 @@ class ElasticsearchResponse
     const KEY_ERROR      = 'error';
     const KEY_TYPE       = 'type';
     const KEY_ROOT_CAUSE = 'root_cause';
+    const KEY_RESPONSES_M_SEARCH = 'responses';
 
     /**
      * @var array
@@ -40,9 +41,8 @@ class ElasticsearchResponse
      */
     public function getHits()
     {
-        return array_key_exists(self::KEY_HITS, $this->decodedResponse)
-            ? $this->decodedResponse[self::KEY_HITS]
-            : [];
+        return array_key_exists(self::KEY_RESPONSES_M_SEARCH, $this->decodedResponse)
+            ? $this->getHitFromMultiSearch() : $this->getHitsFromSearch();
     }
 
     /**
@@ -82,5 +82,24 @@ class ElasticsearchResponse
             $this->decodedResponse[self::KEY_ERROR][self::KEY_TYPE],
             $this->decodedResponse[self::KEY_ERROR][self::KEY_ROOT_CAUSE],
         ]);
+    }
+
+    private function getHitFromMultiSearch()
+    {
+        $multiSearchHits = [];
+        foreach ($this->decodedResponse[self::KEY_RESPONSES_M_SEARCH] as $singleHits) {
+            if (array_key_exists(self::KEY_HITS, $singleHits)) {
+                $multiSearchHits[] = $singleHits[self::KEY_HITS];
+            };
+        }
+
+        return $multiSearchHits;
+    }
+
+    private function getHitsFromSearch()
+    {
+        return array_key_exists(self::KEY_HITS, $this->decodedResponse)
+            ? $this->decodedResponse[self::KEY_HITS]
+            : [];
     }
 }
