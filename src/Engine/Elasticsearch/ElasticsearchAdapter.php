@@ -322,7 +322,7 @@ class ElasticsearchAdapter implements AdapterInterface
     {
         $multiFormattedData = [];
         foreach ($data as $singleItem) {
-            $multiFormattedData = (new RawData($this->formatData($singleItem), count($singleItem['hits'])));
+            $multiFormattedData[] = (new RawData($this->formatData($singleItem), count($singleItem['hits'])));
         }
 
         return $multiFormattedData;
