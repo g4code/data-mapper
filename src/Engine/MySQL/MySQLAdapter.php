@@ -376,4 +376,15 @@ class MySQLAdapter implements AdapterInterface
 
         throw new InvalidValueException('Query does not match a known pattern (insert, delete, update, select)');
     }
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data
+     * @return void
+     * @throws NotImplementedException
+     */
+    public function multiSelect(CollectionNameInterface $collectionName, array $data)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -84,4 +84,11 @@ interface AdapterInterface
      * @throws InvalidValueException
      */
     public function simpleQuery($query);
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data
+     * @return mixed
+     */
+    public function multiSelect(CollectionNameInterface $collectionName, array $data);
 }

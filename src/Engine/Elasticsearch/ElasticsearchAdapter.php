@@ -26,6 +26,8 @@ class ElasticsearchAdapter implements AdapterInterface
 
     private $client;
 
+    private $perPage;
+
     public function __construct(ElasticsearchClientFactory $clientFactory)
     {
         $this->client = $clientFactory->create();
@@ -103,13 +105,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function select(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
     {
-        $body = [
-            'from'    => $selectionFactory->offset(),
-            'size'    => $selectionFactory->limit(),
-            'query'   => $selectionFactory->where(),
-            'sort'    => $selectionFactory->sort(),
-            '_source' => $selectionFactory->fieldNames()
-        ];
+        $body = $this->getBody($selectionFactory);
 
         $data = $this->client
             ->setIndex($collectionName)
@@ -126,6 +122,37 @@ class ElasticsearchAdapter implements AdapterInterface
         }
 
         return new RawData($this->formatData($data->getResponse()), $data->getTotalItemsCount());
+    }
+
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param array $data SelectionFactoryInterface[]
+     * @return array
+     */
+    public function multiSelect(CollectionNameInterface $collectionName, array $data)
+    {
+        $queries = $this->getQueries($data);
+
+        $body = $this->formatMultiSearchBody($queries);
+
+        $this->client
+            ->setIndex($collectionName)
+            ->setBody($body);
+
+        $this->client->multiSearch();
+
+
+        if ($this->client->hasError()) {
+            throw new ClientException(sprintf(
+                "error=%s, body=%s, url=%s",
+                $this->client->getErrorMessage(),
+                json_encode($body),
+                (string) $this->client->getUrl()
+            ));
+        }
+
+        return  $this->formatMultiData($this->client->getResponse());
     }
 
     /**
@@ -230,7 +257,7 @@ class ElasticsearchAdapter implements AdapterInterface
      * @return array
      * @throws EmptyDataException
      */
-    private function prepareBulkUpdateData(IdentifiableMapperInterface ... $mappings)
+    private function prepareBulkUpdateData(IdentifiableMapperInterface ...$mappings)
     {
         $data = [];
         foreach ($mappings as $mapping) {
@@ -256,7 +283,7 @@ class ElasticsearchAdapter implements AdapterInterface
      * @return array
      * @throws EmptyDataException
      */
-    private function prepareBulkDeleteData(IdentifiableMapperInterface ... $mappings)
+    private function prepareBulkDeleteData(IdentifiableMapperInterface ...$mappings)
     {
         $data = [];
         foreach ($mappings as $mapping) {
@@ -277,5 +304,43 @@ class ElasticsearchAdapter implements AdapterInterface
     public function simpleQuery($query)
     {
         throw new NotImplementedException();
+    }
+
+    private function getQueries(array $listOfEsSelectionFactories)
+    {
+        $queries = [];
+
+        /** @var ElasticsearchSelectionFactory $selectionFactory */
+
+        foreach ($listOfEsSelectionFactories as $selectionFactory) {
+            $queries[] = json_encode($this->getBody($selectionFactory), true);
+        }
+        return $queries;
+    }
+
+    private function formatMultiData(array $data)
+    {
+        $multiFormattedData = [];
+        foreach ($data as $singleItem) {
+            $multiFormattedData = (new RawData($this->formatData($singleItem), count($singleItem['hits'])));
+        }
+
+        return $multiFormattedData;
+    }
+
+    private function formatMultiSearchBody(array $queries)
+    {
+        return PHP_EOL . '{}' . PHP_EOL . implode(PHP_EOL . '{}' . PHP_EOL, $queries) . PHP_EOL;
+    }
+
+    private function getBody(SelectionFactoryInterface $selectionFactory)
+    {
+        return [
+            'from'    => $selectionFactory->offset(),
+            'size'    => $selectionFactory->limit(),
+            'query'   => $selectionFactory->where(),
+            'sort'    => $selectionFactory->sort(),
+            '_source' => $selectionFactory->fieldNames()
+        ];
     }
 }
