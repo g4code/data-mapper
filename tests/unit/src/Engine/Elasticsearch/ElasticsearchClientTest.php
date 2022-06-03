@@ -48,7 +48,7 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->elasticsearchClient = new ElasticsearchClient($this->urlMock);
+        $this->elasticsearchClient = new ElasticsearchClient($this->urlMock, null, 5);
     }
 
     protected function tearDown()

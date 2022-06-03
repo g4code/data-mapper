@@ -44,7 +44,11 @@ class ElasticsearchClientFactory implements CreateInterface
             $this->params['host']
         );
 
-        return new ElasticsearchClient($url->port(new PortNumber($this->params['port'])), $this->params['index_type']);
+        return new ElasticsearchClient(
+            $url->port(new PortNumber($this->params['port'])),
+            $this->params['index_type'],
+            $this->params['timeout']
+        );
     }
 
     /**
@@ -66,6 +70,7 @@ class ElasticsearchClientFactory implements CreateInterface
             'host'     => $this->handleHostParameter($params['host']),
             'port'     => $params['port'],
             'index_type' => isset($params['index_type']) ? $params['index_type'] : null,
+            'timeout' => isset($params['timeout']) ? $params['timeout'] : null,
         ];
     }
 

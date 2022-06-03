@@ -24,6 +24,7 @@ class ElasticsearchClientFactoryTest extends PHPUnit_Framework_TestCase
         $this->params = [
             'host'     => [null, '127.0.0.1', null, null],
             'port'     => '9200',
+            'timeout' => 5,
         ];
 
         $this->clientFactory = new ElasticsearchClientFactory($this->params);
