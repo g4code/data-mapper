@@ -47,11 +47,14 @@ class ElasticsearchClient
      */
     private $profiler;
 
-    public function __construct(Url $url, $indexType = null)
+    private $timeout;
+
+    public function __construct(Url $url, $indexType = null, $timeout = null)
     {
         $this->url = $url;
         $this->indexType = $indexType ?: self::DOCUMENT;
         $this->profiler = ProfilerTickerElasticsearch::getInstance();
+        $this->timeout = $timeout ?: self::TIMEOUT;
     }
 
     public function execute()
@@ -197,7 +200,7 @@ class ElasticsearchClient
         curl_setopt_array($handle, [
             CURLOPT_POSTFIELDS     => $this->body,
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_TIMEOUT        => self::TIMEOUT,
+            CURLOPT_TIMEOUT        => $this->timeout,
             CURLOPT_URL            => (string) $this->url,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_CUSTOMREQUEST  => $this->method,
