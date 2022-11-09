@@ -192,7 +192,7 @@ class MySQLAdapter implements AdapterInterface
 
         $tableName = (string) $table;
 
-        $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values);
+        $query = "INSERT IGNORE INTO {$tableName} ({$fields}) VALUES " . implode(',', $values);
 
         $this->innerTransactionBegin();
         $this->client->query($query);
