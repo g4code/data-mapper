@@ -204,7 +204,7 @@ abstract class MysqlAbstract implements MapperInterface
             $values[] = "(" .implode(",", $quotedValues) . ")";
         }
 
-        $query    = "INSERT INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
+        $query    = "INSERT IGNORE INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
         $queryId  = $this->_db->getProfiler()->queryStart($query, \G4\DataMapper\Db\Db::getProfilerConstInsert());
 
         $this->innerTransactionBegin();
