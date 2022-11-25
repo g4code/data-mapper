@@ -8,6 +8,7 @@ use G4\DataMapper\Common\IdentifiableMapperInterface;
 use G4\DataMapper\Common\MappingInterface;
 use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Common\SelectionFactoryInterface;
+use G4\DataMapper\Domain\TotalCount;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\ValueObject\Dictionary;
 use G4\DataMapper\Exception\NotImplementedException;
@@ -127,8 +128,8 @@ class ElasticsearchAdapter implements AdapterInterface
 
     /**
      * @param CollectionNameInterface $collectionName
-     * @param array $data SelectionFactoryInterface[]
-     * @return array
+     * @param SelectionFactoryInterface[] $data
+     * @return RawData
      */
     public function multiSelect(CollectionNameInterface $collectionName, array $data)
     {
@@ -152,7 +153,33 @@ class ElasticsearchAdapter implements AdapterInterface
             ));
         }
 
-        return  $this->formatMultiData($this->client->getResponse());
+        return new RawData($this->formatMultiData($this->client->getResponse()), $this->client->getTotalItemsCount());
+    }
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param SelectionFactoryInterface $selectionFactory
+     * @return RawData
+     */
+    public function count(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
+    {
+        $body = ['query' => $selectionFactory->where()];
+
+        $data = $this->client
+            ->setIndex($collectionName)
+            ->setBody($body)
+            ->count();
+
+        if ($this->client->hasError()) {
+            throw new ClientException(sprintf(
+                "error=%s, body=%s, url=%s",
+                $this->client->getErrorMessage(),
+                json_encode($body),
+                (string) $this->client->getUrl()
+            ));
+        }
+
+        return new RawData([], $data->getTotalItemsCount());
     }
 
     /**
@@ -306,6 +333,8 @@ class ElasticsearchAdapter implements AdapterInterface
         throw new NotImplementedException();
     }
 
+    /** @param SelectionFactoryInterface[] $listOfEsSelectionFactories
+     */
     private function getQueries(array $listOfEsSelectionFactories)
     {
         $queries = [];
@@ -322,7 +351,7 @@ class ElasticsearchAdapter implements AdapterInterface
     {
         $multiFormattedData = [];
         foreach ($data as $singleItem) {
-            $multiFormattedData[] = (new RawData($this->formatData($singleItem), count($singleItem['hits'])));
+            $multiFormattedData[] = (new RawData($this->formatData($singleItem), (new TotalCount($singleItem))->getValue()));
         }
 
         return $multiFormattedData;
