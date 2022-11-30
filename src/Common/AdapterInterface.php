@@ -2,9 +2,6 @@
 
 namespace G4\DataMapper\Common;
 
-use G4\DataMapper\Common\MappingInterface;
-use G4\DataMapper\Common\SelectionFactoryInterface;
-use G4\DataMapper\Common\RawData;
 use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\Exception\InvalidValueException;
 
@@ -88,7 +85,15 @@ interface AdapterInterface
     /**
      * @param CollectionNameInterface $collectionName
      * @param array $data
-     * @return mixed
+     * @return RawData
      */
     public function multiSelect(CollectionNameInterface $collectionName, array $data);
+
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param SelectionFactoryInterface $selectionFactory
+     * @return RawData
+     */
+    public function count(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory);
 }

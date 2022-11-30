@@ -19,6 +19,7 @@ class ElasticsearchClient
     const RETRY_ON_CONFLICT = 'retry_on_conflict';
     const RETRY_COUNT       = 5;
     const MULTI_SEARCH       = '_msearch';
+    const COUNT             = '_count';
 
     private $index;
 
@@ -89,6 +90,17 @@ class ElasticsearchClient
         $this->method = self::METHOD_GET;
 
         $this->submitCurlRequest();
+
+        return $this;
+    }
+
+    public function count()
+    {
+        $this->url = $this->url->path($this->index, self::COUNT);
+
+        $this->method = self::METHOD_GET;
+
+        $this->executeCurlRequest();
 
         return $this;
     }

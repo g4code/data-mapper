@@ -3,7 +3,6 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
-use Elasticsearch\Common\Exceptions\ClientErrorResponseException;
 use G4\DataMapper\Domain\TotalCount;
 
 class ElasticsearchResponse
@@ -15,6 +14,7 @@ class ElasticsearchResponse
     const KEY_TYPE       = 'type';
     const KEY_ROOT_CAUSE = 'root_cause';
     const KEY_RESPONSES_M_SEARCH = 'responses';
+    const KEY_COUNT      = 'count';
 
     /**
      * @var array
@@ -50,10 +50,17 @@ class ElasticsearchResponse
      */
     public function getTotal()
     {
-        if ($this->hasError() || !array_key_exists(self::KEY_HITS, $this->decodedResponse)) {
-            return 0;
-        } else {
-            return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
+        switch (true) {
+            case $this->hasError():
+                return 0;
+            case array_key_exists(self::KEY_RESPONSES_M_SEARCH, $this->decodedResponse):
+                return $this->getTotalFromMultiSearch();
+            case array_key_exists(self::KEY_HITS, $this->decodedResponse):
+                return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
+            case array_key_exists(self::KEY_COUNT, $this->decodedResponse):
+                return (new TotalCount($this->decodedResponse[self::KEY_COUNT]))->getValue();
+            default:
+                return 0;
         }
     }
 
@@ -90,7 +97,7 @@ class ElasticsearchResponse
         foreach ($this->decodedResponse[self::KEY_RESPONSES_M_SEARCH] as $singleHits) {
             if (array_key_exists(self::KEY_HITS, $singleHits)) {
                 $multiSearchHits[] = $singleHits[self::KEY_HITS];
-            };
+            }
         }
 
         return $multiSearchHits;
@@ -101,5 +108,20 @@ class ElasticsearchResponse
         return array_key_exists(self::KEY_HITS, $this->decodedResponse)
             ? $this->decodedResponse[self::KEY_HITS]
             : [];
+    }
+
+    /**
+     * @return int
+     */
+    private function getTotalFromMultiSearch()
+    {
+        $multiSearchTotal = 0;
+        foreach ($this->decodedResponse[self::KEY_RESPONSES_M_SEARCH] as $singleHits) {
+            if (!$this->hasError() && array_key_exists(self::KEY_HITS, $singleHits)) {
+                $multiSearchTotal += (new TotalCount($singleHits[self::KEY_HITS]))->getValue();
+            }
+        }
+
+        return $multiSearchTotal;
     }
 }
