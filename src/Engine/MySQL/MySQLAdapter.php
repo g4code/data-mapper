@@ -387,4 +387,15 @@ class MySQLAdapter implements AdapterInterface
     {
         throw new NotImplementedException();
     }
+
+    /**
+     * @param CollectionNameInterface $collectionName
+     * @param SelectionFactoryInterface $selectionFactory
+     * @return void
+     * @throws NotImplementedException
+     */
+    public function count(CollectionNameInterface $collectionName, SelectionFactoryInterface $selectionFactory)
+    {
+        throw new NotImplementedException();
+    }
 }
