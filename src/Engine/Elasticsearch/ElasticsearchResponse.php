@@ -50,8 +50,18 @@ class ElasticsearchResponse
      */
     public function getTotal()
     {
-        return array_key_exists(self::KEY_RESPONSES_M_SEARCH, $this->decodedResponse)
-            ? $this->getTotalFromMultiSearch() : $this->getTotalFromSearch();
+        switch (true) {
+            case $this->hasError():
+                return 0;
+            case array_key_exists(self::KEY_RESPONSES_M_SEARCH, $this->decodedResponse):
+                return $this->getTotalFromMultiSearch();
+            case array_key_exists(self::KEY_HITS, $this->decodedResponse):
+                return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
+            case array_key_exists(self::KEY_COUNT, $this->decodedResponse):
+                return (new TotalCount($this->decodedResponse[self::KEY_COUNT]))->getValue();
+            default:
+                return 0;
+        }
     }
 
     /**
@@ -98,30 +108,6 @@ class ElasticsearchResponse
         return array_key_exists(self::KEY_HITS, $this->decodedResponse)
             ? $this->decodedResponse[self::KEY_HITS]
             : [];
-    }
-
-    /**
-     * @return int
-     */
-    private function getTotalFromCount()
-    {
-        if ($this->hasError() || !array_key_exists(self::KEY_COUNT, $this->decodedResponse)) {
-            return 0;
-        } else {
-            return (new TotalCount($this->decodedResponse[self::KEY_COUNT]))->getValue();
-        }
-    }
-
-    /**
-     * @return int
-     */
-    private function getTotalFromSearch()
-    {
-        if ($this->hasError() || !array_key_exists(self::KEY_HITS, $this->decodedResponse)) {
-            return $this->getTotalFromCount();
-        } else {
-            return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
-        }
     }
 
     /**
