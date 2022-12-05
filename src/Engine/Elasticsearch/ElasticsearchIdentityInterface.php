@@ -10,6 +10,18 @@ interface ElasticsearchIdentityInterface
 
     public function hasCoordinates();
 
+    public function geodistMin($latitude, $longitude, $distance);
+
+    public function getCoordinatesMin();
+
+    public function hasCoordinatesMin();
+
+    public function geodistMax($latitude, $longitude, $distance);
+
+    public function getCoordinatesMax();
+
+    public function hasCoordinatesMax();
+
     public function setRawQuery($value);
 
     public function setRawQueryWrapped($value);
