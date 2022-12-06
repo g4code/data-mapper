@@ -2,6 +2,8 @@
 
 namespace G4\DataMapper\Engine\Elasticsearch;
 
+use G4\DataMapper\Common\CoordinatesValue;
+
 class ElasticsearchGeodistFormatter
 {
     private $identity;
@@ -13,17 +15,27 @@ class ElasticsearchGeodistFormatter
 
     public function format()
     {
-        return $this->identity->hasCoordinates() ? $this->formatData() : [];
+        return $this->identity->hasCoordinates() ? $this->formatData($this->identity->getCoordinates()) : [];
     }
 
-    private function formatData()
+    public function formatMin()
+    {
+        return $this->identity->hasCoordinatesMin() ? $this->formatData($this->identity->getCoordinatesMin()) : [];
+    }
+
+    /**
+     * @param CoordinatesValue $coordinates
+     * @return array[]
+     *
+     */
+    private function formatData($coordinates)
     {
         return [
             'geo_distance' => [
-                'distance'     => $this->identity->getCoordinates()->getDistance() . 'km',
+                'distance'     => $coordinates->getDistance() . 'km',
                 'location' => [
-                    'lon' => $this->identity->getCoordinates()->getLongitude(),
-                    'lat' => $this->identity->getCoordinates()->getLatitude(),
+                    'lon' => $coordinates->getLongitude(),
+                    'lat' => $coordinates->getLatitude(),
                 ],
             ],
         ];

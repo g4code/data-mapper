@@ -18,6 +18,11 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     private $coordinates;
 
     /**
+     * @var CoordinatesValue
+     */
+    private $coordinatesMin;
+
+    /**
      * @var string
      */
     private $consistentRandomKey;
@@ -41,16 +46,17 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     /**
      * @param $latitude
      * @param $longitude
-     * @param $distance
+     * @param $distanceMax
+     * @param $distanceMin
      * @return ElasticsearchIdentity
      */
-    public function geodist($longitude, $latitude, $distance = null)
+    public function geodist($longitude, $latitude, $distanceMax = 1000000, $distanceMin = 0)
     {
-        if ($distance === null) {
-            $distance = 1000000;
+        if ($distanceMin > 0) {
+            $this->coordinatesMin = new CoordinatesValue($latitude, $longitude, $distanceMin);
         }
 
-        $this->coordinates = new CoordinatesValue($latitude, $longitude, $distance);
+        $this->coordinates = new CoordinatesValue($latitude, $longitude, $distanceMax);
 
         if ($this->hasCoordinates()) {
             $this->addSorting('_geo_distance', new ElasticsearchGeodistSort('_geo_distance', Sort::ASCENDING));
@@ -73,6 +79,22 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function hasCoordinates()
     {
         return !($this->coordinates === null || $this->coordinates->isEmpty());
+    }
+
+    /**
+     * @return CoordinatesValue
+     */
+    public function getCoordinatesMin()
+    {
+        return $this->coordinatesMin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCoordinatesMin()
+    {
+        return !($this->coordinatesMin === null || $this->coordinatesMin->isEmpty());
     }
 
     /**

@@ -40,4 +40,41 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([], $geodistFormatter->format());
     }
+
+    public function testFormatWithGeodistMinParameters()
+    {
+        $this->identity->geodist(5, 10, 100, 20);
+
+        $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
+
+        $expectedArray = [
+            'geo_distance' => [
+                'distance'     => '100km',
+                'location' => [
+                    'lon' => '10',
+                    'lat' => '5',
+                ],
+            ],
+        ];
+
+        $expectedArrayMin = [
+            'geo_distance' => [
+                'distance'     => '20km',
+                'location' => [
+                    'lon' => '10',
+                    'lat' => '5',
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expectedArray, $geodistFormatter->format());
+        $this->assertEquals($expectedArrayMin, $geodistFormatter->formatMin());
+    }
+
+    public function testFormatWithEmptyGeodistMinParameters()
+    {
+        $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
+
+        $this->assertEquals([], $geodistFormatter->formatMin());
+    }
 }

@@ -29,6 +29,20 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->elasticsearchIdentity->hasCoordinates());
     }
 
+    public function testGeodistMin()
+    {
+        $this->assertInstanceOf(ElasticsearchIdentity::class, $this->elasticsearchIdentity->field('location')->geodistMin(10, 15));
+    }
+
+    public function testHasCoordinatesMin()
+    {
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, 5, 100)->hasCoordinatesMin());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(null, null, 100)->hasCoordinatesMin());
+        $this->assertEquals(false, $this->elasticsearchIdentity->geodist(46, null, null)->hasCoordinatesMin());
+
+        $this->assertEquals(false, $this->elasticsearchIdentity->hasCoordinatesMin());
+    }
+
     public function testGetRawQuery()
     {
         $this->elasticsearchIdentity->setRawQuery('test query');

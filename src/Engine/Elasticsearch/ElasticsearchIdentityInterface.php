@@ -4,11 +4,15 @@ namespace G4\DataMapper\Engine\Elasticsearch;
 
 interface ElasticsearchIdentityInterface
 {
-    public function geodist($latitude, $longitude, $distance);
+    public function geodist($latitude, $longitude, $distanceMax, $distanceMin);
 
     public function getCoordinates();
 
     public function hasCoordinates();
+
+    public function getCoordinatesMin();
+
+    public function hasCoordinatesMin();
 
     public function setRawQuery($value);
 

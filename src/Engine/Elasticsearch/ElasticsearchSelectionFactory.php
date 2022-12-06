@@ -90,6 +90,12 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
             }
         }
 
+        $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
+
+        if ($this->identity->hasCoordinatesMin()) {
+            $comparisons['must_not'][] = $geodistFormatter->formatMin();
+        }
+
         if ($this->identity->hasRawQuery()) {
             $comparisons['must'][]= $this->identity->getRawQuery();
         }
@@ -98,7 +104,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
             $comparisons =  ['must' => ['match_all' => []]];
         }
 
-        $comparisons['filter'] = (new ElasticsearchGeodistFormatter($this->identity))->format();
+        $comparisons['filter'] = $geodistFormatter->format();
 
         return $this->addConsistentRandomKey(['bool' => $comparisons]);
     }
