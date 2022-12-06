@@ -23,11 +23,6 @@ class ElasticsearchGeodistFormatter
         return $this->identity->hasCoordinatesMin() ? $this->formatData($this->identity->getCoordinatesMin()) : [];
     }
 
-    public function formatMax()
-    {
-        return $this->identity->hasCoordinatesMax() ? $this->formatData($this->identity->getCoordinatesMax()) : [];
-    }
-
     /**
      * @param CoordinatesValue $coordinates
      * @return array[]

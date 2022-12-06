@@ -95,10 +95,6 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         if ($this->identity->hasCoordinatesMin()) {
             $comparisons['must_not'][] = $geodistFormatter->formatMin();
         }
-        if ($this->identity->hasCoordinatesMax()) {
-            $comparisons['must'][] = $geodistFormatter->formatMax();
-        }
-
 
         if ($this->identity->hasRawQuery()) {
             $comparisons['must'][]= $this->identity->getRawQuery();

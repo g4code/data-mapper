@@ -43,7 +43,7 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
 
     public function testFormatWithGeodistMinParameters()
     {
-        $this->identity->geodistMin(5, 10, 100);
+        $this->identity->geodist(5, 10, 100, 20);
 
         $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
 
@@ -57,7 +57,18 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertEquals($expectedArray, $geodistFormatter->formatMin());
+        $expectedArrayMin = [
+            'geo_distance' => [
+                'distance'     => '20km',
+                'location' => [
+                    'lon' => '10',
+                    'lat' => '5',
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expectedArray, $geodistFormatter->format());
+        $this->assertEquals($expectedArrayMin, $geodistFormatter->formatMin());
     }
 
     public function testFormatWithEmptyGeodistMinParameters()
@@ -65,32 +76,5 @@ class ElasticsearchGeodistFormatterTest extends \PHPUnit_Framework_TestCase
         $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
 
         $this->assertEquals([], $geodistFormatter->formatMin());
-    }
-
-
-    public function testFormatWithGeodistMaxParameters()
-    {
-        $this->identity->geodistMax(5, 10, 100);
-
-        $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
-
-        $expectedArray = [
-            'geo_distance' => [
-                'distance'     => '100km',
-                'location' => [
-                    'lon' => '10',
-                    'lat' => '5',
-                ],
-            ],
-        ];
-
-        $this->assertEquals($expectedArray, $geodistFormatter->formatMax());
-    }
-
-    public function testFormatWithEmptyGeodistMaxParameters()
-    {
-        $geodistFormatter = new ElasticsearchGeodistFormatter($this->identity);
-
-        $this->assertEquals([], $geodistFormatter->formatMax());
     }
 }
