@@ -60,9 +60,14 @@ abstract class MysqlAbstract implements MapperInterface
             ? (" ORDER BY " . join(',', $this->_getSelectionFactory()->orderBy($identity))) : '';
         $sql .= $identity->getLimit() ? (" LIMIT " . $identity->getLimit()) : '';
 
-        $this->innerTransactionBegin();
-        $stmt = $this->_db->query($sql);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $stmt = $this->_db->query($sql);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         return $stmt->rowCount();
     }
@@ -164,17 +169,33 @@ abstract class MysqlAbstract implements MapperInterface
         }
     }
 
+    private function innerTransactionRollback()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        if (!self::$_transactionActive && $this->innerTransactionStarted) {
+            $this->_db->rollBack();
+            $this->innerTransactionStarted = false;
+        }
+    }
+
     public function insert(DomainAbstract $domain)
     {
         $this->setRawDataFromDomain($domain);
 
-        $this->innerTransactionBegin();
-        $this->_db->insert($this->_getTablaName(), $this->_rawData);
+        try {
+            $this->innerTransactionBegin();
+            $this->_db->insert($this->_getTablaName(), $this->_rawData);
 
-        $lastId = $this->_db->lastInsertId();
-        $this->innerTransactionEnd();
-
-        $domain->setId($lastId);
+            $lastId = $this->_db->lastInsertId();
+            $this->innerTransactionEnd();
+            $domain->setId($lastId);
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         return isset($lastId) ? $lastId : false;
     }
@@ -207,9 +228,14 @@ abstract class MysqlAbstract implements MapperInterface
         $query    = "INSERT IGNORE INTO {$this->_getTablaName()} ({$fields}) VALUES " . implode(',', $values);
         $queryId  = $this->_db->getProfiler()->queryStart($query, \G4\DataMapper\Db\Db::getProfilerConstInsert());
 
-        $this->innerTransactionBegin();
-        $response = $this->_db->getConnection()->exec($query);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $response = $this->_db->getConnection()->exec($query);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         $this->_db->getProfiler()->queryEnd($queryId);
 
@@ -228,10 +254,14 @@ abstract class MysqlAbstract implements MapperInterface
 
         $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
-        $this->innerTransactionBegin();
-        $stmt = $this->_db->query($query, array_merge(array_values($this->_rawData), array_values($this->_rawData)));
-        $this->innerTransactionEnd();
-
+        try {
+            $this->innerTransactionBegin();
+            $stmt = $this->_db->query($query, array_merge(array_values($this->_rawData), array_values($this->_rawData)));
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         return $stmt->rowCount();
     }
@@ -292,9 +322,14 @@ abstract class MysqlAbstract implements MapperInterface
             $sql .= " LIMIT " . $sf->limit($identity);
         }
 
-        $this->innerTransactionBegin();
-        $response = $this->_db->query($sql, array_values($rawData));
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $response = $this->_db->query($sql, array_values($rawData));
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         return $response;
     }
@@ -425,9 +460,14 @@ abstract class MysqlAbstract implements MapperInterface
 
     private function _update($where)
     {
-        $this->innerTransactionBegin();
-        $res = $this->_db->update($this->_getTablaName(), $this->_rawData, $where);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $res = $this->_db->update($this->_getTablaName(), $this->_rawData, $where);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
 
         return $res;
     }

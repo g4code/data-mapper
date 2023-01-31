@@ -113,6 +113,18 @@ class MySQLAdapter implements AdapterInterface
         }
     }
 
+    private function innerTransactionRollback()
+    {
+        if (!$this->useInnerTransactions) {
+            return;
+        }
+
+        if (!$this->transactionActive && $this->innerTransactionStarted) {
+            $this->client->rollBack();
+            $this->innerTransactionStarted = false;
+        }
+    }
+
     /**
      * @param CollectionNameInterface $table
      * @param SelectionFactoryInterface $selectionFactory
@@ -132,9 +144,14 @@ class MySQLAdapter implements AdapterInterface
 
         $filteredQuery = preg_replace('/\s+/', ' ', trim($query));
 
-        $this->innerTransactionBegin();
-        $this->client->query($filteredQuery);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->query($filteredQuery);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -159,9 +176,14 @@ class MySQLAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for insert.');
         }
 
-        $this->innerTransactionBegin();
-        $this->client->insert((string) $table, $data);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->insert((string)$table, $data);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -194,9 +216,14 @@ class MySQLAdapter implements AdapterInterface
 
         $query = "INSERT IGNORE INTO {$tableName} ({$fields}) VALUES " . implode(',', $values);
 
-        $this->innerTransactionBegin();
-        $this->client->query($query);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->query($query);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -233,9 +260,14 @@ class MySQLAdapter implements AdapterInterface
         $query = "INSERT INTO {$tableName} ({$fields}) VALUES " . implode(',', $values) .
             " ON DUPLICATE KEY UPDATE ".$updatePartOfQueryFormatted;
 
-        $this->innerTransactionBegin();
-        $this->client->query($query);
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->query($query);
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -283,9 +315,14 @@ class MySQLAdapter implements AdapterInterface
             throw new EmptyDataException('Empty data for update');
         }
 
-        $this->innerTransactionBegin();
-        $this->client->update((string) $table, $data, $selectionFactory->where());
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->update((string)$table, $data, $selectionFactory->where());
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -319,9 +356,14 @@ class MySQLAdapter implements AdapterInterface
 
         $query = "INSERT INTO {$tableName} ({$fields}) VALUES ({$values}) ON DUPLICATE KEY UPDATE {$update}";
 
-        $this->innerTransactionBegin();
-        $this->client->query($query, array_merge(array_values($data), array_values($data)));
-        $this->innerTransactionEnd();
+        try {
+            $this->innerTransactionBegin();
+            $this->client->query($query, array_merge(array_values($data), array_values($data)));
+            $this->innerTransactionEnd();
+        } catch (\Exception $e) {
+            $this->innerTransactionRollback();
+            throw $e;
+        }
     }
 
     /**
