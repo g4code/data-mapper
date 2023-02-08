@@ -24,6 +24,8 @@ class Operator
     const GEODIST              = 'GEODIST';
     const MISSING              = 'MISSING';
     const EXISTS               = 'EXISTS';
+    const QUERY_STRING         = 'QUERY_STRING';
+    const CONSISTENT_RANDOM_KEY = 'CONSISTENT_RANDOM_KEY';
 
 
     /**
@@ -61,6 +63,8 @@ class Operator
             self::GEODIST,
             self::MISSING,
             self::EXISTS,
+            self::QUERY_STRING,
+            self::CONSISTENT_RANDOM_KEY,
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {

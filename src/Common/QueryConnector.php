@@ -40,4 +40,9 @@ class QueryConnector
 
     const MISSING          = 'missing';
     const EXISTS           = 'exists';
+    const FUNCTION_SCORE        = 'function_score';
+    const RANDOM_SCORE          = 'random_score';
+    const SEED                  = 'seed';
+    const FIELD                 = 'field';
+    const ANALYZE_WILDCARD      = 'analyze_wildcard';
 }

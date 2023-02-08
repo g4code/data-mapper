@@ -47,7 +47,8 @@ class ElasticsearchClientFactory implements CreateInterface
         return new ElasticsearchClient(
             $url->port(new PortNumber($this->params['port'])),
             $this->params['index_type'],
-            $this->params['timeout']
+            $this->params['timeout'],
+            $this->params['version']
         );
     }
 
@@ -71,6 +72,7 @@ class ElasticsearchClientFactory implements CreateInterface
             'port'     => $params['port'],
             'index_type' => isset($params['index_type']) ? $params['index_type'] : null,
             'timeout' => isset($params['timeout']) ? $params['timeout'] : null,
+            'version'  => isset($params['version']) ? $params['version'] : null,
         ];
     }
 

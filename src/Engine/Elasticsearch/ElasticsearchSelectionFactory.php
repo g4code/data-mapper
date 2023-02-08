@@ -3,8 +3,10 @@
 namespace G4\DataMapper\Engine\Elasticsearch;
 
 use G4\DataMapper\Common\Selection\Comparison;
+use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SelectionFactoryInterface;
 use G4\DataMapper\Common\Selection\Sort;
+use G4\DataMapper\Common\SingleValue;
 
 class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 {
@@ -116,14 +118,12 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     private function addConsistentRandomKey(array $data)
     {
         return $this->identity->hasConsistentRandomKey()
-            ? [
-                'function_score' => [
-                    'query' => $data,
-                    'random_score' => [
-                        'seed' => $this->identity->getConsistentRandomKey()
-                    ]
-                ]
-            ]
+            ? (new Comparison(
+                $this->identity->getConsistentRandomKey(),
+                new Operator(Operator::CONSISTENT_RANDOM_KEY),
+                new SingleValue($data)
+            ))
+                ->getComparison($this->makeComparisonFormatter())
             : $data;
     }
 

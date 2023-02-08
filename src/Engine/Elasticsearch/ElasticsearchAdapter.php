@@ -24,6 +24,7 @@ class ElasticsearchAdapter implements AdapterInterface
     const ELASTIC_BULK_ACTION_DELETE = 'delete';
     const ELASTIC_PARAM_ID           = '_id';
     const ELASTIC_PAYLOAD_TYPE_DOC   = 'doc';
+    const ELASTIC_PAYLOAD_INDEX   = '_index';
 
     private $client;
 
@@ -272,7 +273,11 @@ class ElasticsearchAdapter implements AdapterInterface
 
         if (array_key_exists('hits', $data)) {
             foreach ($data['hits'] as $item) {
-                $formattedData[] = ['_index' => $item['_index'], '_type' => $item['_type']] + $item['_source'];
+                if (isset($item['_type'])) {
+                    $formattedData[] = ['_index' => $item['_index'], '_type' => $item['_type']] + $item['_source'];
+                } else {
+                    $formattedData[] = ['_index' => $item['_index']] + $item['_source'];
+                }
             }
         }
 
@@ -290,7 +295,8 @@ class ElasticsearchAdapter implements AdapterInterface
         foreach ($mappings as $mapping) {
             $data[] = [
                 self::ELASTIC_BULK_ACTION_UPDATE => [
-                    self::ELASTIC_PARAM_ID => $mapping->getId()
+                    self::ELASTIC_PARAM_ID => $mapping->getId(),
+                    self::ELASTIC_PAYLOAD_INDEX => $this->client->getIndex(),
                 ]
             ];
             $data[] = [
@@ -316,7 +322,8 @@ class ElasticsearchAdapter implements AdapterInterface
         foreach ($mappings as $mapping) {
             $data[] = [
                 self::ELASTIC_BULK_ACTION_DELETE => [
-                    self::ELASTIC_PARAM_ID => $mapping->getId()
+                    self::ELASTIC_PARAM_ID => $mapping->getId(),
+                    self::ELASTIC_PAYLOAD_INDEX => $this->client->getIndex(),
                 ]
             ];
         }

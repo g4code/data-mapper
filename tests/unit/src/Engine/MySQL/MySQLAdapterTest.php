@@ -166,7 +166,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->clientMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->equalTo("INSERT INTO data (`id`,`ts`) VALUES ('123','456'),('789','321'),('999',NULL),(777,NULL)"));
+            ->with($this->equalTo("INSERT IGNORE INTO data (`id`,`ts`) VALUES ('123','456'),('789','321'),('999',NULL),(777,NULL)"));
 
         $mappingStubFirst = $this->getMockForMappings();
         $mappingStubFirst

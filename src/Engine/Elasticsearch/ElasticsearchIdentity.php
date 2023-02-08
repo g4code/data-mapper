@@ -38,7 +38,7 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     private $version;
 
 
-    public function __construct($version = 2)
+    public function __construct($version = ElasticsearchClient::DEFAULT_ES_VERSION)
     {
         parent::__construct();
         $this->version = $version;
@@ -201,5 +201,12 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
     public function getVersion()
     {
         return $this->version;
+    }
+
+    public function queryString($value)
+    {
+        $this->field('');
+        $this->operator(Operator::QUERY_STRING, new SingleValue($value));
+        return $this;
     }
 }
