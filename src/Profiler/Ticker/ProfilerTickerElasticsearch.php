@@ -8,6 +8,7 @@ use G4\DataMapper\Engine\Elasticsearch\ElasticsearchClientFactory;
 class ProfilerTickerElasticsearch extends \G4\Profiler\Ticker\TickerAbstract
 {
     const NAME = 'data_mapper_elasticsearch_1.x';
+    const TYPE = 'es';
 
     private static $instance;
 
@@ -30,6 +31,11 @@ class ProfilerTickerElasticsearch extends \G4\Profiler\Ticker\TickerAbstract
     public function getName()
     {
         return self::NAME;
+    }
+
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

@@ -10,6 +10,7 @@ class ProfilerTickerSolr extends TickerAbstract
 {
 
     const NAME = 'data_mapper_solr_1.x';
+    const TYPE = 'solr';
 
     private static $instance;
 
@@ -44,6 +45,11 @@ class ProfilerTickerSolr extends TickerAbstract
     public function getName()
     {
         return self::NAME;
+    }
+    
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

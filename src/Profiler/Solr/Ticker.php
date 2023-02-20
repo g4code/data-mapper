@@ -5,6 +5,9 @@ namespace G4\DataMapper\Profiler\Solr;
 class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 {
 
+    public const NAME = 'data_mapper_solr_0.x';
+    public const TYPE = 'solr';
+
     private static $instance;
 
     private function __construct()
@@ -35,7 +38,12 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 
     public function getName()
     {
-        return 'data_mapper_solr_0.x';
+        return self::NAME;
+    }
+
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

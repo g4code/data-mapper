@@ -2,6 +2,7 @@
 
 namespace G4\DataMapper\Profiler;
 
+/** @deprecated */
 class Search
 {
 

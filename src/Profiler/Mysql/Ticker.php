@@ -5,6 +5,12 @@ namespace G4\DataMapper\Profiler\Mysql;
 class Ticker extends \G4\Profiler\Ticker\TickerAbstract
 {
 
+    const NAME = 'data_mapper_mysql_0.x';
+    const TYPE = 'db';
+
+    /**
+     * @var \G4\DataMapper\Adapter\Mysql\Db
+     */
     private $db;
 
     public function __construct(\G4\DataMapper\Adapter\Mysql\Db $dbAdapter)
@@ -16,12 +22,22 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
     {
     }
 
+    public function clear()
+    {
+        $this->getDbProfiler()->clear();
+    }
+
     /**
      * @return string
      */
     public function getName()
     {
-        return 'data_mapper_mysql_0.x';
+        return self::NAME;
+    }
+
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**
