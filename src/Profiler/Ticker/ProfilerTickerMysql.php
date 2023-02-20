@@ -11,6 +11,7 @@ class ProfilerTickerMysql extends TickerAbstract
 {
 
     const NAME = 'data_mapper_mysql_1.x';
+    const TYPE = 'db';
 
     /**
      * @var \Zend_Db_Adapter_Abstract
@@ -26,9 +27,19 @@ class ProfilerTickerMysql extends TickerAbstract
     {
     }
 
+    public function clear()
+    {
+        $this->getDbProfiler()->clear();
+    }
+
     public function getName()
     {
         return self::NAME;
+    }
+
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

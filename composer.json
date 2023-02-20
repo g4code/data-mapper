@@ -42,8 +42,8 @@
         "ext-curl"        : "*",
         "ext-json"        : "*",
         "g4/factory"      : "1.*",
-        "g4/profiler"     : "*",
-        "g4/value-object" : "3.*",
+        "g4/profiler"     : ">=1.10.0",
+        "g4/value-object" : "*",
         "zf1/zend-db"     : "1.12.*"
     },
     "scripts": {
