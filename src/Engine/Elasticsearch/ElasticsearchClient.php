@@ -10,16 +10,19 @@ use G4\DataMapper\Exception\ClientException;
 class ElasticsearchClient
 {
     const BULK              = '_bulk';
+    const BULK_METHOD       = 'bulk';
     const DOCUMENT          = 'doc';
     const SEARCH            = '_search';
     const TIMEOUT           = 5;
     const METHOD_GET        = 'GET';
     const UPDATE            = '_update';
+    const UPDATE_METHOD     = 'update';
     const REFRESH           = '_refresh';
     const RETRY_ON_CONFLICT = 'retry_on_conflict';
     const RETRY_COUNT       = 5;
     const MULTI_SEARCH       = '_msearch';
     const COUNT             = '_count';
+    const DEFAULT_ES_VERSION = 2;
 
     private $index;
 
@@ -50,12 +53,15 @@ class ElasticsearchClient
 
     private $timeout;
 
-    public function __construct(Url $url, $indexType = null, $timeout = null)
+    private $version;
+
+    public function __construct(Url $url, $indexType = null, $timeout = null, $version = null)
     {
         $this->url = $url;
         $this->indexType = $indexType ?: self::DOCUMENT;
         $this->profiler = ProfilerTickerElasticsearch::getInstance();
         $this->timeout = $timeout ?: self::TIMEOUT;
+        $this->version = $version ?: self::DEFAULT_ES_VERSION;
     }
 
     public function execute()
@@ -67,7 +73,14 @@ class ElasticsearchClient
 
     public function executeBulk()
     {
-        $this->url = $this->url->path($this->index, $this->indexType, self::BULK);
+        $this->url = ElasticsearchUrlPathBuilder::generateUrl(
+            $this->url,
+            $this->index,
+            $this->indexType,
+            $this->id,
+            self::BULK_METHOD,
+            $this->version
+        );
 
         $this->executeBulkCurlRequest();
     }
@@ -107,9 +120,14 @@ class ElasticsearchClient
 
     public function update()
     {
-        $this->url = $this->url
-            ->path($this->index, $this->indexType, $this->id, self::UPDATE)
-            ->query(new Dictionary([self::RETRY_ON_CONFLICT => self::RETRY_COUNT]));
+        $this->url = ElasticsearchUrlPathBuilder::generateUrl(
+            $this->url,
+            $this->index,
+            $this->indexType,
+            $this->id,
+            self::UPDATE_METHOD,
+            $this->version
+        )->query(new Dictionary([self::RETRY_ON_CONFLICT => self::RETRY_COUNT]));
 
         $this->executeCurlRequest();
     }
@@ -125,6 +143,11 @@ class ElasticsearchClient
     {
         $this->index = $value;
         return $this;
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
     }
 
     public function setMethod($value)

@@ -81,6 +81,12 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
             case Operator::EXISTS:
                 $query = new ExistsOperator($name, $value);
                 break;
+            case Operator::QUERY_STRING:
+                $query = $this->getOperatorBasedOnEsVersion('QueryStringOperator', $name, $value);
+                break;
+            case Operator::CONSISTENT_RANDOM_KEY:
+                $query = $this->getOperatorBasedOnEsVersion('ConsistentRandomKey', $name, $value);
+                break;
         }
 
         return $query->format();
@@ -88,13 +94,11 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
 
     private function getOperatorBasedOnEsVersion($operatorName, $name, $value)
     {
-        $version = $this->identity->getVersion();
-        $versionedPath = "G4\\DataMapper\\Engine\\Elasticsearch\\Version$version\\Operators\\$operatorName";
-        if (class_exists($versionedPath)) {
-            return new $versionedPath($name, $value);
-        }
+        $classPath = ElasticsearchVersionFactory::getVersionedClassPath(
+            "Operators\\$operatorName",
+            $this->identity->getVersion()
+        );
 
-        $defaultPath = "G4\\DataMapper\\Engine\\Elasticsearch\\Operators\\$operatorName";
-        return new $defaultPath($name, $value);
+        return new $classPath($name, $value);
     }
 }

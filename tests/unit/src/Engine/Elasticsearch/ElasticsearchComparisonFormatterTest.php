@@ -181,4 +181,57 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['query_string' => ['query' => 'name:*lada*']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
     }
+
+    public function testLikeCIVersion7()
+    {
+        $comparisonFormatter = new ElasticsearchComparisonFormatter(new ElasticsearchIdentity(7));
+
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::LIKE_CI);
+
+        $this->assertEquals(
+            ['query_string' => ['query' => 'name:*lada*']],
+            $comparisonFormatter->format('name', $this->operatorMock, new SingleValue('LADA'))
+        );
+    }
+
+    public function testQueryString()
+    {
+
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::QUERY_STRING);
+
+        $this->assertEquals(
+            [
+                'query' => [
+                        'query_string' => [
+                                'query' => 'username: *test* OR email: *test*',
+                                'analyze_wildcard' => true,
+                            ],
+                    ]
+            ],
+            $this->comparisonFormatter
+                ->format('', $this->operatorMock, new SingleValue('username: *test* OR email: *test*'))
+        );
+    }
+
+    public function testQueryStringVersion7()
+    {
+        $comparisonFormatter = new ElasticsearchComparisonFormatter(new ElasticsearchIdentity(7));
+
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::QUERY_STRING);
+
+        $this->assertEquals(
+            [
+                'query_string' => [
+                    'query' => 'username: *test* OR email: *test*'
+                ]
+            ],
+            $comparisonFormatter->format('', $this->operatorMock, new SingleValue('username: *test* OR email: *test*'))
+        );
+    }
 }
