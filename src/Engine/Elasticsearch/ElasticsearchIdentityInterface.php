@@ -43,6 +43,8 @@ interface ElasticsearchIdentityInterface
      */
     public function likeCI($value);
 
+    public function equalCI($value);
+
     public function getVersion();
 
     public function queryString($value);
