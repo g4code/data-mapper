@@ -4,12 +4,22 @@ namespace G4\DataMapper\Collection;
 
 class CollectionFactory
 {
-    public static function create(array $rawData, $factoryDomainName, int $total): Content
+    /**
+     * @param array $rawData
+     * @param $factoryDomainName
+     * @param int $total
+     * @return Content
+     */
+    public static function create(array $rawData, $factoryDomainName, int $total)
     {
         return new Content($rawData, $factoryDomainName, $total);
     }
 
-    public static function createEmpty($factoryDomainName): Content
+    /**
+     * @param $factoryDomainName
+     * @return Content
+     */
+    public static function createEmpty($factoryDomainName)
     {
         return new Content(null, $factoryDomainName, 0);
     }
