@@ -134,7 +134,7 @@ class ElasticsearchAdapter implements AdapterInterface
      */
     public function multiSelect(CollectionNameInterface $collectionName, array $data)
     {
-        $queries = $this->getQueries($data);
+        $queries = $this->formatMultiSearchQueries($data);
 
         $body = $this->formatMultiSearchBody($queries);
 
@@ -296,7 +296,7 @@ class ElasticsearchAdapter implements AdapterInterface
             $data[] = [
                 self::ELASTIC_BULK_ACTION_UPDATE => [
                     self::ELASTIC_PARAM_ID => $mapping->getId(),
-                    self::ELASTIC_PAYLOAD_INDEX => $this->client->getIndex(),
+                    self::ELASTIC_PAYLOAD_INDEX => (string) $this->client->getIndex(),
                 ]
             ];
             $data[] = [
@@ -323,7 +323,7 @@ class ElasticsearchAdapter implements AdapterInterface
             $data[] = [
                 self::ELASTIC_BULK_ACTION_DELETE => [
                     self::ELASTIC_PARAM_ID => $mapping->getId(),
-                    self::ELASTIC_PAYLOAD_INDEX => $this->client->getIndex(),
+                    self::ELASTIC_PAYLOAD_INDEX => (string) $this->client->getIndex(),
                 ]
             ];
         }
@@ -342,14 +342,14 @@ class ElasticsearchAdapter implements AdapterInterface
 
     /** @param SelectionFactoryInterface[] $listOfEsSelectionFactories
      */
-    private function getQueries(array $listOfEsSelectionFactories)
+    private function formatMultiSearchQueries(array $listOfEsSelectionFactories)
     {
         $queries = [];
 
         /** @var ElasticsearchSelectionFactory $selectionFactory */
 
         foreach ($listOfEsSelectionFactories as $selectionFactory) {
-            $queries[] = json_encode($this->getBody($selectionFactory), true);
+            $queries[] = '{}' . PHP_EOL . json_encode($this->getBody($selectionFactory), true);
         }
         return $queries;
     }
@@ -366,7 +366,7 @@ class ElasticsearchAdapter implements AdapterInterface
 
     private function formatMultiSearchBody(array $queries)
     {
-        return PHP_EOL . '{}' . PHP_EOL . implode(PHP_EOL . '{}' . PHP_EOL, $queries) . PHP_EOL;
+        return implode(PHP_EOL, $queries) . PHP_EOL;
     }
 
     private function getBody(SelectionFactoryInterface $selectionFactory)
