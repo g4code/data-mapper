@@ -248,7 +248,8 @@ class ElasticsearchClient
         $error = curl_error($handle);
 
         if ($error) {
-            throw new ClientException(sprintf("Submit curl request failed. Error: %s", $error));
+            $errorCode = "Curl error number - ". curl_errno($handle);
+            $this->throwCurlException($errorCode, $error, $this->url, $this->body, null);
         }
 
         $info = curl_getinfo($handle);
@@ -264,15 +265,7 @@ class ElasticsearchClient
         $this->profiler->end($uniqueId);
 
         if (isset($info['http_code']) && (int) $info['http_code'] >= 400 && (int) $info['http_code'] <= 599) {
-            throw new ClientException(
-                sprintf(
-                    "Unexpected response code:%s from ES has been returned on submit. More info: %s. Body: %s. Response: %s",
-                    $info['http_code'],
-                    json_encode($info),
-                    json_encode($this->body),
-                    is_array($response) ? json_encode($response) : $response
-                )
-            );
+            $this->throwCurlException($info['http_code'], $info, $this->url, $this->body, $response);
         }
 
         return $this;
@@ -291,5 +284,19 @@ class ElasticsearchClient
     public function getUrl()
     {
         return $this->url;
+    }
+
+    private function throwCurlException($code, $message, $url, $body, $response)
+    {
+        throw new ClientException(
+            sprintf(
+                "Unexpected response code:%s from ES has been returned on submit. More info: %s. Url: %s. Body: %s. Response: %s",
+                $code,
+                json_encode($message),
+                json_encode($url),
+                json_encode($body),
+                is_array($response) ? json_encode($response) : $response
+            )
+        );
     }
 }
