@@ -2,6 +2,7 @@
 
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchClient;
+use G4\DataMapper\Exception\ClientException;
 use G4\ValueObject\Url;
 
 class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
@@ -40,6 +41,14 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $this->assertEquals($this->urlMock, $this->elasticsearchClient->getUrl());
+    }
+
+    public function testCurlError()
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('Unexpected response code:Curl error number - 6 from ES has been returned on submit. More info: "Could not resolve host: nothing". Url: {}. Body: null. Response: ');
+        $elasticsearchClient = new ElasticsearchClient(new Url('http://nothing'), null, 5);
+        $elasticsearchClient->execute();
     }
 
     protected function setUp()
