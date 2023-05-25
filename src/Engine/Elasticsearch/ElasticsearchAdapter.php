@@ -79,7 +79,7 @@ class ElasticsearchAdapter implements AdapterInterface
             ->setMethod(self::METHOD_POST)
             ->setId($data['id'])
             ->setBody($data)
-            ->execute();
+            ->insert();
     }
 
     /**

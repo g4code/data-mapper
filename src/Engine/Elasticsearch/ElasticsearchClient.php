@@ -15,6 +15,8 @@ class ElasticsearchClient
     const SEARCH            = '_search';
     const TIMEOUT           = 5;
     const METHOD_GET        = 'GET';
+    const INSERT            = '_create';
+    const INSERT_METHOD     = 'insert';
     const UPDATE            = '_update';
     const UPDATE_METHOD     = 'update';
     const REFRESH           = '_refresh';
@@ -116,6 +118,19 @@ class ElasticsearchClient
         $this->executeCurlRequest();
 
         return $this;
+    }
+    public function insert()
+    {
+        $this->url = ElasticsearchUrlPathBuilder::generateUrl(
+            $this->url,
+            $this->index,
+            $this->indexType,
+            $this->id,
+            self::INSERT_METHOD,
+            $this->version
+        );
+
+        $this->executeCurlRequest();
     }
 
     public function update()
