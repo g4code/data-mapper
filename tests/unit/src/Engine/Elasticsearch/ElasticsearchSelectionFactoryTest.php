@@ -232,7 +232,10 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('isVoid')
             ->willReturn(true);
 
-        $this->assertEquals(['bool' => ['must' => ['match_all' => []]]], $this->selectionFactory->where());
+        $result = $this->selectionFactory->where();
+
+        $this->assertEquals(['bool' => ['must' => ['match_all' => new \stdClass()]]], $result);
+        $this->assertEquals('{"bool":{"must":{"match_all":{}}}}', json_encode($result));
     }
 
     public function testGetGeodistParameters()
@@ -255,7 +258,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $expectedArray = [
             'bool' => [
                 'must'   => [
-                    'match_all' => []
+                    'match_all' => new \stdClass()
                 ],
                 'filter' => [
                     'geo_distance' => [
@@ -269,7 +272,10 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertEquals($expectedArray, $this->selectionFactory->where());
+        $result = $this->selectionFactory->where();
+
+        $this->assertEquals($expectedArray, $result);
+        $this->assertEquals('{"bool":{"must":{"match_all":{}},"filter":{"geo_distance":{"distance":"100km","location":{"lon":10,"lat":15}}}}}', json_encode($result));
     }
 
     public function testWhereWithRandom()
