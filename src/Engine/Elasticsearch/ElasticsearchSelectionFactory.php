@@ -77,7 +77,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
     public function where()
     {
         if ($this->identity->isVoid()) {
-            return $this->addConsistentRandomKey(['bool' => ['must' => ['match_all' => []]]]);
+            return $this->addConsistentRandomKey(['bool' => ['must' => ['match_all' => new \stdClass()]]]);
         }
 
         $comparisons = [];
@@ -103,7 +103,7 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
         }
 
         if (empty($comparisons)) {
-            $comparisons =  ['must' => ['match_all' => []]];
+            $comparisons =  ['must' => ['match_all' => new \stdClass()]];
         }
 
         $comparisons['filter'] = $geodistFormatter->format();
