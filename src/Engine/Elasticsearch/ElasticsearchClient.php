@@ -15,7 +15,7 @@ class ElasticsearchClient
     const SEARCH            = '_search';
     const TIMEOUT           = 5;
     const METHOD_GET        = 'GET';
-    const INSERT            = '_create';
+    const INSERT            = '_doc';
     const INSERT_METHOD     = 'insert';
     const UPDATE            = '_update';
     const UPDATE_METHOD     = 'update';
