@@ -10,7 +10,7 @@ use G4\DataMapper\Common\SingleValue;
  * dummy class to prevent multiplelikeoperator falling to default/version 2.4 es operator
  * @package G4\DataMapper\Engine\Elasticsearch\Operators
  */
-class MultipleLikeCIOperator extends LikeCIOperator implements QueryOperatorInterface
+class MultiLikeCIOperator extends LikeCIOperator implements QueryOperatorInterface
 {
     public function __construct($name, SingleValue $value)
     {
