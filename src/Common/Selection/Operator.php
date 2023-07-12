@@ -15,6 +15,7 @@ class Operator
     const IN                   = 'IN';
     const LIKE                 = 'LIKE';
     const LIKE_CI              = 'LIKE_CI';
+    const MULTI_LIKE_CI        = 'MULTI_LIKE_CI';
     const LESS_THAN            = 'LESS_THAN';
     const LESS_THAN_OR_EQUAL   = 'LESS_THAN_OR_EQUAL';
     const NOT_EQUAL            = 'NOT_EQUAL';
@@ -65,6 +66,7 @@ class Operator
             self::EXISTS,
             self::QUERY_STRING,
             self::CONSISTENT_RANDOM_KEY,
+            self::MULTI_LIKE_CI,
         ];
 
         if (!in_array($this->symbol, $validSymbols)) {
