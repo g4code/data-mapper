@@ -179,7 +179,16 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::LIKE_CI);
 
-        $this->assertEquals(['query_string' => ['query' => 'name:*lada*']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
+        $this->assertEquals(['query_string' => ['query' => 'name:(*lada*)']], $this->comparisonFormatter->format('name', $this->operatorMock, new SingleValue('lada')));
+    }
+
+    public function testMultiLikeCI()
+    {
+        $this->operatorMock->expects($this->any())
+            ->method('getSymbol')
+            ->willReturn(Operator::MULTI_LIKE_CI);
+
+        $this->assertEquals(['query_string' => ['query' => 'username:(*my** **name* *is** **rio*)']], $this->comparisonFormatter->format('username', $this->operatorMock, new SingleValue('my_name is-rio')));
     }
 
     public function testLikeCIVersion7()
@@ -191,8 +200,8 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->willReturn(Operator::LIKE_CI);
 
         $this->assertEquals(
-            ['query_string' => ['query' => 'name:*lada*']],
-            $comparisonFormatter->format('name', $this->operatorMock, new SingleValue('LADA'))
+            ['query_string' => ['query' => 'name:*dacia*']],
+            $comparisonFormatter->format('name', $this->operatorMock, new SingleValue('DACIA'))
         );
     }
 
@@ -234,4 +243,5 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             $comparisonFormatter->format('', $this->operatorMock, new SingleValue('username: *test* OR email: *test*'))
         );
     }
+
 }

@@ -209,4 +209,11 @@ class ElasticsearchIdentity extends Identity implements ElasticsearchIdentityInt
         $this->operator(Operator::QUERY_STRING, new SingleValue($value));
         return $this;
     }
+
+    public function multiLikeCI($value)
+    {
+        $this->arrayException($value);
+        $this->operator(Operator::MULTI_LIKE_CI, new SingleValue($value));
+        return $this;
+    }
 }
