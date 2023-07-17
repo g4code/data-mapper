@@ -26,6 +26,6 @@ class MultiLikeCIOperator extends LikeCIOperator implements QueryOperatorInterfa
 
     private function formatValue(SingleValue $value)
     {
-        return new SingleValue(str_replace(["-","_"," "], "* *", $value));
+        return new SingleValue(str_replace([" ","-"], "* AND *", $value));
     }
 }

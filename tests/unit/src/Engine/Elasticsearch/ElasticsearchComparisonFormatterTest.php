@@ -188,7 +188,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->method('getSymbol')
             ->willReturn(Operator::MULTI_LIKE_CI);
 
-        $this->assertEquals(['query_string' => ['query' => 'username:(*my** **name* *is** **rio*)']], $this->comparisonFormatter->format('username', $this->operatorMock, new SingleValue('my_name is-rio')));
+        $this->assertEquals(['query_string' => ['query' => 'username:(*my_name* AND *is* AND *rio*)']], $this->comparisonFormatter->format('username', $this->operatorMock, new SingleValue('my_name is-rio')));
     }
 
     public function testLikeCIVersion7()
