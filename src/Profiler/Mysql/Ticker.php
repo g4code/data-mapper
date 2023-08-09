@@ -63,10 +63,10 @@ class Ticker extends \G4\Profiler\Ticker\TickerAbstract
     {
         if ($this->getDbProfiler()->getTotalNumQueries() && $this->getDbProfiler()->getQueryProfiles()) {
             foreach ($this->getDbProfiler()->getQueryProfiles() as $queryProfile) {
-                $queries[] = [
+                $queries[(string) $queryProfile->getStartedMicrotime()] = [
                     'elapsed_time' =>
                         $this->getDataFormatterInstance()->getFormattedTime($queryProfile->getElapsedSecs()),
-                    'query'        => $queryProfile->getQuery()
+                    'query' => $queryProfile->getQuery()
                 ];
             }
         }
