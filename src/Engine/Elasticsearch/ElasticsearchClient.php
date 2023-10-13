@@ -254,6 +254,8 @@ class ElasticsearchClient
             CURLOPT_URL            => (string) $this->url,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_CUSTOMREQUEST  => $this->method,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $response =  curl_exec($handle);
@@ -308,7 +310,7 @@ class ElasticsearchClient
                 "Unexpected response code:%s from ES has been returned on submit. More info: %s. Url: %s. Body: %s. Response: %s",
                 $code,
                 json_encode($message),
-                json_encode($url),
+                (string) $url,
                 json_encode($body),
                 is_array($response) ? json_encode($response) : $response
             )

@@ -46,9 +46,9 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
     public function testCurlError()
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('Unexpected response code:Curl error number - 6 from ES has been returned on submit. More info: "Could not resolve host: nothing". Url: {}. Body: null. Response: ');
-        $elasticsearchClient = new ElasticsearchClient(new Url('http://nothing'), null, 5);
-        $elasticsearchClient->execute();
+        $this->expectExceptionMessage('Unexpected response code:Curl error number - 6 from ES has been returned on submit. More info: "Could not resolve host: nothing". Url: http://nothing//doc/. Body: null. Response: ');
+        $elasticsearchClient = new ElasticsearchClient(new Url('http://nothing/'), null, 5);
+        $elasticsearchClient->execute(); // todo - misleading because execute is only called internally
     }
 
     protected function setUp()

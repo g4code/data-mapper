@@ -44,7 +44,7 @@
         "ext-json"        : "*",
         "g4/factory"      : "1.*",
         "g4/profiler"     : ">=1.11.0",
-        "g4/value-object" : "*",
+        "g4/value-object" : ">=3.6.0",
         "zf1/zend-db"     : "1.12.*"
     },
     "scripts": {
