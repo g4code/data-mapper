@@ -4,7 +4,7 @@ use G4\DataMapper\Engine\MySQL\MySQLSelectionFactory;
 use G4\DataMapper\Common\Identity;
 use G4\DataMapper\Common\Selection\Comparison;
 
-class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
+class MySQLSelectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -15,7 +15,7 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
     private $identityMock;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Common\Identity::class)
             ->disableOriginalConstructor()
@@ -24,7 +24,7 @@ class MySQLSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = new MySQLSelectionFactory($this->identityMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->identityMock     = null;
         $this->selectionFactory = null;

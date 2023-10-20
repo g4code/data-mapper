@@ -5,14 +5,14 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Common\RangeValue;
 
-class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
+class SolrComparisonFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
     private $comparisonFormatter;
 
     private $operatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->comparisonFormatter = new SolrComparisonFormatter();
 
@@ -21,7 +21,7 @@ class SolrComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->comparisonFormatter = null;
         $this->operatorMock        = null;

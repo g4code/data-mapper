@@ -5,7 +5,7 @@ use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\Exception\NotImplementedException;
 
-class SolrAdapterTest extends PHPUnit_Framework_TestCase
+class SolrAdapterTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -20,7 +20,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
 
     private $collectionNameMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrClient::class)
             ->disableOriginalConstructor()
@@ -39,7 +39,7 @@ class SolrAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = new SolrAdapter($this->getMockForSolrClientFactory());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
         $this->clientMock = null;

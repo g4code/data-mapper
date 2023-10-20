@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\RawData;
 
-class RawDataTest extends PHPUnit_Framework_TestCase
+class RawDataTest extends \PHPUnit\Framework\TestCase
 {
     const ID_IDENTIFIER = 'id';
 
@@ -12,7 +12,7 @@ class RawDataTest extends PHPUnit_Framework_TestCase
 
     private $total;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->data = [
             [
@@ -26,7 +26,7 @@ class RawDataTest extends PHPUnit_Framework_TestCase
         $this->rawData = new RawData($this->data, $this->total);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->data = null;
         $this->total = null;

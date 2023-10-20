@@ -5,7 +5,7 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Common\RangeValue;
 
-class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
+class MySQLComparisonFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
     private $comparisonFormatter;
@@ -13,7 +13,7 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
     private $operatorMock;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->comparisonFormatter = new MySQLComparisonFormatter();
 
@@ -22,7 +22,7 @@ class MySQLComparisonFormatterTest extends PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->comparisonFormatter = null;
         $this->operatorMock        = null;

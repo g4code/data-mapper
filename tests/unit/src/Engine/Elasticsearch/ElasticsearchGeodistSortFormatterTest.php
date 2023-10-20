@@ -3,14 +3,14 @@
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchGeodistSortFormatter;
 
-class ElasticsearchGeodistSortFormatterTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchGeodistSortFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchIdentity
      */
     private $identity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identity = new ElasticsearchIdentity();
     }

@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Engine\MySQL\MySQLClientFactory;
 
-class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
+class MySQLClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -16,7 +16,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
     private $clientFactory;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->params = [
             'host'     => '127.0.0.1',
@@ -30,7 +30,7 @@ class MySQLClientFactoryTest extends PHPUnit_Framework_TestCase
 
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->params = null;
         $this->clientFactory = null;

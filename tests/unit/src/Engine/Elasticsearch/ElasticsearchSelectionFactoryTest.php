@@ -3,7 +3,7 @@
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchSelectionFactory;
 use G4\DataMapper\Common\SingleValue;
 
-class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchSelectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchSelectionFactory
@@ -12,7 +12,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     private $identityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class)
             ->disableOriginalConstructor()
@@ -21,7 +21,7 @@ class ElasticsearchSelectionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->selectionFactory = new ElasticsearchSelectionFactory($this->identityMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->identityMock = null;
 
