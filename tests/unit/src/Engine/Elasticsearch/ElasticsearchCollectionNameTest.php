@@ -2,19 +2,19 @@
 
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchCollectionName;
 
-class ElasticsearchCollectionNameTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchCollectionNameTest extends \PHPUnit\Framework\TestCase
 {
     private $elasticsearchCollectionName;
 
     private $collectionName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionName     = 'profiles';
         $this->elasticsearchCollectionName = new ElasticsearchCollectionName($this->collectionName);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->elasticsearchCollectionName = null;
         $this->collectionName     = null;

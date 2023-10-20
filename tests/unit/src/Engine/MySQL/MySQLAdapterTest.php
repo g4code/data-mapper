@@ -3,7 +3,7 @@
 use G4\DataMapper\Engine\MySQL\MySQLAdapter;
 use G4\DataMapper\Common\SingleValue;
 
-class MySQLAdapterTest extends PHPUnit_Framework_TestCase
+class MySQLAdapterTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -19,7 +19,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
     private $tableNameMock;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientMock = $this->getMockBuilder(\Zend_Db_Adapter_Mysqli::class)
             ->disableOriginalConstructor()
@@ -49,7 +49,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = new MySQLAdapter($this->getMockForMySQLClientFactory());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter          = null;
         $this->clientMock       = null;
@@ -137,7 +137,7 @@ class MySQLAdapterTest extends PHPUnit_Framework_TestCase
             ->method('map')
             ->willReturn([]);
 
-        $selectionFactoryStub = $this->getMock(G4\DataMapper\Common\SelectionFactoryInterface::class);
+        $selectionFactoryStub = $this->createMock(G4\DataMapper\Common\SelectionFactoryInterface::class);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Empty data for update');

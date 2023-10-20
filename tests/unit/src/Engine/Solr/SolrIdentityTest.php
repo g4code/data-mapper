@@ -2,19 +2,19 @@
 
 use G4\DataMapper\Engine\Solr\SolrIdentity;
 
-class SolrIdentityTest extends PHPUnit_Framework_TestCase
+class SolrIdentityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SolrIdentity
      */
     private $solrIdentity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->solrIdentity = new SolrIdentity();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->solrIdentity = null;
     }

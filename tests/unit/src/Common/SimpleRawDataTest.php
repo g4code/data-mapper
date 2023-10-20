@@ -2,13 +2,13 @@
 
 use G4\DataMapper\Common\SimpleRawData;
 
-class SimpleRawDataTest extends PHPUnit_Framework_TestCase
+class SimpleRawDataTest extends \PHPUnit\Framework\TestCase
 {
     private $data;
 
     private $rawData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->data = [
             [
@@ -20,7 +20,7 @@ class SimpleRawDataTest extends PHPUnit_Framework_TestCase
         $this->rawData = new SimpleRawData($this->data);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->data = null;
         $this->rawData = null;

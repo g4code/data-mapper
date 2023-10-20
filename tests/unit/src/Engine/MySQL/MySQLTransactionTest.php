@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Engine\MySQL\MySQLTransaction;
 
-class MySQLTransactionTest extends PHPUnit_Framework_TestCase
+class MySQLTransactionTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -15,7 +15,7 @@ class MySQLTransactionTest extends PHPUnit_Framework_TestCase
      */
     private $transaction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(\G4\DataMapper\Engine\MySQL\MySQLAdapter::class)
             ->disableOriginalConstructor()
@@ -24,7 +24,7 @@ class MySQLTransactionTest extends PHPUnit_Framework_TestCase
         $this->transaction = new MySQLTransaction($this->adapterMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapterMock = null;
 

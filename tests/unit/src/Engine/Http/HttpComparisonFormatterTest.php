@@ -5,7 +5,7 @@ use G4\DataMapper\Engine\Http\HttpComparisonFormatter;
 use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
 
-class HttpComparisonFormatterTest extends PHPUnit_Framework_TestCase
+class HttpComparisonFormatterTest extends \PHPUnit\Framework\TestCase
 {
 
 

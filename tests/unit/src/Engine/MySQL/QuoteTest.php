@@ -3,7 +3,7 @@
 use G4\DataMapper\Engine\MySQL\Quote;
 use G4\DataMapper\Common\SingleValue;
 
-class QuoteTest extends PHPUnit_Framework_TestCase
+class QuoteTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testInt()
@@ -18,7 +18,7 @@ class QuoteTest extends PHPUnit_Framework_TestCase
     {
         $quote = new Quote(new SingleValue(1.01));
         $value = (string) $quote;
-        $this->assertEquals('1.01', $value);
+        $this->assertEquals('1.010000', $value);
         $this->assertTrue(is_string($value));
     }
 

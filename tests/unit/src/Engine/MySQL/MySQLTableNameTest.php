@@ -2,20 +2,20 @@
 
 use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
-class MySQLTableNameTest extends PHPUnit_Framework_TestCase
+class MySQLTableNameTest extends \PHPUnit\Framework\TestCase
 {
 
     private $mySQLTableName;
 
     private $tableName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tableName        = 'tralala';
         $this->mySQLTableName   = new MySQLTableName($this->tableName);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->mySQLTableName   = null;
         $this->tableName        = null;

@@ -5,7 +5,7 @@ namespace unit\src\Engine\Elasticsearch;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchVersionFactory;
 use PHPUnit_Framework_TestCase;
 
-class ElasticsearchVersionFactoryTest extends PHPUnit_Framework_TestCase
+class ElasticsearchVersionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testElasticsearchClientUrlPath()
     {

@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\CoordinatesValue;
 
-class CoordinatesValueTest extends PHPUnit_Framework_TestCase
+class CoordinatesValueTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -10,12 +10,12 @@ class CoordinatesValueTest extends PHPUnit_Framework_TestCase
      */
     private $coordinates;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coordinates = new CoordinatesValue(46.100376, 19.667587, 100);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->coordinates = null;
     }

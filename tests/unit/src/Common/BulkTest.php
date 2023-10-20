@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\Bulk;
 
-class BulkTest extends PHPUnit_Framework_TestCase
+class BulkTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -21,7 +21,7 @@ class BulkTest extends PHPUnit_Framework_TestCase
     private $tableNameMock;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder('\G4\DataMapper\Common\AdapterInterface')
             ->disableOriginalConstructor()
@@ -39,7 +39,7 @@ class BulkTest extends PHPUnit_Framework_TestCase
         $this->bulk = new Bulk($this->adapterMock, $this->tableNameMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapterMock      = null;
         $this->tableNameMock    = null;

@@ -2,16 +2,16 @@
 
 use G4\DataMapper\Common\RangeValue;
 
-class RangeValueTest extends PHPUnit_Framework_TestCase
+class RangeValueTest extends \PHPUnit\Framework\TestCase
 {
     private $rangeValueObject;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->rangeValueObject = new RangeValue(5,18);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->rangeValueObject = null;
     }

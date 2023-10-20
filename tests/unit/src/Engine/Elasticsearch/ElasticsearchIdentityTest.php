@@ -3,14 +3,14 @@
 use G4\DataMapper\Common\QueryConnector;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 
-class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
+class ElasticsearchIdentityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchIdentity
      */
     private $elasticsearchIdentity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elasticsearchIdentity = new ElasticsearchIdentity();
     }
@@ -91,7 +91,8 @@ class ElasticsearchIdentityTest extends PHPUnit_Framework_TestCase
         $identity = new ElasticsearchIdentity();
         $this->assertInstanceOf(ElasticsearchIdentity::class, $identity->field('id')->likeCI('this'));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $identity->field('name')->likeCI([1]);
     }
 }

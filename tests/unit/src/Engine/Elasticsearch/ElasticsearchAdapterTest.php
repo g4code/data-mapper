@@ -5,7 +5,7 @@ use G4\DataMapper\Exception\EmptyDataException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\Exception\NotImplementedException;
 
-class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
+class ElasticsearchAdapterTest extends \PHPUnit\Framework\TestCase
 {
 
     const METHOD_POST   = 'POST';
@@ -27,7 +27,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
      */
     private $collectionNameMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientMock = $this->getMockBuilder(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchClient::class)
             ->disableOriginalConstructor()
@@ -45,7 +45,7 @@ class ElasticsearchAdapterTest extends PHPUnit_Framework_TestCase
         $this->adapter = new ElasticsearchAdapter($this->getMockForElasticsearchClientFactory());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
         $this->clientMock = null;

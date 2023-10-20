@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\Selection\Operator;
 
-class OperatorTest extends PHPUnit_Framework_TestCase
+class OperatorTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetSymbol()
@@ -14,7 +14,8 @@ class OperatorTest extends PHPUnit_Framework_TestCase
 
     public function testNotValidSymbol()
     {
-        $this->setExpectedException('\Exception', 'Symbol is not valid');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Symbol is not valid');
 
         $operator = new Operator('not_valid');
     }

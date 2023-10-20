@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\Identity;
 
-class IdentityTest extends PHPUnit_Framework_TestCase
+class IdentityTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -11,12 +11,12 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     private $identity;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identity = new Identity();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->identity = null;
     }
@@ -27,7 +27,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(\G4\DataMapper\Common\Selection\Comparison::class, $this->identity->getComparisons()[0]);
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->equal([1]);
     }
 
@@ -42,7 +43,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThan(1));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->greaterThan([1]);
     }
 
@@ -50,7 +52,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->greaterThanOrEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->greaterThanOrEqual([1]);
     }
 
@@ -63,7 +66,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThan(1));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->lessThan([1]);
     }
 
@@ -71,7 +75,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->lessThanOrEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->lessThanOrEqual([1]);
     }
 
@@ -79,7 +84,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->like('this'));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->like([1]);
     }
 
@@ -103,7 +109,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(\G4\DataMapper\Common\Identity::class, $this->identity->field('id')->notEqual(1));
 
-        $this->setExpectedException('\Exception', 'Value can not be array');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value can not be array');
         $this->identity->field('name')->notEqual([1]);
     }
 
@@ -120,7 +127,8 @@ class IdentityTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->identity->isVoid());
 
-        $this->setExpectedException('\Exception', 'Incomplete field');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Incomplete field');
         $this->identity->field('name');
     }
 
@@ -130,13 +138,15 @@ class IdentityTest extends PHPUnit_Framework_TestCase
             ->field('id')
             ->equal(1);
 
-        $this->setExpectedException('\Exception', 'Field is already set');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field is already set');
         $this->identity->field('id');
     }
 
     public function testFieldIsNotDefined()
     {
-        $this->setExpectedException('\Exception', 'Field is not defined');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field is not defined');
         $this->identity->equal(1);
     }
 

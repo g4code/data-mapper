@@ -2,20 +2,20 @@
 
 use G4\DataMapper\Engine\Solr\SolrCollectionName;
 
-class SolrCollectionNameTest extends PHPUnit_Framework_TestCase
+class SolrCollectionNameTest extends \PHPUnit\Framework\TestCase
 {
 
     private $solrCollectionName;
 
     private $collectionName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionName     = 'profiles';
         $this->solrCollectionName = new SolrCollectionName($this->collectionName);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->solrCollectionName = null;
         $this->collectionName     = null;

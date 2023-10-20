@@ -6,7 +6,7 @@ use G4\DataMapper\Exception\MethodNotValidForHttpEngineException;
 use G4\DataMapper\Engine\Http\HttpComparisonFormatter;
 use G4\DataMapper\Common\Selection\Comparison;
 
-class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
+class HttpSelectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -81,7 +81,7 @@ class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpComparisonFormatter::class, $this->selectionFactory->makeComparisonFormatter());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityMock = $this->getMockBuilder(Identity::class)
             ->disableOriginalConstructor()
@@ -90,7 +90,7 @@ class HttpSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = new HttpSelectionFactory($this->identityMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->identityMock     = null;
         $this->selectionFactory = null;

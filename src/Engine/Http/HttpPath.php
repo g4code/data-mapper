@@ -20,7 +20,7 @@ class HttpPath implements CollectionNameInterface
      * HttpPath constructor.
      * @param array ...$parts string
      */
-    public function __construct(... $parts)
+    public function __construct(...$parts)
     {
         $path = join(self::SLASH, $parts);
 

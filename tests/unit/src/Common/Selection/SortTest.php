@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\Selection\Sort;
 
-class SortTest extends PHPUnit_Framework_TestCase
+class SortTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetSort()
@@ -25,7 +25,8 @@ class SortTest extends PHPUnit_Framework_TestCase
 
     public function testOrderIsNotValid()
     {
-        $this->setExpectedException('\Exception', 'Sort order is not valid');
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Sort order is not valid');
         new Sort('name', 'not_valid_order');
     }
 }

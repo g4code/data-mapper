@@ -3,7 +3,7 @@
 use G4\DataMapper\Engine\Http\HttpPath;
 use G4\DataMapper\Exception\HttpPathException;
 
-class HttpPathTest extends PHPUnit_Framework_TestCase
+class HttpPathTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testValidValueWithOnePart()

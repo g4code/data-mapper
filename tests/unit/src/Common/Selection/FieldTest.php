@@ -2,17 +2,17 @@
 
 use G4\DataMapper\Common\Selection\Field;
 
-class FieldTest extends PHPUnit_Framework_TestCase
+class FieldTest extends \PHPUnit\Framework\TestCase
 {
 
     private $field;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->field = new Field('id');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->field = null;
     }

@@ -6,7 +6,7 @@ use G4\DataMapper\Exception\NoPortParameterException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\ErrorMessages as ErrorMessage;
 
-class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
+class SolrClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -19,7 +19,7 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
     private $clientFactory;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->params = [
             'host'     => '127.0.0.1',
@@ -30,7 +30,7 @@ class SolrClientFactoryTest extends PHPUnit_Framework_TestCase
 
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->params = null;
         $this->clientFactory = null;

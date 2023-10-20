@@ -4,7 +4,7 @@ use G4\DataMapper\Engine\MySQL\MySQLSortingFormatter;
 use G4\DataMapper\Common\Selection\Sort;
 
 
-class MySQLSortingFormatterTest extends PHPUnit_Framework_TestCase
+class MySQLSortingFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MySQLSortingFormatter
@@ -12,12 +12,12 @@ class MySQLSortingFormatterTest extends PHPUnit_Framework_TestCase
     private $sortingFormatter;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sortingFormatter = new MySQLSortingFormatter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->sortingFormatter = null;
     }

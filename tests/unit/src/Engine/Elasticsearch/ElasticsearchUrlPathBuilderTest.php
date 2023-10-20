@@ -6,7 +6,7 @@ use G4\DataMapper\Engine\Elasticsearch\ElasticsearchUrlPathBuilder;
 use G4\ValueObject\Url;
 use PHPUnit_Framework_TestCase;
 
-class ElasticsearchUrlPathBuilderTest extends PHPUnit_Framework_TestCase
+class ElasticsearchUrlPathBuilderTest extends \PHPUnit\Framework\TestCase
 {
     public function testUpdateVersion8()
     {
