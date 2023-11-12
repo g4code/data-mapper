@@ -1,9 +1,10 @@
 <?php
 
 use G4\DataMapper\Builder;
+use G4\DataMapper\Engine\MySQL\MySQLMapper;
 use G4\DataMapper\Engine\MySQL\MySQLTableName;
 
-class BuilderTest extends PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -16,8 +17,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
      */
     private $params;
 
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->params = [
             'host'     => 'localhost',
@@ -29,7 +29,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->builder = Builder::create();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->params = null;
         $this->builder = null;
@@ -54,7 +54,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->builder
             ->collectionName(new MySQLTableName('profiles'))
             ->adapter($this->getMockForMySQLAdapter());
-        $this->builder->buildMapper();
+        $this->assertInstanceOf(MySQLMapper::class, $this->builder->buildMapper());
     }
 
     public function testBuildBulk()
@@ -76,7 +76,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testBuildWithNoType()
     {
-        $this->builder->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'));
+        $this->builder->adapter($this->createMock('\G4\DataMapper\Common\AdapterInterface'));
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
         $this->expectExceptionMessage('DataSet cannot be emty');
@@ -86,7 +86,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     public function testBuildForUnknownEngine()
     {
         $this->builder
-            ->adapter($this->getMock('\G4\DataMapper\Common\AdapterInterface'))
+            ->adapter($this->createMock('\G4\DataMapper\Common\AdapterInterface'))
             ->collectionName(new MySQLTableName('profiles'));
         $this->expectException('\Exception');
         $this->expectExceptionCode(601);
@@ -104,12 +104,10 @@ class BuilderTest extends PHPUnit_Framework_TestCase
 
     private function getMockForMySQLAdapter()
     {
-        return $this->getMock(
-            '\G4\DataMapper\Engine\MySQL\MySQLAdapter',
-            null,
-            [
-                $this->getMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory', null, [$this->params]),
-            ]
-        );
+        return $this->getMockBuilder('\G4\DataMapper\Engine\MySQL\MySQLAdapter')
+            ->setConstructorArgs([
+                $this->createMock('\G4\DataMapper\Engine\MySQL\MySQLClientFactory'),
+            ])
+            ->getMock();
     }
 }

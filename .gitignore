@@ -17,6 +17,7 @@ vendor
 
 tests/unit/coverage/*
 tests/integration/coverage/*
+tests/unit/.phpunit.result.cache
 .vagrant/
 .bash_history
 .cache/motd.legal-displayed

@@ -6,7 +6,7 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Common\RangeValue;
 
-class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
+class SolrSelectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SolrSelectionFactory
@@ -15,7 +15,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
 
     private $identityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrIdentity::class)
             ->disableOriginalConstructor()
@@ -24,7 +24,7 @@ class SolrSelectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->selectionFactory = new SolrSelectionFactory($this->identityMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->identityMock = null;
 

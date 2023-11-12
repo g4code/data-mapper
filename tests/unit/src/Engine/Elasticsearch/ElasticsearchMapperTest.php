@@ -4,7 +4,7 @@ use G4\DataMapper\Engine\Elasticsearch\ElasticsearchMapper;
 use G4\DataMapper\Exception\ElasticSearchMapperException;
 use G4\DataMapper\Exception\NotImplementedException;
 
-class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchMapperTest extends \PHPUnit\Framework\TestCase
 {
 
     const ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE = 'Elastic Search Mapper error';
@@ -24,7 +24,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
     private $mappingMock;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(\G4\DataMapper\Common\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -46,7 +46,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
         $this->mapper = new ElasticsearchMapper($this->collectionNameMock, $this->adapterMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapterMock          = null;
         $this->mapper  = null;
@@ -56,7 +56,7 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
+        $identityStub = $this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -67,12 +67,11 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->mapper->delete($identityStub);
-
     }
 
     public function testDeleteException()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
+        $identityStub = $this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -126,7 +125,10 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($rawDataStub);
 
-        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class)));
+        $this->assertSame(
+            $rawDataStub,
+            $this->mapper->find($this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class))
+        );
     }
 
     public function testFindException()
@@ -134,11 +136,13 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
         $this->adapterMock
             ->expects($this->once())
             ->method('select')
-            ->will($this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE)));
+            ->will(
+                $this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE))
+            );
 
         $this->expectException(ElasticSearchMapperException::class);
 
-        $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
+        $this->mapper->find($this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
     public function testInsert()
@@ -171,7 +175,10 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             ->method('update')
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
+        $this->mapper->update(
+            $this->mappingMock,
+            $this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class)
+        );
     }
 
     public function testUpdateException()
@@ -180,11 +187,13 @@ class ElasticsearchMapperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('update')
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock))
-            ->will($this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE)));
+            ->will(
+                $this->throwException(new ElasticSearchMapperException(self::ELASTIC_SEARCH_DATA_MAPPER_ERROR_MESSAGE))
+            );
 
         $this->expectException(ElasticSearchMapperException::class);
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
+        $this->mapper->update($this->mappingMock, $this->createMock(\G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity::class));
     }
 
     private function getIdentifiableMock()

@@ -6,19 +6,19 @@ use G4\DataMapper\Exception\OrderNotInMapException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\ErrorMessages as ErrorMessage;
 
-class SolrSortingFormatterTest extends PHPUnit_Framework_TestCase
+class SolrSortingFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SolrSortingFormatter
      */
     private $sortingFormatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sortingFormatter = new SolrSortingFormatter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->sortingFormatter = null;
     }

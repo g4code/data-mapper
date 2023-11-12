@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\SingleValue;
 
-class SingleValueTest extends PHPUnit_Framework_TestCase
+class SingleValueTest extends \PHPUnit\Framework\TestCase
 {
     public function testToStringWithStringValue()
     {

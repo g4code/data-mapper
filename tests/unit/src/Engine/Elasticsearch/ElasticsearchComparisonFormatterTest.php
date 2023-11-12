@@ -5,7 +5,7 @@ use G4\DataMapper\Common\Selection\Operator;
 use G4\DataMapper\Common\SingleValue;
 use G4\DataMapper\Engine\Elasticsearch\ElasticsearchIdentity;
 
-class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchComparisonFormatter
@@ -17,7 +17,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
      */
     private $operatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->comparisonFormatter = new ElasticsearchComparisonFormatter(new ElasticsearchIdentity(2));
 
@@ -26,7 +26,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->comparisonFormatter = null;
         $this->operatorMock        = null;

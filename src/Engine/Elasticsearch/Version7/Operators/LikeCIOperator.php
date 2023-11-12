@@ -29,7 +29,8 @@ class LikeCIOperator implements QueryOperatorInterface
     {
         return [
             QueryConnector::NAME_QUERY_STRING => [
-                QueryConnector::NAME_QUERY_STRING_QUERY => $this->name . ":" . QueryConnector::WILDCARD . strtolower($this->value) . QueryConnector::WILDCARD
+                QueryConnector::NAME_QUERY_STRING_QUERY =>
+                    $this->name . ":" . QueryConnector::WILDCARD . strtolower($this->value) . QueryConnector::WILDCARD
             ]
         ];
     }

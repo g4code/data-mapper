@@ -6,19 +6,19 @@ use G4\DataMapper\Exception\OrderNotInMapException;
 use G4\DataMapper\ErrorCodes as ErrorCode;
 use G4\DataMapper\ErrorMessages as ErrorMessage;
 
-class ElasticsearchSortingFormatterTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchSortingFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ElasticsearchSortingFormatter
      */
     private $sortingFormatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sortingFormatter = new ElasticsearchSortingFormatter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->sortingFormatter = null;
     }

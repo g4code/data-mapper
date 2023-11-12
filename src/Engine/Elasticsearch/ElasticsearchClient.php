@@ -307,7 +307,7 @@ class ElasticsearchClient
     {
         throw new ClientException(
             sprintf(
-                "Unexpected response code:%s from ES has been returned on submit. More info: %s. Url: %s. Body: %s. Response: %s",
+                "Unexpected response code:%s from ES has been returned on submit. More info: %s. Url: %s. Body: %s. Response: %s", // phpcs:ignore
                 $code,
                 json_encode($message),
                 (string) $url,

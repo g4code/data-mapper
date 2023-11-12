@@ -5,7 +5,7 @@ use G4\DataMapper\Engine\Elasticsearch\ElasticsearchClient;
 use G4\DataMapper\Exception\ClientException;
 use G4\ValueObject\Url;
 
-class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
+class ElasticsearchClientTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -51,7 +51,7 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
         $elasticsearchClient->execute(); // todo - misleading because execute is only called internally
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlMock = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
@@ -60,7 +60,7 @@ class ElasticsearchClientTest extends PHPUnit_Framework_TestCase
         $this->elasticsearchClient = new ElasticsearchClient($this->urlMock, null, 5);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->urlMock              = null;
         $this->elasticsearchClient  = null;

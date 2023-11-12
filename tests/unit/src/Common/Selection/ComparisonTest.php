@@ -2,7 +2,7 @@
 
 use G4\DataMapper\Common\Selection\Comparison;
 
-class ComparisonTest extends PHPUnit_Framework_TestCase
+class ComparisonTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetComparison()

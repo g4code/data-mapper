@@ -4,7 +4,7 @@ use G4\DataMapper\Engine\Solr\SolrMapper;
 use G4\DataMapper\Exception\NotImplementedException;
 use G4\DataMapper\Exception\SolrMapperException;
 
-class SolrMapperTest extends PHPUnit_Framework_TestCase
+class SolrMapperTest extends \PHPUnit\Framework\TestCase
 {
     const SOLR_DATA_MAPPER_ERROR_MESSAGE = 'Solr Mapper error';
 
@@ -28,7 +28,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
      */
     private $mappingMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(\G4\DataMapper\Engine\Solr\SolrAdapter::class)
             ->disableOriginalConstructor()
@@ -45,7 +45,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
         $this->mapper = new SolrMapper($this->collectionNameMock, $this->adapterMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapterMock        = null;
         $this->mapper             = null;
@@ -55,7 +55,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
+        $identityStub = $this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -66,7 +66,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteException()
     {
-        $identityStub = $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
+        $identityStub = $this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class);
 
         $this->adapterMock
             ->expects($this->once())
@@ -89,7 +89,10 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($rawDataStub);
 
-        $this->assertSame($rawDataStub, $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class)));
+        $this->assertSame(
+            $rawDataStub,
+            $this->mapper->find($this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class))
+        );
     }
 
     public function testFindException()
@@ -101,7 +104,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(SolrMapperException::class);
 
-        $this->mapper->find($this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
+        $this->mapper->find($this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testInsert()
@@ -134,7 +137,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
             ->method('update')
             ->with($this->equalTo($this->collectionNameMock), $this->equalTo($this->mappingMock));
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
+        $this->mapper->update($this->mappingMock, $this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testUpdateException()
@@ -147,7 +150,7 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(SolrMapperException::class);
 
-        $this->mapper->update($this->mappingMock, $this->getMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
+        $this->mapper->update($this->mappingMock, $this->createMock(\G4\DataMapper\Engine\Solr\SolrIdentity::class));
     }
 
     public function testUpdateBulk()
@@ -187,7 +190,6 @@ class SolrMapperTest extends PHPUnit_Framework_TestCase
         $this->expectException(SolrMapperException::class);
 
         $this->mapper->updateBulk();
-
     }
 
     public function testUpsert()
