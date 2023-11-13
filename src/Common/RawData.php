@@ -31,7 +31,7 @@ class RawData implements \Countable
         $this->total = $total;
     }
 
-    public function count()
+    public function count(): int
     {
         if ($this->count === null) {
             $this->count = count($this->data);
