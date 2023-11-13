@@ -84,7 +84,8 @@ class ElasticsearchSelectionFactory implements SelectionFactoryInterface
 
         foreach ($this->identity->getComparisons() as $oneComparison) {
             if ($oneComparison instanceof Comparison && !$oneComparison->getValue()->isEmpty()) {
-                if (preg_match("/^-/", $oneComparison->getName())) {
+                $comparisonName = $oneComparison->getName() ?: '';
+                if (str_starts_with($comparisonName, '-')) {
                     $comparisons['must_not'][]= $oneComparison->getComparison($this->makeComparisonFormatter());
                 } else {
                     $comparisons['must'][]= $oneComparison->getComparison($this->makeComparisonFormatter());

@@ -29,6 +29,8 @@ class ElasticsearchComparisonFormatter implements ComparisonFormatterInterface
     const RANGE                 = 'range';
     const TERMS                 = 'terms';
 
+    private ElasticsearchIdentity $identity;
+
     public function __construct(ElasticsearchIdentity $identity)
     {
         $this->identity = $identity;

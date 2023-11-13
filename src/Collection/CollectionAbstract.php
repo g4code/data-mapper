@@ -14,12 +14,12 @@ abstract class CollectionAbstract implements \Iterator, \Countable
 
     protected $_total = 0;
 
-    public function count()
+    public function count(): int
     {
         return $this->_total;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->_getObject();
     }
@@ -29,29 +29,26 @@ abstract class CollectionAbstract implements \Iterator, \Countable
         return $this->_rawData;
     }
 
-    public function key()
+    public function key(): mixed
     {
         return $this->_pointer;
     }
 
-    public function next()
+    public function next(): void
     {
         $row = $this->_getObject();
 
         if (!empty($row)) {
             $this->_incrementPointer();
         }
-
-        return $row;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->_pointer = 0;
-        return $this;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return !is_null($this->current());
     }
