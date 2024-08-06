@@ -29,7 +29,7 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
     public function tearDown(): void
     {
         $this->comparisonFormatter = null;
-        $this->operatorMock        = null;
+        $this->operatorMock = null;
     }
 
     public function testEqual()
@@ -51,8 +51,8 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
             ['match' => [
                 'email' => [
                     'query' => 'text@example.com',
-                    'type' => 'phrase'
-                ]
+                    'type' => 'phrase',
+                ],
             ]],
             $this->comparisonFormatter->format('email', $this->operatorMock, new SingleValue('text@example.com'))
         );
@@ -69,8 +69,8 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             ['match' => [
                 'email' => [
-                    'query' => 'text@example.com'
-                ]
+                    'query' => 'text@example.com',
+                ],
             ]],
             $comparisonFormatter->format('email', $this->operatorMock, new SingleValue('text@example.com'))
         );
@@ -157,10 +157,10 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([
             'range' => [
                 'online' => [
-                    'gt'     => strtotime("-15 minute", time()),
+                    'gt' => strtotime("-15 minute", time()),
                     'format' => 'epoch_second',
-                ]
-            ]
+                ],
+            ],
         ], $this->comparisonFormatter->format('online', $this->operatorMock, new SingleValue(15)));
     }
 
@@ -214,12 +214,10 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [
-                'query' => [
-                        'query_string' => [
-                                'query' => 'username: *test* OR email: *test*',
-                                'analyze_wildcard' => true,
-                            ],
-                    ]
+                'query_string' => [
+                    'query' => 'username: *test* OR email: *test*',
+                    'analyze_wildcard' => true,
+                ],
             ],
             $this->comparisonFormatter
                 ->format('', $this->operatorMock, new SingleValue('username: *test* OR email: *test*'))
@@ -237,8 +235,8 @@ class ElasticsearchComparisonFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'query_string' => [
-                    'query' => 'username: *test* OR email: *test*'
-                ]
+                    'query' => 'username: *test* OR email: *test*',
+                ],
             ],
             $comparisonFormatter->format('', $this->operatorMock, new SingleValue('username: *test* OR email: *test*'))
         );
