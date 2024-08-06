@@ -18,13 +18,10 @@ class QueryStringOperator implements QueryOperatorInterface
     public function format()
     {
         return [
-            QueryConnector::NAME_QUERY_STRING_QUERY =>
+            QueryConnector::NAME_QUERY_STRING =>
                 [
-                    QueryConnector::NAME_QUERY_STRING =>
-                        [
-                            QueryConnector::NAME_QUERY_STRING_QUERY => $this->value->getValue(),
-                            QueryConnector::ANALYZE_WILDCARD => true,
-                        ],
+                    QueryConnector::NAME_QUERY_STRING_QUERY => $this->value->getValue(),
+                    QueryConnector::ANALYZE_WILDCARD => true,
                 ],
         ];
     }
