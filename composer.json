@@ -42,7 +42,7 @@
         "g4/code-coverage"          : "1.*"
     },
     "require": {
-        "php"             : ">=7.3",
+        "php"             : ">=8.2",
         "ext-curl"        : "*",
         "ext-json"        : "*",
         "g4/factory"      : "1.*",

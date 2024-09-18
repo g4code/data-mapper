@@ -21,7 +21,7 @@ class SimpleRawData implements \Countable
         $this->data = $data;
     }
 
-    public function count()
+    public function count(): int
     {
         if ($this->count === null) {
             $this->count = count($this->data);

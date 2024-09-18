@@ -50,15 +50,17 @@ class ElasticsearchResponse
      */
     public function getTotal()
     {
+        if (!is_array($this->decodedResponse)) {
+            return 0;
+        }
         switch (true) {
-            case $this->hasError():
-                return 0;
             case array_key_exists(self::KEY_RESPONSES_M_SEARCH, $this->decodedResponse):
                 return $this->getTotalFromMultiSearch();
             case array_key_exists(self::KEY_HITS, $this->decodedResponse):
                 return (new TotalCount($this->decodedResponse[self::KEY_HITS]))->getValue();
             case array_key_exists(self::KEY_COUNT, $this->decodedResponse):
                 return (new TotalCount($this->decodedResponse[self::KEY_COUNT]))->getValue();
+            case $this->hasError():
             default:
                 return 0;
         }
@@ -67,10 +69,10 @@ class ElasticsearchResponse
     /**
      * @return array
      */
-    private function getDecodedResponse()
+    private function getDecodedResponse(): ?array
     {
         if ($this->decodedResponse === null) {
-            $this->decodedResponse = json_decode($this->response, true);
+            $this->decodedResponse = is_string($this->response) ? json_decode($this->response, true) : null;
         }
         return $this->decodedResponse;
     }
@@ -80,7 +82,7 @@ class ElasticsearchResponse
         return $this->decodedResponse === null || array_key_exists(self::KEY_ERROR, $this->decodedResponse);
     }
 
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         if ($this->decodedResponse === null) {
             return json_encode(['Error decoding response', $this->response]);
@@ -110,10 +112,7 @@ class ElasticsearchResponse
             : [];
     }
 
-    /**
-     * @return int
-     */
-    private function getTotalFromMultiSearch()
+    private function getTotalFromMultiSearch(): int
     {
         $multiSearchTotal = 0;
         foreach ($this->decodedResponse[self::KEY_RESPONSES_M_SEARCH] as $singleHits) {
