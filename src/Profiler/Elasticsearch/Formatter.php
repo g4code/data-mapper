@@ -15,16 +15,18 @@ class Formatter extends \G4\Profiler\Ticker\Formatter
      */
     public function getFormatted()
     {
+        $info = $this->info ?? [];
+
         return parent::getFormatted()
             + [
-                'url'              => urldecode($this->info['url']),
+                'url'              => urldecode($info['url'] ?? ''),
                 'method'           => $this->method,
                 'query'            => $this->query,
-                'redirect_count'   => $this->info['redirect_count'],
-                'curl_total_time'  => $this->getFormattedTime($this->info['total_time']),
-                'namelookup_time'  => $this->getFormattedTime($this->info['namelookup_time']),
-                'connect_time'     => $this->getFormattedTime($this->info['connect_time']),
-                'pretransfer_time' => $this->getFormattedTime($this->info['pretransfer_time']),
+                'redirect_count'   => $info['redirect_count'] ?? null,
+                'curl_total_time'  => $this->getFormattedTime($info['total_time'] ?? 0),
+                'namelookup_time'  => $this->getFormattedTime($info['namelookup_time'] ?? 0),
+                'connect_time'     => $this->getFormattedTime($info['connect_time'] ?? 0),
+                'pretransfer_time' => $this->getFormattedTime($info['pretransfer_time'] ?? 0),
             ];
     }
 
